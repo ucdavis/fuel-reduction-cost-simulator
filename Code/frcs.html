@@ -100,6 +100,11 @@
           </tr>
 
           <tr>
+            <td><input type="checkbox" class="residue_collect"></td>     
+            <th class="checkbox">Include the costs of collecting and chipping residues</th>
+          </tr>
+
+          <tr>
             <td><input type="checkbox" class="move_in"></td>
             <th class="checkbox">Include move-in costs</th>
             <th>Area treated</th>
@@ -108,17 +113,14 @@
             <td><input type="number" name="move_in_dist" size="5"></td>
           </tr>
 
-          <tr>
-            <td><input type="checkbox" class="residue_collect"></td>     
-            <th class="checkbox">Include the costs of collecting and chipping residues</th>
-          </tr>
+
   
 
         </table>
         <br>
 
         <strong>TREE CHARACTERISTICS</strong>
-        <table class="CHARACTERISTICS">
+    <table class="CHARACTERISTICS">
 		  <tr>
 		  	<th></th>
 		    <th>Chipped</th>
@@ -127,30 +129,78 @@
 		  </tr>
 		  <tr>
 		    <th>Green wood density (lbs/cf)</th>
-		    <td><input type="number" name="gwd_chip"></td>
-		    <td><input type="number" name="gwd_sl"></td>
-		    <td><input type="number" name="gwd_ll"></td>
+		    <td><input type=number step=0.0001 name="gwd_chip"></td>
+		    <td><input type=number step=0.0001 name="gwd_sl"></td>
+		    <td><input type=number step=0.0001 name="gwd_ll"></td>
 		  </tr>
 		  <tr>
 		    <th>Residue Fraction</th>
-		    <td><input type="number" name="rf_chip"></td>
-		    <td><input type="number" name="rf_sl"></td>
-		    <td><input type="number" name="rf_ll"></td>
+		    <td><input type=number step=0.0001 name="rf_chip"></td>
+		    <td><input type=number step=0.0001 name="rf_sl"></td>
+		    <td><input type=number step=0.0001 name="rf_ll"></td>
 		  </tr>
 		  <tr>
 		    <th>Hardwood Fraction</th>
-		    <td><input type="number" name="hf_chip"></td>
-		    <td><input type="number" name="hf_sl"></td>
-		    <td><input type="number" name="hf_ll"></td>
+		    <td><input type=number step=0.0001 name="hf_chip"></td>
+		    <td><input type=number step=0.0001 name="hf_sl"></td>
+		    <td><input type=number step=0.0001 name="hf_ll"></td>
 		  </tr>
 		</table>
-        <br><br>
-        <input type="submit" value="Calculate">
+        <br>
+
+<table class="tg">
+  <tr>
+    <th class="tg-baqh" colspan="6">Cut Tree Table</th>
+  </tr>
+  <tr>
+    <td class="tg-baqh" colspan="2">Chip Trees</td>
+    <td class="tg-baqh" colspan="2">Small Log Trees</td>
+    <td class="tg-baqh" colspan="2">Large Log Trees</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+  </tr>
+    <tr>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmct"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvct"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmslt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvslt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmllt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvllt"></td>
+  </tr>
+</table>
+
+<br>
+
+<table class="tg results">
+  <tr>
+    <th class="tg-baqh" colspan="3">Results List</th>
+  </tr>
+  <tr>
+    <td class="tg-0lax">$/CCF</td>
+    <td class="tg-0lax">$/Ton</td>
+    <td class="tg-0lax">$/Acre</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax output" id="CCF"></td>
+    <td class="tg-0lax output" id="Ton"></td>
+    <td class="tg-0lax output" id="Acre"></td>
+  </tr>
+</table>
+
+    <br>
+    <input type="submit" value="Calculate">
     </form>
     <!-- <button type="button" onclick="validate()">Calculate</button> -->
 
     <p id="output_text"/>
     <p id="output_text2"/>
+    <p id="output_text3"/>
 
 </body>
 
