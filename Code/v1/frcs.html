@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FRCS</title>
+    <link rel="stylesheet" type="text/css" href="frcs.css">
+    <!--<link rel="stylesheet" type="text/css" href="reset.css">-->
+    <script type="text/javascript" src="frcs.js"></script>
+</head>
+
+<body>
+
+    <h1>Fuel Reduction Cost Simulator - West</h1>
+    
+    <form name="input_form" action="javascript:calculate();">
+    	<strong>CONFIGURATION</strong>
+        <br>
+        <table class="CONFIGURATION">
+            <tr>
+                <th>System Type</th>
+                <td>        
+                    <select id="system">
+                      <option value="ground-based mech wt">Ground-Based Mech WT</option>
+                      <option value="ground-based ctl">Ground-Based CTL</option>
+                      <option value="ground-based manual ctl">Ground-Based Manual WT</option>
+                      <option value="ground-based manual log">Ground-Based Manual Log</option>
+                      <option value="cable manual wt/log">Cable Manual WT/Log</option>
+                      <option value="cable manual wt">Cable Manual WT</option>
+                      <option value="cable manual log">Cable Manual Log</option>
+                      <option value="cable ctl">Cable CTL</option>
+                      <option value="helicopter manual wt">Helicopter Manual WT</option>
+                      <option value="helicopter ctl">Helicopter CTL</option>
+                    </select> 
+                </td>
+            </tr>
+            <tr>
+                <th>Cut Type</th>
+                <td>        
+                    <select id="cut_type">
+                      <option value="clear_cut">Clear Cut</option>
+                      <option value="partial_cut">Partial Cut</option>
+                    </select> 
+                </td>
+            </tr>
+            <tr>
+                <th>location (State)</th>
+                <td>        
+                    <select>
+                      <option value="california">California</option>
+                    </select> 
+                </td>
+            </tr>
+            <tr>
+                <th>Yard/Skid/Forward Slope Dist (ft)</th>
+                <td><input type="number" name="deliver_dist" size="5" required></td>
+            </tr>
+            <tr>
+                <th>Percent Slope</th>
+                <td><input type="number" name="slope" size="5" required></td>
+            </tr>
+            <tr>
+                <th>Elevation</th>
+                <td><input type="number" name="elevation" size="5"></td>
+            </tr>
+        </table>
+
+        <strong>COSTS</strong>
+        <br>
+        <table class="COSTS">
+          <tr>
+            <th>Change Machine Costs ($/PMH)</th>
+            <td>
+                <select id="machine">
+                  <option value="bundler">Bundler</option>
+                  <option value="chainsaw">Chainsaw</option>
+                  <option value="chipper big">Chipper big</option>
+                  <option value="chipper small">Chipper small</option>
+                  <option value="Fbuncher DriveToTree">Fbuncher DriveToTree</option>
+                  <option value="Fbuncher SelfLeveling">Fbuncher SelfLeveling</option>
+                  <option value="Fbuncher SwingBoom">Fbuncher SwingBoom</option>
+                  <option value="Forwarder big">Forwarder big</option>
+                  <option value="Forwarder small">Forwarder small</option>
+                  <option value="Harvester big">Harvester big</option>
+                  <option value="Harvester small">Harvester small</option>
+                  <option value="Loader big">Loader big</option>
+                  <option value="Loader small">Loader small</option>
+                  <option value="Processor big">Processor big</option>
+                  <option value="Processor small">Processor small</option>
+                  <option value="Skidder big">Skidder big</option>
+                  <option value="Skidder small">Skidder small</option>
+                  <option value="Yarder intermediate">Yarder intermediate</option>
+                  <option value="Yarder small">Yarder small</option>
+                </select> 
+            </td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" class="load_cost" value="1"></td>
+            <th class="checkbox">Include loading costs</th>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" class="residue_collect"></td>     
+            <th class="checkbox">Include the costs of collecting and chipping residues</th>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" class="move_in"></td>
+            <th class="checkbox">Include move-in costs</th>
+            <th>Area treated</th>
+            <td><input type="number" name="area" size="5"></td>
+            <th>One-way move-in distance</th>
+            <td><input type="number" name="move_in_dist" size="5"></td>
+          </tr>
+
+
+  
+
+        </table>
+        <br>
+
+        <strong>TREE CHARACTERISTICS</strong>
+    <table class="CHARACTERISTICS">
+		  <tr>
+		  	<th></th>
+		    <th>Chipped</th>
+		    <th>Small log</th> 
+		    <th>large log</th>
+		  </tr>
+		  <tr>
+		    <th>Green wood density (lbs/cf)</th>
+		    <td><input type=number step=0.0001 name="gwd_chip"></td>
+		    <td><input type=number step=0.0001 name="gwd_sl"></td>
+		    <td><input type=number step=0.0001 name="gwd_ll"></td>
+		  </tr>
+		  <tr>
+		    <th>Residue Fraction</th>
+		    <td><input type=number step=0.0001 name="rf_chip"></td>
+		    <td><input type=number step=0.0001 name="rf_sl"></td>
+		    <td><input type=number step=0.0001 name="rf_ll"></td>
+		  </tr>
+		  <tr>
+		    <th>Hardwood Fraction</th>
+		    <td><input type=number step=0.0001 name="hf_chip"></td>
+		    <td><input type=number step=0.0001 name="hf_sl"></td>
+		    <td><input type=number step=0.0001 name="hf_ll"></td>
+		  </tr>
+		</table>
+        <br>
+
+<table class="tg">
+  <tr>
+    <th class="tg-baqh" colspan="6">Cut Tree Table</th>
+  </tr>
+  <tr>
+    <td class="tg-baqh" colspan="2">Chip Trees</td>
+    <td class="tg-baqh" colspan="2">Small Log Trees</td>
+    <td class="tg-baqh" colspan="2">Large Log Trees</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+    <td class="tg-0lax">Trees/acre</td>
+    <td class="tg-0lax">Vol/tree (ft3)</td>
+  </tr>
+    <tr>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmct"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvct"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmslt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvslt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="rmllt"></td>
+    <td class="tg-0lax"><input type=number step=0.01 name="tvllt"></td>
+  </tr>
+</table>
+
+<br>
+
+<table class="tg results">
+  <tr>
+    <th class="tg-baqh" colspan="3">Results List</th>
+  </tr>
+  <tr>
+    <td class="tg-0lax">$/CCF</td>
+    <td class="tg-0lax">$/Ton</td>
+    <td class="tg-0lax">$/Acre</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax output" id="CCF"></td>
+    <td class="tg-0lax output" id="Ton"></td>
+    <td class="tg-0lax output" id="Acre"></td>
+  </tr>
+</table>
+
+    <br>
+    <input type="submit" value="Calculate">
+    </form>
+    <!-- <button type="button" onclick="validate()">Calculate</button> -->
+
+    <!--<p id="output_text"/>-->
+    <!--<p id="output_text2"/>-->
+    <!--<p id="output_text3"/>-->
+
+</body>
+
+</html>
