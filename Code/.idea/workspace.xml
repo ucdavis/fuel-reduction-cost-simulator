@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="151c462a-ce71-4d11-bf73-88c530271808" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frcs.css" beforeDir="false" afterPath="$PROJECT_DIR$/frcs.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frcs.html" beforeDir="false" afterPath="$PROJECT_DIR$/frcs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frcs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frcs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Docs/FRCS-West-test2.xls" beforeDir="false" afterPath="$PROJECT_DIR$/../Docs/FRCS-West-test2.xls" afterDir="false" />
-    </list>
+    <list default="true" id="151c462a-ce71-4d11-bf73-88c530271808" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -19,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frcs.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2533">
-              <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="251" />
+            <state relative-caret-position="-1905">
+              <caret line="130" column="5" lean-forward="true" selection-start-line="130" selection-start-column="5" selection-end-line="130" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -31,17 +25,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frcs.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="1904">
               <caret line="112" column="61" lean-forward="true" selection-start-line="112" selection-start-column="61" selection-end-line="112" selection-end-column="61" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frcs.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="625">
-              <caret line="191" column="24" selection-start-line="191" selection-start-column="24" selection-end-line="191" selection-end-column="24" />
+            <state relative-caret-position="2431">
+              <caret line="167" column="85" selection-start-line="167" selection-start-column="85" selection-end-line="167" selection-end-column="85" />
             </state>
           </provider>
         </entry>
@@ -65,8 +59,8 @@
         <option value="$PROJECT_DIR$/UI/frcs.html" />
         <option value="$PROJECT_DIR$/UI/frcs.css" />
         <option value="$PROJECT_DIR$/frcs.css" />
-        <option value="$PROJECT_DIR$/frcs.html" />
         <option value="$PROJECT_DIR$/frcs.js" />
+        <option value="$PROJECT_DIR$/frcs.html" />
       </list>
     </option>
   </component>
@@ -135,12 +129,12 @@
       <workItem from="1555051287305" duration="6384000" />
       <workItem from="1555294550619" duration="10590000" />
       <workItem from="1555308665223" duration="471000" />
-      <workItem from="1555456767357" duration="4335000" />
+      <workItem from="1555456767357" duration="4575000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21780000" />
+    <option name="totallyTimeSpent" value="22020000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="953" y="0" width="974" height="1047" extended-state="0" />
@@ -175,22 +169,22 @@
     <entry file="file://$PROJECT_DIR$/UI/frcs.css" />
     <entry file="file://$PROJECT_DIR$/frcs.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
+        <state relative-caret-position="1904">
           <caret line="112" column="61" lean-forward="true" selection-start-line="112" selection-start-column="61" selection-end-line="112" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frcs.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="191" column="24" selection-start-line="191" selection-start-column="24" selection-end-line="191" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frcs.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2533">
-          <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="251" />
+        <state relative-caret-position="-1905">
+          <caret line="130" column="5" lean-forward="true" selection-start-line="130" selection-start-column="5" selection-end-line="130" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frcs.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2431">
+          <caret line="167" column="85" selection-start-line="167" selection-start-column="85" selection-end-line="167" selection-end-column="85" />
         </state>
       </provider>
     </entry>
