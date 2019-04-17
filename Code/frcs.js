@@ -22,12 +22,18 @@ let RemovalsCT, RemovalsSLT, RemovalsLLT, TreeVolCT, TreeVolSLT, TreeVolLLT,
 //Output variables
 let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptional,
     TotalPrimaryAndOptional, TotalPrimaryProductsAndOptionalResidues,
-    GroundFuel, PiledFuel, ResidueUncutTrees, TotalResidues,
+    GroundFuel, PiledFuel, ResidueUncutTrees, TotalResidues, Movein4PrimaryProduct, OntoTruck4ResiduesWoMovein,
     ChipLooseResiduesFromLogTreesLess80cf, FellAndBunchTreesLess80cf, ManualFellLimbBuckTreesLarger80cf,
     SkidBunchedAllTrees, ProcessLogTreesLess80cf, LoadLogTrees, ChipWholeTrees, Stump2Truck4PrimaryProductWithoutMovein,
     TotalPerAcre, TotalPerBoleCCF, TotalPerGT;
-//Fell&Bunch
+//IA Fell&Bunch
 let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
+//IB Chainsaw Heads
+let TimePerTreeIB,VolPerPMHIB,CostPerPMHIB,CostPerCCFIB,RelevanceIB;
+//IC Intermittent Circular Sawheads
+let TimePerTreeIC,VolPerPMHIC,CostPerPMHIC,CostPerCCFIC,RelevanceIC;
+//ID Hydro-Ax 211 (Hartsough, 01)
+let TreesPerAccumID, TimePerAccumID, TreesPerPMHID, VolPerPMHID, CostPerPMHID, CostPerCCFID, RelevanceID;
 //Assumption variables
 // var MaxManualTreeVol, MaxMechTreeVol, MoistureContentFraction, LogLength, LoadWeightLog, LoadWeightChip,
 //     CTLTrailSpacing, HdwdCostPremium, ResidueRecovFracWT, ResidueRecovFracCTL;
@@ -135,8 +141,8 @@ function calculate(){
     DBHSLT = Math.sqrt((TreeVolSLT+3.675)/0.216);
     DBHLLT = Math.sqrt((TreeVolLLT+3.675)/0.216);
     DBHST = TreeVolST>0 ? Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST) : 0;
-    DBHALT = TreeVolALT>0 ? Math.sqrt((RemovalsSLT*DBHSLT^2+RemovalsLLT*DBHLLT^2)/RemovalsALT) : 0;
-    DBH= Math.sqrt((RemovalsCT*DBHCT^2+RemovalsALT*DBHALT^2)/Removals);
+    DBHALT = TreeVolALT>0 ? Math.sqrt((RemovalsSLT*Math.pow(DBHSLT,2)+RemovalsLLT*Math.pow(DBHLLT,2))/RemovalsALT) : 0;
+    DBH= Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsALT*Math.pow(DBHALT,2))/Removals);
 //Tree Height
     HeightCT=TreeVolCT>0?-20+24*Math.sqrt(DBHCT):0;
     HeightSLT=TreeVolSLT>0?-20+24*Math.sqrt(DBHSLT):0;
@@ -201,7 +207,7 @@ function calculate(){
 //NonSelfLevelCabDummy
     NonSelfLevelCabDummy=Slope<15?1:(Slope<35?1.75-0.05*Slope:0);
 //CSlopeFB&Harv (Mellgren 90)
-    CSlopeFB_Harv =0.00015*Slope^2+0.00359*NonSelfLevelCabDummy*Slope;
+    CSlopeFB_Harv =0.00015*Math.pow(Slope,2)+0.00359*NonSelfLevelCabDummy*Slope;
 //CRemovalsFB&Harv (Mellgren 90)
     CRemovalsFB_Harv =Math.max(0,0.66-0.001193*RemovalsST*2.47+5.357*Math.pow(10,-7)*Math.pow(RemovalsST*2.47,2));
 //CSlopeSkidForwLoadSize (Mellgren 90)
@@ -252,6 +258,7 @@ function calculate(){
     let InLimits1=1; 
 /*---------hardcoded-----------*/
 /*--------------Fell&Bunch START---------------------------*/
+    // IA: Melroe Bobcat (Johnson, 79)
     let PMH_DriveToTree=181.30; //Todo: (hardcoded)
     DistBetweenTrees=Math.sqrt(43560/Math.max(RemovalsST,1));
     // I. Drive-To-Tree
@@ -261,8 +268,30 @@ function calculate(){
     CostPerPMHIA =PMH_DriveToTree;
     CostPerCCFIA =100*CostPerPMHIA/VolPerPMHIA;
     RelevanceIA =(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
+    // IB: Chainsaw Heads START
+    let CutsIB=1.1;
+    TimePerTreeIB =(-0.0368+0.02914*DBHST+0.00289*DistBetweenTrees+0.2134*CutsIB)*(1+CSlopeFB_Harv);
+    VolPerPMHIB =TreeVolST/(TimePerTreeIB/60);
+    CostPerPMHIB=PMH_DriveToTree;
+    CostPerCCFIB =100*CostPerPMHIB/VolPerPMHIB;
+    RelevanceIB =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
+    // IC: Intermittent Circular Sawheads (Greene&McNeel, 91)
+    let CutsIC=1.01;
+    TimePerTreeIC =(-0.4197+0.01345*DBHST+0.001245*DistBetweenTrees+0.7271*CutsIC)*(1+CSlopeFB_Harv);
+    VolPerPMHIC =TreeVolST/(TimePerTreeIC/60);
+    CostPerPMHIC=PMH_DriveToTree;
+    CostPerCCFIC =100*CostPerPMHIC/VolPerPMHIC;
+    RelevanceIC =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
+    // ID: Hydro-Ax 211 (Hartsough, 01)
+    TreesPerAccumID =Math.max(1,14.2-2.18*DBHST+0.0799*Math.pow(DBHST,2));
+    TimePerAccumID =0.114+0.266+0.073*TreesPerAccumID+0.00999*TreesPerAccumID*DBHST;
+    TreesPerPMHID =60*TreesPerAccumID/TimePerAccumID;
+    VolPerPMHID =TreeVolST*TreesPerPMHID;
+    CostPerPMHID=PMH_DriveToTree;
+    CostPerCCFID =100*CostPerPMHID/VolPerPMHID;
+    RelevanceID=(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
 
-/*------------Fell&Bunch END---------------------------*/
+    /*------------Fell&Bunch END---------------------------*/
 
     ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
     FellAndBunchTreesLess80cf=CostFellBunch*VolPerAcreST/100*InLimits1;
@@ -274,35 +303,35 @@ function calculate(){
     Stump2Truck4PrimaryProductWithoutMovein=FellAndBunchTreesLess80cf+ManualFellLimbBuckTreesLarger80cf+SkidBunchedAllTrees+ProcessLogTreesLess80cf+LoadLogTrees+ChipWholeTrees;
     Movein4PrimaryProduct=MoveInCosts1G39*CalcMoveIn*BoleVolCCF*InLimits1;
     OntoTruck4ResiduesWoMovein=ChipLooseResiduesFromLogTreesLess80cf; //for Mech WT sys;
-    Movein4Residues=0; // Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
+    let Movein4Residues=0; // Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
 
 //Results 
     TotalPerAcre=Stump2Truck4PrimaryProductWithoutMovein+Movein4PrimaryProduct+OntoTruck4ResiduesWoMovein+Movein4Residues;
     TotalPerBoleCCF=TotalPerAcre/BoleVolCCF;
     TotalPerGT=TotalPerAcre/TotalPrimaryProductsAndOptionalResidues;
 
-    document.getElementById("CCF").innerHTML = Math.round(TotalPerBoleCCF);
-    document.getElementById("Ton").innerHTML = Math.round(TotalPerGT);
-    document.getElementById("Acre").innerHTML = Math.round(TotalPerAcre);
+    document.getElementById("CCF").innerHTML = Math.round(TotalPerBoleCCF).toString();
+    document.getElementById("Ton").innerHTML = Math.round(TotalPerGT).toString();
+    document.getElementById("Acre").innerHTML = Math.round(TotalPerAcre).toString();
 
     let output = document.getElementsByClassName("output");
     output[0].style.background="yellow";
-    for (var i = 0; i < output.length; i++) {
+    for (let i = 0; i < output.length; i++) {
         output[i].style.background = "yellow";
     }
 // test
     // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
 
-    outputText= CostPerPMHIA;
+    let outputText= VolPerPMHID; //2.0
     document.getElementById("output_text").innerHTML = outputText;
-    outputText2= CostPerCCFIA;
+    let outputText2= CostPerCCFID;
     document.getElementById("output_text2").innerHTML = outputText2;
-    outputText3=VolPerPMHIA;
+    let outputText3=CSlopeFB_Harv;
     document.getElementById("output_text3").innerHTML = outputText3;
-    outputText4=DBHCT;
+    let outputText4=NonSelfLevelCabDummy;
     document.getElementById("output_text4").innerHTML = outputText4;
-    outputText5=DBHSLT;
+    let outputText5=DBHSLT;
     document.getElementById("output_text5").innerHTML = outputText5;
-    outputText6=a;
+    let outputText6=a;
     document.getElementById("output_text6").innerHTML = outputText6;
 }
