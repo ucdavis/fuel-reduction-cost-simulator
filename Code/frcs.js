@@ -1,12 +1,12 @@
 //Input variables
-var e, inputElements, cut_type, system, Slope, elevation, machine, load_cost, area, move_in_dist,
+let e, inputElements, cut_type, system, Slope, elevation, machine, load_cost, area, move_in_dist,
     CalcMoveIn, CalcResidues;
 //Input variables
-var UserSpecWDCT, UserSpecWDSLT, UserSpecWDLLT,
+let UserSpecWDCT, UserSpecWDSLT, UserSpecWDLLT,
     UserSpecRFCT, UserSpecRFSLT, UserSpecRFLLT,
     UserSpecHFCT, UserSpecHFSLT, UserSpecHFLLT;
 //Intermediate variables except the first line that is consisted of all input variables
-var RemovalsCT, RemovalsSLT, RemovalsLLT, TreeVolCT, TreeVolSLT, TreeVolLLT,
+let RemovalsCT, RemovalsSLT, RemovalsLLT, TreeVolCT, TreeVolSLT, TreeVolLLT,
     RemovalsST, RemovalsALT, Removals, TreeVolST, TreeVolALT, TreeVol,
     VolPerAcreCT, VolPerAcreSLT, VolPerAcreLLT, VolPerAcreST, VolPerAcreALT, VolPerAcre,
     DBHCT, DBHSLT, DBHLLT, DBHST, DBHALT, DBH, HeightCT, HeightSLT, HeightLLT, HeightST, HeightALT, Height,
@@ -20,7 +20,7 @@ var RemovalsCT, RemovalsSLT, RemovalsLLT, TreeVolCT, TreeVolSLT, TreeVolLLT,
     CSlopeFB_Harv, CRemovalsFB_Harv, CSlopeSkidForwLoadSize,
     CHardwoodCT, CHardwoodSLT, CHardwoodLLT, CHardwoodST, CHardwoodALT, CHardwood;
 //Output variables
-var BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptional,
+let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptional,
     TotalPrimaryAndOptional, TotalPrimaryProductsAndOptionalResidues,
     GroundFuel, PiledFuel, ResidueUncutTrees, TotalResidues,
     ChipLooseResiduesFromLogTreesLess80cf, FellAndBunchTreesLess80cf, ManualFellLimbBuckTreesLarger80cf,
@@ -112,7 +112,7 @@ function calculate(){
     TreeVolCT =  Number(document.forms["input_form"]["tvct"].value);
     TreeVolSLT =  Number(document.forms["input_form"]["tvslt"].value);
     TreeVolLLT =  Number(document.forms["input_form"]["tvllt"].value);
-
+//funtions
     RemovalsST = RemovalsCT + RemovalsSLT;
     RemovalsALT = RemovalsSLT + RemovalsLLT;
     Removals = RemovalsCT + RemovalsSLT + RemovalsLLT;
