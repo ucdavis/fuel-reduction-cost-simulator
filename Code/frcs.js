@@ -26,6 +26,8 @@ let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptiona
     ChipLooseResiduesFromLogTreesLess80cf, FellAndBunchTreesLess80cf, ManualFellLimbBuckTreesLarger80cf,
     SkidBunchedAllTrees, ProcessLogTreesLess80cf, LoadLogTrees, ChipWholeTrees, Stump2Truck4PrimaryProductWithoutMovein,
     TotalPerAcre, TotalPerBoleCCF, TotalPerGT;
+//Fell&Bunch
+let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
 //Assumption variables
 // var MaxManualTreeVol, MaxMechTreeVol, MoistureContentFraction, LogLength, LoadWeightLog, LoadWeightChip,
 //     CTLTrailSpacing, HdwdCostPremium, ResidueRecovFracWT, ResidueRecovFracCTL;
@@ -132,7 +134,7 @@ function calculate(){
     DBHCT = Math.sqrt((TreeVolCT+3.675)/0.216);
     DBHSLT = Math.sqrt((TreeVolSLT+3.675)/0.216);
     DBHLLT = Math.sqrt((TreeVolLLT+3.675)/0.216);
-    DBHST = TreeVolST>0 ? Math.sqrt((RemovalsCT*DBHCT^2+RemovalsSLT*DBHSLT^2)/RemovalsST) : 0;
+    DBHST = TreeVolST>0 ? Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST) : 0;
     DBHALT = TreeVolALT>0 ? Math.sqrt((RemovalsSLT*DBHSLT^2+RemovalsLLT*DBHLLT^2)/RemovalsALT) : 0;
     DBH= Math.sqrt((RemovalsCT*DBHCT^2+RemovalsALT*DBHALT^2)/Removals);
 //Tree Height
@@ -249,6 +251,18 @@ function calculate(){
     let CostChipLooseRes=7.37;
     let InLimits1=1; 
 /*---------hardcoded-----------*/
+/*--------------Fell&Bunch START---------------------------*/
+    let PMH_DriveToTree=181.30; //Todo: (hardcoded)
+    DistBetweenTrees=Math.sqrt(43560/Math.max(RemovalsST,1));
+    // I. Drive-To-Tree
+    // A) Melroe Bobcat (Johnson, 79)
+    TimePerTreeIA =0.204+0.00822*DistBetweenTrees+0.02002*DBHST+0.00244*Slope;
+    VolPerPMHIA = TreeVolST/(TimePerTreeIA/60);
+    CostPerPMHIA =PMH_DriveToTree;
+    CostPerCCFIA =100*CostPerPMHIA/VolPerPMHIA;
+    RelevanceIA =(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
+
+/*------------Fell&Bunch END---------------------------*/
 
     ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
     FellAndBunchTreesLess80cf=CostFellBunch*VolPerAcreST/100*InLimits1;
@@ -276,12 +290,19 @@ function calculate(){
     for (var i = 0; i < output.length; i++) {
         output[i].style.background = "yellow";
     }
+// test
+    // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
 
-//test
-    // outputText= TotalPerAcre;
-    // document.getElementById("output_text").innerHTML = outputText;
-    // outputText2=TotalPerBoleCCF;
-    // document.getElementById("output_text2").innerHTML = outputText2;
-    // outputText3=TotalPerGT;
-    // document.getElementById("output_text3").innerHTML = outputText3;
+    outputText= CostPerPMHIA;
+    document.getElementById("output_text").innerHTML = outputText;
+    outputText2= CostPerCCFIA;
+    document.getElementById("output_text2").innerHTML = outputText2;
+    outputText3=VolPerPMHIA;
+    document.getElementById("output_text3").innerHTML = outputText3;
+    outputText4=DBHCT;
+    document.getElementById("output_text4").innerHTML = outputText4;
+    outputText5=DBHSLT;
+    document.getElementById("output_text5").innerHTML = outputText5;
+    outputText6=a;
+    document.getElementById("output_text6").innerHTML = outputText6;
 }
