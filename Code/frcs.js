@@ -26,21 +26,12 @@ let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptiona
     ChipLooseResiduesFromLogTreesLess80cf, FellAndBunchTreesLess80cf, ManualFellLimbBuckTreesLarger80cf,
     SkidBunchedAllTrees, ProcessLogTreesLess80cf, LoadLogTrees, ChipWholeTrees, Stump2Truck4PrimaryProductWithoutMovein,
     TotalPerAcre, TotalPerBoleCCF, TotalPerGT;
-//IA Fell&Bunch
-let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
-//IB Chainsaw Heads
-let TimePerTreeIB,VolPerPMHIB,CostPerPMHIB,CostPerCCFIB,RelevanceIB;
-//IC Intermittent Circular Sawheads
-let TimePerTreeIC,VolPerPMHIC,CostPerPMHIC,CostPerCCFIC,RelevanceIC;
-//ID Hydro-Ax 211 (Hartsough, 01)
-let TreesPerAccumID, TimePerAccumID, TreesPerPMHID, VolPerPMHID, CostPerPMHID, CostPerCCFID, RelevanceID;
 //Assumption variables
 // var MaxManualTreeVol, MaxMechTreeVol, MoistureContentFraction, LogLength, LoadWeightLog, LoadWeightChip,
 //     CTLTrailSpacing, HdwdCostPremium, ResidueRecovFracWT, ResidueRecovFracCTL;
 //test purpose
 // var outputText, outputText2, outputText3;
 // var DieselPrice = 3.327;
-
 function calculate(){
     // get the harvesting system
     e = document.getElementById("system");
@@ -247,7 +238,7 @@ function calculate(){
 // For All Products, $/ac--
 
 /*---------hardcoded-----------*/ //Todo: Find the equations for var below
-    let CostFellBunch=12.70; 
+    let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let CostManFLBLLT=12.78;
     let CostSkidBun=35.42;
     let CostProcess=8.18;
@@ -257,7 +248,81 @@ function calculate(){
     let CostChipLooseRes=7.37;
     let InLimits1=1; 
 /*---------hardcoded-----------*/
-/*--------------Fell&Bunch START---------------------------*/
+
+    ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
+    FellAndBunchTreesLess80cf=CostFellBunch*VolPerAcreST/100*InLimits1;
+    ManualFellLimbBuckTreesLarger80cf=CostManFLBLLT*VolPerAcreLLT/100*InLimits1;
+    SkidBunchedAllTrees=CostSkidBun*VolPerAcre/100*InLimits1;
+    ProcessLogTreesLess80cf=CostProcess*VolPerAcreSLT/100*InLimits1;
+    LoadLogTrees=CostLoad*VolPerAcreALT/100*InLimits1;
+    ChipWholeTrees=CostChipWT*VolPerAcreCT/100*InLimits1;
+    Stump2Truck4PrimaryProductWithoutMovein=FellAndBunchTreesLess80cf+ManualFellLimbBuckTreesLarger80cf+SkidBunchedAllTrees+ProcessLogTreesLess80cf+LoadLogTrees+ChipWholeTrees;
+    Movein4PrimaryProduct=MoveInCosts1G39*CalcMoveIn*BoleVolCCF*InLimits1;
+    OntoTruck4ResiduesWoMovein=ChipLooseResiduesFromLogTreesLess80cf; //for Mech WT sys;
+    let Movein4Residues=0; // Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
+
+//Results 
+    TotalPerAcre=Stump2Truck4PrimaryProductWithoutMovein+Movein4PrimaryProduct+OntoTruck4ResiduesWoMovein+Movein4Residues;
+    TotalPerBoleCCF=TotalPerAcre/BoleVolCCF;
+    TotalPerGT=TotalPerAcre/TotalPrimaryProductsAndOptionalResidues;
+
+    document.getElementById("CCF").textContent = Math.round(TotalPerBoleCCF).toString();
+    document.getElementById("Ton").textContent = Math.round(TotalPerGT).toString();
+    document.getElementById("Acre").textContent = Math.round(TotalPerAcre).toString();
+
+    let output = document.getElementsByClassName("output");
+    output[0].style.background="yellow";
+    for (let i = 0; i < output.length; i++) {
+        output[i].style.background = "yellow";
+    }
+// test
+//     let a=FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv);
+    // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
+    // outputText= CostFellBunch; //2.0
+    // document.getElementById("output_text").textContent = outputText;
+    // outputText2=a;
+    // document.getElementById("output_text2").textContent = outputText2;
+    // outputText3=TimePerAccumIIG;
+    // document.getElementById("output_text3").textContent = outputText3;
+    // outputText4=NonSelfLevelCabDummy;
+    // document.getElementById("output_text4").textContent = outputText4;
+    // outputText5=DBHSLT;
+    // document.getElementById("output_text5").textContent = outputText5;
+    // outputText6=;
+    // document.getElementById("output_text6").textContent = outputText6;
+}
+
+/**
+ * @return {number}
+ */
+function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST){
+//IA Melroe Bobcat (Johnson, 79) //FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
+    let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
+//IB Chainsaw Heads
+    let TimePerTreeIB,VolPerPMHIB,CostPerPMHIB,CostPerCCFIB,RelevanceIB;
+//IC Intermittent Circular Sawheads
+    let TimePerTreeIC,VolPerPMHIC,CostPerPMHIC,CostPerCCFIC,RelevanceIC;
+//ID Hydro-Ax 211 (Hartsough, 01)
+    let TreesPerAccumID, TimePerAccumID, TreesPerPMHID, VolPerPMHID, CostPerPMHID, CostPerCCFID, RelevanceID;
+// IIA: Drott (Johnson, 79) not used at present
+    let TimePerTreeIIA, VolPerPMHIIA, CostPerPMHIIA, CostPerCCFIIA, RelevanceIIA;
+// IIB: Timbco 2520&Cat 227 (Johnson, 88)
+    let TreeInReachIIB,TreesPerCycleIIB,TimePerCycleIIB,TimePerTreeIIB,VolPerPMHIIB,CostPerPMHIIB,CostPerCCFIIB,RelevanceIIB;
+// IIC: JD 693B&TJ Timbco 2518 (Gingras, 88)
+    let UnmerchPerMerchIIC, TreesInReachIIC,ObsTreesPerCycleIIC, TreesPerCycleIIC,TreesPerPMHIIC,VolPerPMHIIC,
+        CostPerPMHIIC,CostPerCCFIIC,RelevanceIIC;
+// IID: Timbco (Gonsier&Mandzak, 87)
+    let TimePerTreeIID,VolPerPMHIID,CostPerPMHIID,CostPerCCFIID,RelevanceIID;
+// IIE: FERIC Generic (Gingras, J.F., 96.  The cost of product sorting during harvesting.  FERIC Technical Note TN-245)
+    let VolPerPMHIIE,CostPerPMHIIE,CostPerCCFIIE,RelevanceIIE;
+// IIF: (Plamondon, J. 1998.  Trials of mechanized tree-length harvesting in eastern Canada. FERIC Technical Note TN-273)
+    let VolPerPMHIIF,CostPerPMHIIF,CostPerCCFIIF,RelevanceIIF;
+// IIG: Timbco 420 (Hartsough, B., E. Drews, J. McNeel, T. Durston and B. Stokes. 97.
+//      Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.  Forest Products Journal 47(11/12):59-68)
+    let TreesInReachIIG,TreesPerAccumIIG,MoveFracIIG,MoveIIG,FellIIG,TimePerAccumIIG,TimePerTreeIIG,VolPerPMHIIG,
+        CostPerPMHIIG,CostPerCCFIIG,RelevanceIIG;
+
+    /*--------------Fell&Bunch START---------------------------*/
     // IA: Melroe Bobcat (Johnson, 79)
     let PMH_DriveToTree=181.30; //Todo: (hardcoded)
     DistBetweenTrees=Math.sqrt(43560/Math.max(RemovalsST,1));
@@ -290,48 +355,86 @@ function calculate(){
     CostPerPMHID=PMH_DriveToTree;
     CostPerCCFID =100*CostPerPMHID/VolPerPMHID;
     RelevanceID=(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
+    // II. Swing Boom
+    // IIA: Drott (Johnson, 79) not used at present
+    let PMH_SwingBoom=233.26; //Todo: (hardcoded)
+    TimePerTreeIIA =0.388+0.0137*DistBetweenTrees+0.0398*Slope;
+    VolPerPMHIIA =TreeVolST/(TimePerTreeIIA/60);
+    CostPerPMHIIA =PMH_SwingBoom;
+    CostPerCCFIIA =100*CostPerPMHIIA/VolPerPMHIIA;
+    RelevanceIIA=0; //hardcoded
 
+    // IIB: Timbco 2520&Cat 227 (Johnson, 88)
+    let PMH_SelfLevel=238;//Todo: (hardcoded)
+    let BoomReachIIB=24; //
+    TreeInReachIIB =RemovalsST*Math.PI*Math.pow(BoomReachIIB,2)/43560;
+    TreesPerCycleIIB =Math.max(1,TreeInReachIIB);
+    TimePerCycleIIB =(0.242+0.1295*TreesPerCycleIIB+0.0295*DBHST*TreesPerCycleIIB)*(1+CSlopeFB_Harv);
+    TimePerTreeIIB =TimePerCycleIIB/TreesPerCycleIIB;
+    VolPerPMHIIB =TreeVolST/(TimePerTreeIIB/60);
+    CostPerPMHIIB =PMH_SwingBoom*NonSelfLevelCabDummy+PMH_SelfLevel*(1-NonSelfLevelCabDummy);
+    CostPerCCFIIB =100*CostPerPMHIIB/VolPerPMHIIB;
+    RelevanceIIB =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
+    // IIC: JD 693B&TJ Timbco 2518 (Gingras, 88)
+    let UnmerchTreesPerHaIIC=285;
+    UnmerchPerMerchIIC =Math.min(1.5,285/(2.47*RemovalsST));
+    let BoomReachIIC=24;
+    TreesInReachIIC =RemovalsST*Math.PI*Math.pow(BoomReachIIC,2)/43560;
+    ObsTreesPerCycleIIC =(4.36+9-(0.12+0.34)*DBHST+0.00084*2.47*RemovalsST)/2;
+    TreesPerCycleIIC =Math.max(1,Math.min(TreesInReachIIC,ObsTreesPerCycleIIC));
+    TreesPerPMHIIC =(127.8+21.2*TreesPerCycleIIC-63.1*UnmerchPerMerchIIC+0.033*UnmerchTreesPerHaIIC)/(1+CSlopeFB_Harv);
+    VolPerPMHIIC =TreeVolST*TreesPerPMHIIC;
+    CostPerPMHIIC =PMH_SwingBoom*NonSelfLevelCabDummy+PMH_SelfLevel*(1-NonSelfLevelCabDummy);
+    CostPerCCFIIC =100*CostPerPMHIIC/VolPerPMHIIC;
+    RelevanceIIC =(DBHST<12?1:(DBHST<18?3-DBHST/6:0))*(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
+    // IID: Timbco (Gonsier&Mandzak, 87)
+    TimePerTreeIID =(0.324+0.00138*Math.pow(DBHST,2))*(1+CSlopeFB_Harv+CRemovalsFB_Harv);
+    VolPerPMHIID =TreeVolST/(TimePerTreeIID/60);
+    CostPerPMHIID =PMH_SelfLevel;
+    CostPerCCFIID =100*CostPerPMHIID/VolPerPMHIID;
+    RelevanceIID =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<15?0:(Slope<35?-3/4+Slope/20:1));
+    // IIE: FERIC Generic (Gingras, J.F., 96.  The cost of product sorting during harvesting.  FERIC Technical Note TN-245)
+    VolPerPMHIIE =(50.338/0.028317*Math.pow((TreeVolST*0.028317),0.3011))/(1+CSlopeFB_Harv+CRemovalsFB_Harv);
+    CostPerPMHIIE =PMH_SwingBoom*NonSelfLevelCabDummy+PMH_SelfLevel*(1-NonSelfLevelCabDummy);
+    CostPerCCFIIE =100*CostPerPMHIIE/VolPerPMHIIE;
+    RelevanceIIE =(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
+    // IIF: (Plamondon, J. 1998.  Trials of mechanized tree-length harvesting in eastern Canada. FERIC Technical Note TN-273)
+    VolPerPMHIIF =(5/0.028317+57.7*TreeVolST)/(1+CSlopeFB_Harv+CRemovalsFB_Harv);
+    CostPerPMHIIF =PMH_SwingBoom*NonSelfLevelCabDummy+PMH_SelfLevel*(1-NonSelfLevelCabDummy);
+    CostPerCCFIIF =100*CostPerPMHIIF/VolPerPMHIIF;
+    RelevanceIIF =(TreeVolST<20?1:(TreeVolST<50?5/3-TreeVolST/30:0))*(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
+    // IIG: Timbco 420 (Hartsough, B., E. Drews, J. McNeel, T. Durston and B. Stokes. 97.
+    //      Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.  Forest Products Journal 47(11/12):59-68)
+    let HybridIIG=0;
+    let DeadIIG=0;
+    let DelayFracIIG =0.0963;
+    let BoomReachIIG=24;
+    TreesInReachIIG =RemovalsST*Math.PI*Math.pow(BoomReachIIG,2)/43560;
+    TreesPerAccumIIG =Math.max(1,1.81-0.0664*DBHST+3.64/DBHST-0.0058*20-0.27*0-0.1*0);
+    MoveFracIIG =0.5/(Math.trunc(TreesInReachIIG/TreesPerAccumIIG)+1);
+    MoveIIG =0.192+0.00779*(BoomReachIIG+DistBetweenTrees)+0.35*HybridIIG;
+    FellIIG =0.285+0.126*TreesPerAccumIIG+0.0176*DBHST*TreesPerAccumIIG-0.0394*DeadIIG;
+    TimePerAccumIIG =MoveFracIIG*MoveIIG+FellIIG;
+    TimePerTreeIIG =(TimePerAccumIIG*(1+DelayFracIIG)/TreesPerAccumIIG)*(1+CSlopeFB_Harv);
+    VolPerPMHIIG =TreeVolST/TimePerTreeIIG*60;
+    CostPerPMHIIG =PMH_SwingBoom*NonSelfLevelCabDummy+PMH_SelfLevel*(1-NonSelfLevelCabDummy);
+    CostPerCCFIIG =100*CostPerPMHIIG/VolPerPMHIIG;
+    RelevanceIIG =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
+
+    // III. User-Defined
+    let UserDefinedVolPerPMH=0.001;
+    let UserDefinedCostPerPMH=null;
+    let UserDefinedCostPerCCF =100*UserDefinedCostPerPMH/UserDefinedVolPerPMH;
+    let UserDefinedRelevance=0;
+
+    // Summary
+    let WeightedAverage =(TreeVolST>0?CHardwoodST*100*(CostPerPMHIA*RelevanceIA+CostPerPMHIB*RelevanceIB+CostPerPMHIC*RelevanceIC
+        +CostPerPMHID*RelevanceID+CostPerPMHIIA*RelevanceIIA+CostPerPMHIIB*RelevanceIIB+CostPerPMHIIC*RelevanceIIC
+        +CostPerPMHIID*RelevanceIID+CostPerPMHIIE*RelevanceIIE+CostPerPMHIIF*RelevanceIIF+CostPerPMHIIG*RelevanceIIG
+        +UserDefinedCostPerPMH*UserDefinedRelevance)/(VolPerPMHIA*RelevanceIA+VolPerPMHIB*RelevanceIB
+        +VolPerPMHIC*RelevanceIC+VolPerPMHID*RelevanceID+VolPerPMHIIA*RelevanceIIA+VolPerPMHIIB*RelevanceIIB
+        +VolPerPMHIIC*RelevanceIIC+VolPerPMHIID*RelevanceIID+VolPerPMHIIE*RelevanceIIE+VolPerPMHIIF*RelevanceIIF
+        +VolPerPMHIIG*RelevanceIIG+UserDefinedVolPerPMH*UserDefinedRelevance):0);
     /*------------Fell&Bunch END---------------------------*/
-
-    ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
-    FellAndBunchTreesLess80cf=CostFellBunch*VolPerAcreST/100*InLimits1;
-    ManualFellLimbBuckTreesLarger80cf=CostManFLBLLT*VolPerAcreLLT/100*InLimits1;
-    SkidBunchedAllTrees=CostSkidBun*VolPerAcre/100*InLimits1;
-    ProcessLogTreesLess80cf=CostProcess*VolPerAcreSLT/100*InLimits1;
-    LoadLogTrees=CostLoad*VolPerAcreALT/100*InLimits1;
-    ChipWholeTrees=CostChipWT*VolPerAcreCT/100*InLimits1;
-    Stump2Truck4PrimaryProductWithoutMovein=FellAndBunchTreesLess80cf+ManualFellLimbBuckTreesLarger80cf+SkidBunchedAllTrees+ProcessLogTreesLess80cf+LoadLogTrees+ChipWholeTrees;
-    Movein4PrimaryProduct=MoveInCosts1G39*CalcMoveIn*BoleVolCCF*InLimits1;
-    OntoTruck4ResiduesWoMovein=ChipLooseResiduesFromLogTreesLess80cf; //for Mech WT sys;
-    let Movein4Residues=0; // Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
-
-//Results 
-    TotalPerAcre=Stump2Truck4PrimaryProductWithoutMovein+Movein4PrimaryProduct+OntoTruck4ResiduesWoMovein+Movein4Residues;
-    TotalPerBoleCCF=TotalPerAcre/BoleVolCCF;
-    TotalPerGT=TotalPerAcre/TotalPrimaryProductsAndOptionalResidues;
-
-    document.getElementById("CCF").innerHTML = Math.round(TotalPerBoleCCF).toString();
-    document.getElementById("Ton").innerHTML = Math.round(TotalPerGT).toString();
-    document.getElementById("Acre").innerHTML = Math.round(TotalPerAcre).toString();
-
-    let output = document.getElementsByClassName("output");
-    output[0].style.background="yellow";
-    for (let i = 0; i < output.length; i++) {
-        output[i].style.background = "yellow";
-    }
-// test
-    // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
-
-    let outputText= VolPerPMHID; //2.0
-    document.getElementById("output_text").innerHTML = outputText;
-    let outputText2= CostPerCCFID;
-    document.getElementById("output_text2").innerHTML = outputText2;
-    let outputText3=CSlopeFB_Harv;
-    document.getElementById("output_text3").innerHTML = outputText3;
-    let outputText4=NonSelfLevelCabDummy;
-    document.getElementById("output_text4").innerHTML = outputText4;
-    let outputText5=DBHSLT;
-    document.getElementById("output_text5").innerHTML = outputText5;
-    let outputText6=a;
-    document.getElementById("output_text6").innerHTML = outputText6;
+    return WeightedAverage;
 }
