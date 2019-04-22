@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="151c462a-ce71-4d11-bf73-88c530271808" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Docs/FRCS equations.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../Docs/FRCS equations.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Docs/FRCS-West-test2.xls" beforeDir="false" afterPath="$PROJECT_DIR$/../Docs/FRCS-West-test2.xls" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -37,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frcs.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-878">
-              <caret line="247" column="30" lean-forward="true" selection-start-line="247" selection-start-column="30" selection-end-line="247" selection-end-column="30" />
+            <state relative-caret-position="305">
+              <caret line="248" column="21" lean-forward="true" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -83,8 +84,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="953" />
-    <option name="width" value="974" />
+    <option name="x" value="729" />
+    <option name="width" value="1198" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -150,16 +151,17 @@
       <workItem from="1555308665223" duration="471000" />
       <workItem from="1555456767357" duration="24745000" />
       <workItem from="1555643344529" duration="2062000" />
+      <workItem from="1555700661842" duration="1915000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44252000" />
+    <option name="totallyTimeSpent" value="46167000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="953" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="729" y="0" width="1198" height="1047" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2596154" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2596154" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -205,8 +207,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frcs.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-878">
-          <caret line="247" column="30" lean-forward="true" selection-start-line="247" selection-start-column="30" selection-end-line="247" selection-end-column="30" />
+        <state relative-caret-position="305">
+          <caret line="248" column="21" lean-forward="true" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
         </state>
       </provider>
     </entry>
