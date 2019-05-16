@@ -44,9 +44,9 @@ function calculate(){
         cut_type = 1;    
     }
     //get yarding distance, percent_slope; and elevation for helicopter systems
-    deliver_dist = document.forms["input_form"]["deliver_dist"].value;
-    Slope = Number(document.forms["input_form"]["slope"].value);
-    elevation = document.forms["input_form"]["elevation"].value;
+    deliver_dist = document.getElementById("deliver_dist").value;
+    Slope = Number(document.getElementById("slope").value);
+    elevation = document.getElementById("elevation").value;
 
     // get the harvesting system
     e = document.getElementById("machine");
@@ -68,8 +68,8 @@ function calculate(){
         CalcMoveIn = 0;
     }
     //area treated and one-way move-in distance are needed when movein_cost is checked.
-    area = document.forms["input_form"]["area"].value;
-    move_in_dist = document.forms["input_form"]["move_in_dist"].value;
+    area = document.getElementById("area").value;
+    move_in_dist = document.getElementById("move_in_dist").value;
 
     //if include the costs of collecting and chipping residues
     inputElements = document.getElementsByClassName('residue_collect');
@@ -93,24 +93,24 @@ function calculate(){
     let ResidueRecovFracCTL=0.50;
 
     //get values of Green wood density, Residue Fraction and Hardwood Fraction
-    //gwd: Green wood density; rf: Residue Fraction; hf: Hardwood Fraction.
-    //sl: small log; ll: large log
-    UserSpecWDCT = Number(document.forms["input_form"]["gwd_chip"].value);
-    UserSpecWDSLT = Number(document.forms["input_form"]["gwd_sl"].value);
-    UserSpecWDLLT = Number(document.forms["input_form"]["gwd_ll"].value);
-    UserSpecRFCT = Number(document.forms["input_form"]["rf_chip"].value);
-    UserSpecRFSLT = Number(document.forms["input_form"]["rf_sl"].value);
-    UserSpecRFLLT = Number(document.forms["input_form"]["rf_ll"].value);
-    UserSpecHFCT = Number(document.forms["input_form"]["hf_chip"].value);
-    UserSpecHFSLT = Number(document.forms["input_form"]["hf_sl"].value);
-    UserSpecHFLLT = Number(document.forms["input_form"]["hf_ll"].value);
+    //ct: chip trees; slt: small log trees; llt: large log trees; rm: removals; tv: tree volume;
+    //gwd: green wood density; rf: residue fraction; hf: hardwood fraction
+    UserSpecWDCT = Number(document.getElementById("gwd_ct").value); // green wood density of chip trees
+    UserSpecWDSLT = Number(document.getElementById("gwd_slt").value); 
+    UserSpecWDLLT = Number(document.getElementById("gwd_llt").value);
+    UserSpecRFCT = Number(document.getElementById("rf_ct").value); 
+    UserSpecRFSLT = Number(document.getElementById("rf_slt").value); // residue fraction of small log trees
+    UserSpecRFLLT = Number(document.getElementById("rf_llt").value);
+    UserSpecHFCT = Number(document.getElementById("hf_ct").value); 
+    UserSpecHFSLT = Number(document.getElementById("hf_slt").value);
+    UserSpecHFLLT = Number(document.getElementById("hf_llt").value); // hardwood fraction of large log trees
 
-    RemovalsCT = Number(document.forms["input_form"]["rmct"].value);
-    RemovalsSLT = Number(document.forms["input_form"]["rmslt"].value);
-    RemovalsLLT = Number(document.forms["input_form"]["rmllt"].value);
-    TreeVolCT =  Number(document.forms["input_form"]["tvct"].value);
-    TreeVolSLT =  Number(document.forms["input_form"]["tvslt"].value);
-    TreeVolLLT =  Number(document.forms["input_form"]["tvllt"].value);
+    RemovalsCT = Number(document.getElementById("rmct").value); // removals of chip trees
+    RemovalsSLT = Number(document.getElementById("rmslt").value); 
+    RemovalsLLT = Number(document.getElementById("rmllt").value); 
+    TreeVolCT =  Number(document.getElementById("tvct").value); 
+    TreeVolSLT =  Number(document.getElementById("tvslt").value); // tree volume of small log trees
+    TreeVolLLT =  Number(document.getElementById("tvllt").value);
 //funtions
     RemovalsST = RemovalsCT + RemovalsSLT;
     RemovalsALT = RemovalsSLT + RemovalsLLT;
@@ -270,11 +270,13 @@ function calculate(){
     document.getElementById("Ton").textContent = Math.round(TotalPerGT).toString();
     document.getElementById("Acre").textContent = Math.round(TotalPerAcre).toString();
 
-    let output = document.getElementsByClassName("output");
-    output[0].style.background="yellow";
-    for (let i = 0; i < output.length; i++) {
-        output[i].style.background = "yellow";
-    }
+// highlight outputs color
+    // let output = document.getElementsByClassName("output");
+    // output[0].style.background="yellow";
+    // for (let i = 0; i < output.length; i++) {
+    //     output[i].style.background = "yellow";
+    // }
+    
 // test
 //     let a=FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv);
     // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);

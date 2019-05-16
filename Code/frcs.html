@@ -9,7 +9,6 @@
 <body>
     <header><p>Fuel Reduction Cost Simulator - California</p></header>
     <main>
-        <form name="input_form" action="javascript:calculate();">
         <div class="upper">
             <div class="config">
                 <div class="subtitle">CONFIGURATION</div>
@@ -47,15 +46,15 @@
                 </div>
                 <div class="elemConfig">
                     <div>Yard/Skid/Forward Slope Dist (ft):</div>
-                    <div><input type="number" name="deliver_dist" size="5" required></div>
+                    <div><input type="number" id="deliver_dist" required></div>
                 </div>
                 <div class="elemConfig">
                     <div>Percent Slope:</div>
-                    <div><input type="number" name="slope" size="5" required></div>
+                    <div><input type="number" id="slope" required></div>
                 </div>
                 <div class="elemConfig">
                     <div>Elevation:</div>
-                    <div><input type="number" name="elevation" size="5"></div>
+                    <div><input type="number" id="elevation"></div>
                 </div>
                 <div class="elemConfig">
                     <div>Change Machine Costs ($/PMH)</div>
@@ -102,12 +101,12 @@
                     <div>
                         <div>
                             Area treated
-                            <input type="number" name="area" size="5">
+                            <input type="number" id="area" size="5">
                             acres
                         </div>
                         <div>
                             One-way move-in distance
-                            <input type="number" name="move_in_dist" size="5">
+                            <input type="number" id="move_in_dist" size="5">
                             miles
                         </div>
                     </div>
@@ -124,21 +123,21 @@
                     </tr>
                     <tr>
                         <th>Green wood density (lbs/cf)</th>
-                        <td><input type=number step=0.0001 name="gwd_chip"></td> <!--gwd = green wood density-->
-                        <td><input type=number step=0.0001 name="gwd_sl"></td>
-                        <td><input type=number step=0.0001 name="gwd_ll"></td>
+                        <td><input type=number step=0.0001 id="gwd_ct"></td> <!--gwd = green wood density-->
+                        <td><input type=number step=0.0001 id="gwd_slt"></td>
+                        <td><input type=number step=0.0001 id="gwd_llt"></td>
                     </tr>
                     <tr>
                         <th>Residue Fraction</th>
-                        <td><input type=number step=0.0001 name="rf_chip"></td> <!--residue fraction-->
-                        <td><input type=number step=0.0001 name="rf_sl"></td>
-                        <td><input type=number step=0.0001 name="rf_ll"></td>
+                        <td><input type=number step=0.0001 id="rf_ct"></td> <!--residue fraction-->
+                        <td><input type=number step=0.0001 id="rf_slt"></td>
+                        <td><input type=number step=0.0001 id="rf_llt"></td>
                     </tr>
                     <tr>
                         <th>Hardwood Fraction</th>
-                        <td><input type=number step=0.0001 name="hf_chip"></td> <!--hardwood fraction-->
-                        <td><input type=number step=0.0001 name="hf_sl"></td>
-                        <td><input type=number step=0.0001 name="hf_ll"></td>
+                        <td><input type=number step=0.0001 id="hf_ct"></td> <!--hardwood fraction-->
+                        <td><input type=number step=0.0001 id="hf_slt"></td>
+                        <td><input type=number step=0.0001 id="hf_llt"></td>
                     </tr>
                 </table>
             </div>
@@ -164,12 +163,12 @@
                         <td class="t2">Vol/tree (ft3)</td>
                     </tr>
                     <tr>
-                        <td class="t2"><input type=number step=0.01 name="rmct"></td> <!--removals of chip trees-->
-                        <td class="t2"><input type=number step=0.01 name="tvct"></td> <!--tree volume of chip trees-->
-                        <td class="t2"><input type=number step=0.01 name="rmslt"></td> <!--removals of small log trees-->
-                        <td class="t2"><input type=number step=0.01 name="tvslt"></td> <!--tree volume of small log trees-->
-                        <td class="t2"><input type=number step=0.01 name="rmllt"></td> <!--removals of large log trees-->
-                        <td class="t2"><input type=number step=0.01 name="tvllt"></td> <!--tree volume of large log trees-->
+                        <td class="t2"><input type=number step=0.01 id="rmct"></td> <!--removals of chip trees-->
+                        <td class="t2"><input type=number step=0.01 id="tvct"></td> <!--tree volume of chip trees-->
+                        <td class="t2"><input type=number step=0.01 id="rmslt"></td> <!--removals of small log trees-->
+                        <td class="t2"><input type=number step=0.01 id="tvslt"></td> <!--tree volume of small log trees-->
+                        <td class="t2"><input type=number step=0.01 id="rmllt"></td> <!--removals of large log trees-->
+                        <td class="t2"><input type=number step=0.01 id="tvllt"></td> <!--tree volume of large log trees-->
                     </tr>
                 </table>
             </div>
@@ -192,15 +191,15 @@
                 </table>
             </div>
         </div>
-        <input type="submit" value="Calculate">
-        </form>
-        <p id="output_text"/>
-        <p id="output_text2"/>
-        <p id="output_text3"/>
-        <p id="output_text4"/>
-        <p id="output_text5"/>
-        <p id="output_text6"/>
+        <input type="submit" value="Calculate" onclick="calculate()">
+        <!-- <p id="output_text"> // for test use
+        <p id="output_text2">
+        <p id="output_text3">
+        <p id="output_text4">
+        <p id="output_text5">
+        <p id="output_text6"> -->
     </main>
+
     <script type="text/javascript" src="frcs.js"></script>
 </body>
 </html>

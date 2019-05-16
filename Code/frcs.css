@@ -118,14 +118,6 @@ th.checkbox {
     height: 150px;
 }
 
-/*.output {*/
-    /*background: red;*/
-/*}*/
-
-.displayresult {
-    background: yellow;
-}
-
 table th td {
     border: 1px solid black;
 }
@@ -151,6 +143,5 @@ table th td {
     .input_table{
         margin-bottom: 1%;
     }
-
 }
 
