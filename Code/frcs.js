@@ -238,6 +238,7 @@ function calculate(){
 // For All Products, $/ac--
 
 /*---------hardcoded-----------*/ //Todo: Find the equations for var below
+    let TreesPerCycleIIB;
     let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
     let CostSkidBun=35.42;
@@ -298,38 +299,37 @@ function calculate(){
  * @return {number}
  */
 function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST){
-//IA Melroe Bobcat (Johnson, 79) //FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
+    //IA Melroe Bobcat (Johnson, 79) //FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
-//IB Chainsaw Heads
+    //IB Chainsaw Heads
     let TimePerTreeIB,VolPerPMHIB,CostPerPMHIB,CostPerCCFIB,RelevanceIB;
-//IC Intermittent Circular Sawheads
+    //IC Intermittent Circular Sawheads
     let TimePerTreeIC,VolPerPMHIC,CostPerPMHIC,CostPerCCFIC,RelevanceIC;
-//ID Hydro-Ax 211 (Hartsough, 01)
+    //ID Hydro-Ax 211 (Hartsough, 01)
     let TreesPerAccumID, TimePerAccumID, TreesPerPMHID, VolPerPMHID, CostPerPMHID, CostPerCCFID, RelevanceID;
-// IIA: Drott (Johnson, 79) not used at present
+    // IIA: Drott (Johnson, 79) not used at present
     let TimePerTreeIIA, VolPerPMHIIA, CostPerPMHIIA, CostPerCCFIIA, RelevanceIIA;
-// IIB: Timbco 2520&Cat 227 (Johnson, 88)
-    let TreeInReachIIB,TreesPerCycleIIB,TimePerCycleIIB,TimePerTreeIIB,VolPerPMHIIB,CostPerPMHIIB,CostPerCCFIIB,RelevanceIIB;
-// IIC: JD 693B&TJ Timbco 2518 (Gingras, 88)
+    // IIB: Timbco 2520&Cat 227 (Johnson, 88)
+    let TreeInReachIIB,TimePerCycleIIB,TimePerTreeIIB,VolPerPMHIIB,CostPerPMHIIB,CostPerCCFIIB,RelevanceIIB;
+    // IIC: JD 693B&TJ Timbco 2518 (Gingras, 88)
     let UnmerchPerMerchIIC, TreesInReachIIC,ObsTreesPerCycleIIC, TreesPerCycleIIC,TreesPerPMHIIC,VolPerPMHIIC,
         CostPerPMHIIC,CostPerCCFIIC,RelevanceIIC;
-// IID: Timbco (Gonsier&Mandzak, 87)
+    // IID: Timbco (Gonsier&Mandzak, 87)
     let TimePerTreeIID,VolPerPMHIID,CostPerPMHIID,CostPerCCFIID,RelevanceIID;
-// IIE: FERIC Generic (Gingras, J.F., 96.  The cost of product sorting during harvesting.  FERIC Technical Note TN-245)
+    // IIE: FERIC Generic (Gingras, J.F., 96.  The cost of product sorting during harvesting.  FERIC Technical Note TN-245)
     let VolPerPMHIIE,CostPerPMHIIE,CostPerCCFIIE,RelevanceIIE;
-// IIF: (Plamondon, J. 1998.  Trials of mechanized tree-length harvesting in eastern Canada. FERIC Technical Note TN-273)
+    // IIF: (Plamondon, J. 1998.  Trials of mechanized tree-length harvesting in eastern Canada. FERIC Technical Note TN-273)
     let VolPerPMHIIF,CostPerPMHIIF,CostPerCCFIIF,RelevanceIIF;
-// IIG: Timbco 420 (Hartsough, B., E. Drews, J. McNeel, T. Durston and B. Stokes. 97.
-//      Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.  Forest Products Journal 47(11/12):59-68)
+    // IIG: Timbco 420 (Hartsough, B., E. Drews, J. McNeel, T. Durston and B. Stokes. 97.
+    //      Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.  Forest Products Journal 47(11/12):59-68)
     let TreesInReachIIG,TreesPerAccumIIG,MoveFracIIG,MoveIIG,FellIIG,TimePerAccumIIG,TimePerTreeIIG,VolPerPMHIIG,
         CostPerPMHIIG,CostPerCCFIIG,RelevanceIIG;
 
     /*--------------Fell&Bunch START---------------------------*/
-    // IA: Melroe Bobcat (Johnson, 79)
     let PMH_DriveToTree=181.30; //Todo: (hardcoded)
     DistBetweenTrees=Math.sqrt(43560/Math.max(RemovalsST,1));
-    // I. Drive-To-Tree
-    // A) Melroe Bobcat (Johnson, 79)
+// I. Drive-To-Tree
+    // IA: Melroe Bobcat (Johnson, 79)
     TimePerTreeIA =0.204+0.00822*DistBetweenTrees+0.02002*DBHST+0.00244*Slope;
     VolPerPMHIA = TreeVolST/(TimePerTreeIA/60);
     CostPerPMHIA =PMH_DriveToTree;
@@ -357,7 +357,7 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
     CostPerPMHID=PMH_DriveToTree;
     CostPerCCFID =100*CostPerPMHID/VolPerPMHID;
     RelevanceID=(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
-    // II. Swing Boom
+// II. Swing Boom
     // IIA: Drott (Johnson, 79) not used at present
     let PMH_SwingBoom=233.26; //Todo: (hardcoded)
     TimePerTreeIIA =0.388+0.0137*DistBetweenTrees+0.0398*Slope;
@@ -423,13 +423,13 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
     CostPerCCFIIG =100*CostPerPMHIIG/VolPerPMHIIG;
     RelevanceIIG =(DBHST<15?1:(DBHST<20?4-DBHST/5:0))*(Slope<5?0:(Slope<20?-1/3+Slope/15:1));
 
-    // III. User-Defined
+// III. User-Defined
     let UserDefinedVolPerPMH=0.001;
     let UserDefinedCostPerPMH=null;
     let UserDefinedCostPerCCF =100*UserDefinedCostPerPMH/UserDefinedVolPerPMH;
     let UserDefinedRelevance=0;
 
-    // Summary
+// Summary
     let WeightedAverage =(TreeVolST>0?CHardwoodST*100*(CostPerPMHIA*RelevanceIA+CostPerPMHIB*RelevanceIB+CostPerPMHIC*RelevanceIC
         +CostPerPMHID*RelevanceID+CostPerPMHIIA*RelevanceIIA+CostPerPMHIIB*RelevanceIIB+CostPerPMHIIC*RelevanceIIC
         +CostPerPMHIID*RelevanceIID+CostPerPMHIIE*RelevanceIIE+CostPerPMHIIF*RelevanceIIF+CostPerPMHIIG*RelevanceIIG
@@ -443,75 +443,102 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
 
 function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPerTreeLLT){
     let WalkDistLLT = Math.sqrt(43560/Math.max(RemovalsLLT,1));
-    // Part I: Felling Only
-    // A (McNeel, 94)
-    let SelectionTimePerTreelltA=0.568+0.0193*0.305*WalkDistLLT+0.0294*2.54*DBHLLT;
-    let ClearcutTimePerTreelltA=0.163+0.0444*0.305*WalkDistLLT+0.0323*2.54*DBHLLT;
-    let TimePerTreelltA=(PartialCut==1?SelectionTimePerTreelltA:Math.min(SelectionTimePerTreelltA,ClearcutTimePerTreelltA));
-    let VolPerPMHlltA=TreeVolLLT/(TimePerTreelltA/60);
-    let PMH_Chainsaw=95.65; // hardcoded
-    let CostPerCCFlltA=100*PMH_Chainsaw/VolPerPMHlltA;
-    let RelevancelltA=1;
-    // B (Peterson, 87)
-    let TimePerTreelltB=(DBHLLT<10?0.33+0.012*DBHLLT:0.1+0.0111*Math.pow(DBHLLT,1.496));
-    let VolPerPMHlltB=TreeVolLLT/(TimePerTreelltB/60);
-    let CostPerCCFlltB=100*PMH_Chainsaw/VolPerPMHlltB;
-    let RelevancelltB=1;
-    // C (Keatley, 2000)
-    let TimePerTreelltC=Math.sqrt(4.58+0.07*WalkDistLLT+0.16*DBHLLT);
-    let VolPerPMHlltC=TreeVolLLT/(TimePerTreelltC/60);
-    let CostPerCCFlltC=100*PMH_Chainsaw/VolPerPMHlltC;
-    let RelevancelltC=1;
-    // D (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    let TimePerTreelltD=1.082+0.01505*TreeVolLLT-0.634/TreeVolLLT;
-    let VolPerPMHlltD=TreeVolLLT/(TimePerTreelltD/60);
-    let CostPerCCFlltD=100*PMH_Chainsaw/VolPerPMHlltD;
-    let RelevancelltD=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:(TreeVolLLT<90?1:(TreeVolLLT<180?2-TreeVolLLT/90:0))));
-    // E User-Defined Felling Only
-    let VolPerPMHlltE=0.001;
-    let CostPerCCFlltE=100*PMH_Chainsaw/VolPerPMHlltE;
-    let RelevancelltE=0;
+// I. Felling Only
+    // IA (McNeel, 94)
+    let SelectionTimePerTreelltA,ClearcutTimePerTreelltA,TimePerTreelltA,VolPerPMHlltA,CostPerCCFlltA,RelevancelltA;
+    // IB (Peterson, 87)
+    let TimePerTreelltB,VolPerPMHlltB,CostPerCCFlltB,RelevancelltB;
+    // IC (Keatley, 2000)
+    let TimePerTreelltC,VolPerPMHlltC,CostPerCCFlltC,RelevancelltC;
+    // ID (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    let TimePerTreelltD,VolPerPMHlltD,CostPerCCFlltD,RelevancelltD;
+    // IE User-Defined Felling Only
+    let VolPerPMHlltE,CostPerCCFlltE,RelevancelltE;
     // Summary
-    let CostManFellLLT=(TreeVolLLT>0?
+    let CostManFellLLT;
+// II. Felling, Limbing & Bucking
+    // IIA (Kellogg&Olsen, 86)
+    let EastsideAdjustment,ClearcutAdjustment,TimePerTreelltIIA,VolPerPMHlltIIA,CostPerCCFlltIIA,RelevancelltIIA;
+    // IIB (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.  
+    // Research Contribtion 21.  Forest Research Laboratory, Oregon State University, Corvallis.
+    let LimbslltIIB,LogslltIIB,WedgelltIIB,CorridorlltIIB,NotBetweenOpeningslltIIB,OpeningslltIIB,HeavyThinlltIIB,
+        DelayFraclltIIB,TimePerTreelltIIB,VolPerPMHlltIIB,CostPerCCFlltIIB,RelevancelltIIB;
+    // IIC (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    let DelayFraclltIIC,TimePerTreelltIIC,VolPerPMHlltIIC,CostPerCCFlltIIC,RelevancelltIIC;
+    // IID User-Defined Felling, Limbing & Bucking
+    let VolPerPMHlltIID,CostPerCCFlltIID,RelevancelltIID;
+    // Summary
+    let CostManFLBLLT;
+
+    let PMH_Chainsaw=95.65; // hardcoded
+// I. Felling Only
+    // IA (McNeel, 94)
+    SelectionTimePerTreelltA=0.568+0.0193*0.305*WalkDistLLT+0.0294*2.54*DBHLLT;
+    ClearcutTimePerTreelltA=0.163+0.0444*0.305*WalkDistLLT+0.0323*2.54*DBHLLT;
+    TimePerTreelltA=(PartialCut==1?SelectionTimePerTreelltA:Math.min(SelectionTimePerTreelltA,ClearcutTimePerTreelltA));
+    VolPerPMHlltA=TreeVolLLT/(TimePerTreelltA/60);
+    CostPerCCFlltA=100*PMH_Chainsaw/VolPerPMHlltA;
+    RelevancelltA=1;
+    // IB (Peterson, 87)
+    TimePerTreelltB=(DBHLLT<10?0.33+0.012*DBHLLT:0.1+0.0111*Math.pow(DBHLLT,1.496));
+    VolPerPMHlltB=TreeVolLLT/(TimePerTreelltB/60);
+    CostPerCCFlltB=100*PMH_Chainsaw/VolPerPMHlltB;
+    RelevancelltB=1;
+    // IC (Keatley, 2000)
+    TimePerTreelltC=Math.sqrt(4.58+0.07*WalkDistLLT+0.16*DBHLLT);
+    VolPerPMHlltC=TreeVolLLT/(TimePerTreelltC/60);
+    CostPerCCFlltC=100*PMH_Chainsaw/VolPerPMHlltC;
+    RelevancelltC=1;
+    // ID (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    TimePerTreelltD=1.082+0.01505*TreeVolLLT-0.634/TreeVolLLT;
+    VolPerPMHlltD=TreeVolLLT/(TimePerTreelltD/60);
+    CostPerCCFlltD=100*PMH_Chainsaw/VolPerPMHlltD;
+    RelevancelltD=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:(TreeVolLLT<90?1:(TreeVolLLT<180?2-TreeVolLLT/90:0))));
+    // IE User-Defined Felling Only
+    VolPerPMHlltE=0.001;
+    CostPerCCFlltE=100*PMH_Chainsaw/VolPerPMHlltE;
+    RelevancelltE=0;
+    // Summary
+    CostManFellLLT=(TreeVolLLT>0?
         CHardwoodLLT*100*(PMH_Chainsaw*RelevancelltA+PMH_Chainsaw*RelevancelltB+PMH_Chainsaw*RelevancelltC+PMH_Chainsaw*RelevancelltD+PMH_Chainsaw*RelevancelltE)
         /(RelevancelltA*VolPerPMHlltA+RelevancelltB*VolPerPMHlltB+RelevancelltC*VolPerPMHlltC+RelevancelltD*VolPerPMHlltD+RelevancelltE*VolPerPMHlltE):0);
 
-    // Part II: Felling, Limbing & Bucking
-    // A (Kellogg&Olsen, 86)
-    let EastsideAdjustment=1.2;
-    let ClearcutAdjustment=0.9;
-    let TimePerTreelltIIA=EastsideAdjustment*(PartialCut==1?1:(PartialCut==0?ClearcutAdjustment:null))*(1.33+0.0187*WalkDistLLT+0.0143*Slope+0.0987*TreeVolLLT+0.14);
-    let VolPerPMHlltIIA=TreeVolLLT/(TimePerTreelltIIA/60);
-    let CostPerCCFlltIIA=100*PMH_Chainsaw/VolPerPMHlltIIA;
-    let RelevancelltIIA=1;
-    // B (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.  
+// II. Felling, Limbing & Bucking
+    // IIA (Kellogg&Olsen, 86)
+    EastsideAdjustment=1.2;
+    ClearcutAdjustment=0.9;
+    TimePerTreelltIIA=EastsideAdjustment*(PartialCut==1?1:(PartialCut==0?ClearcutAdjustment:null))*(1.33+0.0187*WalkDistLLT+0.0143*Slope+0.0987*TreeVolLLT+0.14);
+    VolPerPMHlltIIA=TreeVolLLT/(TimePerTreelltIIA/60);
+    CostPerCCFlltIIA=100*PMH_Chainsaw/VolPerPMHlltIIA;
+    RelevancelltIIA=1;
+    // IIB (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.  
     // Research Contribtion 21.  Forest Research Laboratory, Oregon State University, Corvallis.
-    let LimbslltIIB=31.5;
-    let LogslltIIB=LogsPerTreeLLT;
-    let WedgelltIIB=0.02;
-    let CorridorlltIIB=0.21;
-    let NotBetweenOpeningslltIIB=1;
-    let OpeningslltIIB=0;
-    let HeavyThinlltIIB=(PartialCut?0:1);
-    let DelayFraclltIIB=0.25;
-    let TimePerTreelltIIB=(-0.465+0.102*DBHLLT+0.016*LimbslltIIB+0.562*LogslltIIB+0.009*Slope+0.734*WedgelltIIB+0.137*CorridorlltIIB
+    LimbslltIIB=31.5;
+    LogslltIIB=LogsPerTreeLLT;
+    WedgelltIIB=0.02;
+    CorridorlltIIB=0.21;
+    NotBetweenOpeningslltIIB=1;
+    OpeningslltIIB=0;
+    HeavyThinlltIIB=(PartialCut?0:1);
+    DelayFraclltIIB=0.25;
+    TimePerTreelltIIB=(-0.465+0.102*DBHLLT+0.016*LimbslltIIB+0.562*LogslltIIB+0.009*Slope+0.734*WedgelltIIB+0.137*CorridorlltIIB
         +0.449*NotBetweenOpeningslltIIB+0.437*OpeningslltIIB+0.426*HeavyThinlltIIB)*(1+DelayFraclltIIB);
-    let VolPerPMHlltIIB=TreeVolLLT/(TimePerTreelltIIB/60);
-    let CostPerCCFlltIIB=100*PMH_Chainsaw/VolPerPMHlltIIB;
-    // let RelevancelltIIB=(TreeVolLLT<1?0:(TreeVolLLT<2?-1+TreeVolLLT/1:(TreeVolLLT<70?1:1.2-TreeVolLLT/350)));
-    let RelevancelltIIB=1;
-    // C (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    let DelayFraclltIIC=0.197;
-    let TimePerTreelltIIC=(1.772+0.02877*TreeVolLLT-2.6486/TreeVolLLT)*(1+DelayFraclltIIC);
-    let VolPerPMHlltIIC=TreeVolLLT/(TimePerTreelltIIC/60);
-    let CostPerCCFlltIIC=100*PMH_Chainsaw/VolPerPMHlltIIC;
-    let RelevancelltIIC=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:1));
-    // D User-Defined Felling, Limbing & Bucking
-    let VolPerPMHlltIID=0.001;
-    let CostPerCCFlltIID=100*PMH_Chainsaw/VolPerPMHlltIID;
-    let RelevancelltIID=0;
+    VolPerPMHlltIIB=TreeVolLLT/(TimePerTreelltIIB/60);
+    CostPerCCFlltIIB=100*PMH_Chainsaw/VolPerPMHlltIIB;
+    // RelevancelltIIB=(TreeVolLLT<1?0:(TreeVolLLT<2?-1+TreeVolLLT/1:(TreeVolLLT<70?1:1.2-TreeVolLLT/350)));
+    RelevancelltIIB=1;
+    // IIC (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    DelayFraclltIIC=0.197;
+    TimePerTreelltIIC=(1.772+0.02877*TreeVolLLT-2.6486/TreeVolLLT)*(1+DelayFraclltIIC);
+    VolPerPMHlltIIC=TreeVolLLT/(TimePerTreelltIIC/60);
+    CostPerCCFlltIIC=100*PMH_Chainsaw/VolPerPMHlltIIC;
+    RelevancelltIIC=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:1));
+    // IID User-Defined Felling, Limbing & Bucking
+    VolPerPMHlltIID=0.001;
+    CostPerCCFlltIID=100*PMH_Chainsaw/VolPerPMHlltIID;
+    RelevancelltIID=0;
     // Summary
-    let CostManFLBLLT=(TreeVolLLT>0?CHardwoodLLT*100*
+    CostManFLBLLT=(TreeVolLLT>0?CHardwoodLLT*100*
         (PMH_Chainsaw*RelevancelltIIA+PMH_Chainsaw*RelevancelltIIB+PMH_Chainsaw*RelevancelltIIC+PMH_Chainsaw*RelevancelltIID)
         /(RelevancelltIIA*VolPerPMHlltIIA+RelevancelltIIB*VolPerPMHlltIIB+RelevancelltIIC*VolPerPMHlltIIC+RelevancelltIID*VolPerPMHlltIID):0);
     
