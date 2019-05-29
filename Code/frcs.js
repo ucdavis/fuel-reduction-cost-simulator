@@ -41,7 +41,7 @@ function calculate(){
     if (document.getElementById("cut_type").value === "clear_cut"){
         cut_type = 0; 
     } else {
-        cut_type = 1;    
+        cut_type = 1;
     }
     //get yarding distance, percent_slope; and elevation for helicopter systems
     deliver_dist = document.getElementById("deliver_dist").value;
@@ -239,7 +239,7 @@ function calculate(){
 
 /*---------hardcoded-----------*/ //Todo: Find the equations for var below
     let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
-    let CostManFLBLLT=12.78;
+    let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
     let CostSkidBun=35.42;
     let CostProcess=8.18;
     let CostLoad=7.78;
@@ -280,7 +280,7 @@ function calculate(){
 // test
 //     let a=FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv);
     // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
-    // outputText= CostFellBunch; //2.0
+    // outputText= CostManFLBLLT; //2.0
     // document.getElementById("output_text").textContent = outputText;
     // outputText2=a;
     // document.getElementById("output_text2").textContent = outputText2;
@@ -439,4 +439,81 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
         +VolPerPMHIIG*RelevanceIIG+UserDefinedVolPerPMH*UserDefinedRelevance):0);
     /*------------Fell&Bunch END---------------------------*/
     return WeightedAverage;
+}
+
+function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPerTreeLLT){
+    let WalkDistLLT = Math.sqrt(43560/Math.max(RemovalsLLT,1));
+    // Part I: Felling Only
+    // A (McNeel, 94)
+    let SelectionTimePerTreelltA=0.568+0.0193*0.305*WalkDistLLT+0.0294*2.54*DBHLLT;
+    let ClearcutTimePerTreelltA=0.163+0.0444*0.305*WalkDistLLT+0.0323*2.54*DBHLLT;
+    let TimePerTreelltA=(PartialCut==1?SelectionTimePerTreelltA:Math.min(SelectionTimePerTreelltA,ClearcutTimePerTreelltA));
+    let VolPerPMHlltA=TreeVolLLT/(TimePerTreelltA/60);
+    let PMH_Chainsaw=95.65; // hardcoded
+    let CostPerCCFlltA=100*PMH_Chainsaw/VolPerPMHlltA;
+    let RelevancelltA=1;
+    // B (Peterson, 87)
+    let TimePerTreelltB=(DBHLLT<10?0.33+0.012*DBHLLT:0.1+0.0111*Math.pow(DBHLLT,1.496));
+    let VolPerPMHlltB=TreeVolLLT/(TimePerTreelltB/60);
+    let CostPerCCFlltB=100*PMH_Chainsaw/VolPerPMHlltB;
+    let RelevancelltB=1;
+    // C (Keatley, 2000)
+    let TimePerTreelltC=Math.sqrt(4.58+0.07*WalkDistLLT+0.16*DBHLLT);
+    let VolPerPMHlltC=TreeVolLLT/(TimePerTreelltC/60);
+    let CostPerCCFlltC=100*PMH_Chainsaw/VolPerPMHlltC;
+    let RelevancelltC=1;
+    // D (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    let TimePerTreelltD=1.082+0.01505*TreeVolLLT-0.634/TreeVolLLT;
+    let VolPerPMHlltD=TreeVolLLT/(TimePerTreelltD/60);
+    let CostPerCCFlltD=100*PMH_Chainsaw/VolPerPMHlltD;
+    let RelevancelltD=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:(TreeVolLLT<90?1:(TreeVolLLT<180?2-TreeVolLLT/90:0))));
+    // E User-Defined Felling Only
+    let VolPerPMHlltE=0.001;
+    let CostPerCCFlltE=100*PMH_Chainsaw/VolPerPMHlltE;
+    let RelevancelltE=0;
+    // Summary
+    let CostManFellLLT=(TreeVolLLT>0?
+        CHardwoodLLT*100*(PMH_Chainsaw*RelevancelltA+PMH_Chainsaw*RelevancelltB+PMH_Chainsaw*RelevancelltC+PMH_Chainsaw*RelevancelltD+PMH_Chainsaw*RelevancelltE)
+        /(RelevancelltA*VolPerPMHlltA+RelevancelltB*VolPerPMHlltB+RelevancelltC*VolPerPMHlltC+RelevancelltD*VolPerPMHlltD+RelevancelltE*VolPerPMHlltE):0);
+
+    // Part II: Felling, Limbing & Bucking
+    // A (Kellogg&Olsen, 86)
+    let EastsideAdjustment=1.2;
+    let ClearcutAdjustment=0.9;
+    let TimePerTreelltIIA=EastsideAdjustment*(PartialCut==1?1:(PartialCut==0?ClearcutAdjustment:null))*(1.33+0.0187*WalkDistLLT+0.0143*Slope+0.0987*TreeVolLLT+0.14);
+    let VolPerPMHlltIIA=TreeVolLLT/(TimePerTreelltIIA/60);
+    let CostPerCCFlltIIA=100*PMH_Chainsaw/VolPerPMHlltIIA;
+    let RelevancelltIIA=1;
+    // B (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.  
+    // Research Contribtion 21.  Forest Research Laboratory, Oregon State University, Corvallis.
+    let LimbslltIIB=31.5;
+    let LogslltIIB=LogsPerTreeLLT;
+    let WedgelltIIB=0.02;
+    let CorridorlltIIB=0.21;
+    let NotBetweenOpeningslltIIB=1;
+    let OpeningslltIIB=0;
+    let HeavyThinlltIIB=(PartialCut?0:1);
+    let DelayFraclltIIB=0.25;
+    let TimePerTreelltIIB=(-0.465+0.102*DBHLLT+0.016*LimbslltIIB+0.562*LogslltIIB+0.009*Slope+0.734*WedgelltIIB+0.137*CorridorlltIIB
+        +0.449*NotBetweenOpeningslltIIB+0.437*OpeningslltIIB+0.426*HeavyThinlltIIB)*(1+DelayFraclltIIB);
+    let VolPerPMHlltIIB=TreeVolLLT/(TimePerTreelltIIB/60);
+    let CostPerCCFlltIIB=100*PMH_Chainsaw/VolPerPMHlltIIB;
+    // let RelevancelltIIB=(TreeVolLLT<1?0:(TreeVolLLT<2?-1+TreeVolLLT/1:(TreeVolLLT<70?1:1.2-TreeVolLLT/350)));
+    let RelevancelltIIB=1;
+    // C (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
+    let DelayFraclltIIC=0.197;
+    let TimePerTreelltIIC=(1.772+0.02877*TreeVolLLT-2.6486/TreeVolLLT)*(1+DelayFraclltIIC);
+    let VolPerPMHlltIIC=TreeVolLLT/(TimePerTreelltIIC/60);
+    let CostPerCCFlltIIC=100*PMH_Chainsaw/VolPerPMHlltIIC;
+    let RelevancelltIIC=(TreeVolLLT<5?0:(TreeVolLLT<15?-0.5+TreeVolLLT/10:1));
+    // D User-Defined Felling, Limbing & Bucking
+    let VolPerPMHlltIID=0.001;
+    let CostPerCCFlltIID=100*PMH_Chainsaw/VolPerPMHlltIID;
+    let RelevancelltIID=0;
+    // Summary
+    let CostManFLBLLT=(TreeVolLLT>0?CHardwoodLLT*100*
+        (PMH_Chainsaw*RelevancelltIIA+PMH_Chainsaw*RelevancelltIIB+PMH_Chainsaw*RelevancelltIIC+PMH_Chainsaw*RelevancelltIID)
+        /(RelevancelltIIA*VolPerPMHlltIIA+RelevancelltIIB*VolPerPMHlltIIB+RelevancelltIIC*VolPerPMHlltIIC+RelevancelltIID*VolPerPMHlltIID):0);
+    
+    return Math.round(CostManFLBLLT * 100) / 100; // round to at most 2 decimal places
 }
