@@ -246,9 +246,9 @@ function calculate(){
     let TreesPerCycleIIB;
     let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
-    let CostSkidBun= Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
+    let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
     let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize);
-    let CostLoad=7.78;
+    let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT);
     let CostChipWT=7.76;
     let MoveInCosts1G39=79.06;
     let CostChipLooseRes=7.37;
@@ -282,22 +282,6 @@ function calculate(){
     // for (let i = 0; i < output.length; i++) {
     //     output[i].style.background = "yellow";
     // }
-    
-// test
-//     let a=FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv);
-    // var a=Math.sqrt((RemovalsCT*Math.pow(DBHCT,2)+RemovalsSLT*Math.pow(DBHSLT,2))/RemovalsST);
-    // outputText= CostSkidBun; //2.0
-    // document.getElementById("output_text").textContent = outputText;
-    // outputText2=a;
-    // document.getElementById("output_text2").textContent = outputText2;
-    // outputText3=TimePerAccumIIG;
-    // document.getElementById("output_text3").textContent = outputText3;
-    // outputText4=NonSelfLevelCabDummy;
-    // document.getElementById("output_text4").textContent = outputText4;
-    // outputText5=DBHSLT;
-    // document.getElementById("output_text5").textContent = outputText5;
-    // outputText6=;
-    // document.getElementById("output_text6").textContent = outputText6;
 }
 
 /**
@@ -800,4 +784,96 @@ function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize
             +RelevanceProcessE*VolPerPMHprocessE+RelevanceProcessF*VolPerPMHprocessF+RelevanceProcessG*VolPerPMHprocessG+RelevanceProcessH*VolPerPMHprocessH):0);
 
     return Math.round(CostProcess * 100) / 100; // round to at most 2 decimal places
+}
+
+function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT){
+    let ExchangeTrucks,PMH_LoaderS,PMH_LoaderB;
+    // Loading Calculated Values
+    let LoadVolALT,LoadVolSLT,LoaderHourlyCost;
+    // I. Loading Full-Length Logs
+    // A) Front-End Loader (Vaughan, 89)
+    let TimePerLoadIA,VolPerPMHloadingIA,CostPerCCFloadingIA,RelevanceLoadingIA;
+    // B) Knuckleboom Loader, Small Logs (Brown&Kellogg, 96)
+    let CCFperPmin,TimePerLoadIB,VolPerPMHloadingIB,CostPerCCFloadingIB,RelevanceLoadingIB;
+    // C) Loaders (Hartsough et al, 98)
+    let TimePerCCFloadingIC,TimePerLoadIC,VolPerPMHloadingIC,CostPerCCFloadingIC,RelevanceLoadingIC;
+    // D) Loaders (Jackson et al, 84)
+    let VolPerPMHloadingID,CostPerCCFloadingID,RelevanceLoadingID;
+    // E) User-Defined Load Full-Length Logs
+    let VolPerPMHloadingIE,CostPerCCFloadingIE,RelevanceLoadingIE;
+    // II. Loading CTL Logs
+    // A) Knuckleboom Loader, CTL Logs (Brown&Kellogg, 96)
+    let CCFperPminLoadingIIA,TimePerLoadIIA,VolPerPMHloadingIIA,CostPerCCFloadingIIA,RelevanceLoadingIIA;    
+    // B) Loaders (Jackson et al, 84)
+    let VolPerPMHloadingIIB,CostPerCCFloadingIIB,RelevanceLoadingIIB;
+    // C) User-Defined Load CTL Logs
+    let VolPerPMHloadingIIC,CostPerCCFloadingIIC,RelevanceLoadingIIC;
+    // Loading Summary
+    // I. Loading Full-Length Logs
+    let CostLoad;
+    // II. Loading CTL Logs
+    let CostLoadCTL;
+
+    ExchangeTrucks=5;
+    PMH_LoaderS=146.74; // hardcoded
+    PMH_LoaderB=180.18; // hardcoded
+    // Loading Calculated Values
+    LoadVolALT=LoadWeightLog*2000/(WoodDensityALT*100);
+    LoadVolSLT=LoadWeightLog*2000/(WoodDensitySLT*100);
+    LoaderHourlyCost=PMH_LoaderS*(1-ManualMachineSizeALT)+PMH_LoaderB*ManualMachineSizeALT;
+
+    // I. Loading Full-Length Logs
+    // A) Front-End Loader (Vaughan, 89)
+    TimePerLoadIA=22-0.129*LogVolALT+ExchangeTrucks;
+    VolPerPMHloadingIA=100*LoadVolALT/(TimePerLoadIA/60);
+    CostPerCCFloadingIA=100*LoaderHourlyCost/VolPerPMHloadingIA;
+    RelevanceLoadingIA=LogVolALT<10?0:(LogVolALT<40?-1/3+LogVolALT/30:1);
+    // B) Knuckleboom Loader, Small Logs (Brown&Kellogg, 96)
+    CCFperPmin=0.1+0.019*LogVolALT;
+    TimePerLoadIB=LoadVolALT/CCFperPmin+ExchangeTrucks;
+    VolPerPMHloadingIB=100*LoadVolALT/(TimePerLoadIB/60);
+    CostPerCCFloadingIB=100*LoaderHourlyCost/VolPerPMHloadingIB;
+    RelevanceLoadingIB=LogVolALT<10?1:(LogVolALT<20?2-LogVolALT/10:0);
+    // C) Loaders (Hartsough et al, 98)
+    TimePerCCFloadingIC=0.66+46.2/DBHALT;
+    TimePerLoadIC=TimePerCCFloadingIC*LoadVolALT;
+    VolPerPMHloadingIC=6000/TimePerCCFloadingIC;
+    CostPerCCFloadingIC=100*LoaderHourlyCost/VolPerPMHloadingIC;
+    RelevanceLoadingIC=0.8; // hardcoded
+    // D) Loaders (Jackson et al, 84)
+    VolPerPMHloadingID=100*(11.04+0.522*LogVolALT-0.00173*Math.pow(LogVolALT,2));
+    CostPerCCFloadingID=100*LoaderHourlyCost/VolPerPMHloadingID;
+    RelevanceLoadingID=LogVolALT<75?1:(LogVolALT<100?4-LogVolALT/25:0);
+    // E) User-Defined Load Full-Length Logs
+    VolPerPMHloadingIE=0.001;
+    CostPerCCFloadingIE=100*LoaderHourlyCost/VolPerPMHloadingIE;
+    RelevanceLoadingIE=0;
+
+    // II. Loading CTL Logs
+    // A) Knuckleboom Loader, CTL Logs (Brown&Kellogg, 96)
+    CCFperPminLoadingIIA=0.1+0.019*CTLLogVol;
+    TimePerLoadIIA=LoadVolSLT/CCFperPminLoadingIIA+ExchangeTrucks;
+    VolPerPMHloadingIIA=100*LoadVolSLT/(TimePerLoadIIA/60);
+    CostPerCCFloadingIIA=100*LoaderHourlyCost/VolPerPMHloadingIIA;
+    RelevanceLoadingIIA=CTLLogVol<10?1:(CTLLogVol<20?2-CTLLogVol/10:0);
+    // B) Loaders (Jackson et al, 84)
+    VolPerPMHloadingIIB=100*(11.04+0.522*CTLLogVol-0.00173*Math.pow(CTLLogVol,2));
+    CostPerCCFloadingIIB=100*LoaderHourlyCost/VolPerPMHloadingIIB;
+    RelevanceLoadingIIB=0.5;
+    // C) User-Defined Load CTL Logs
+    VolPerPMHloadingIIC=0.001;
+    CostPerCCFloadingIIC=100*LoaderHourlyCost/VolPerPMHloadingIIC;
+    RelevanceLoadingIIC=0;
+
+    // Loading Summary
+    // I. Loading Full-Length Logs
+    CostLoad=load_cost==true?
+    (TreeVolALT>0?CHardwoodALT*100*(LoaderHourlyCost*RelevanceLoadingIA+LoaderHourlyCost*RelevanceLoadingIB+LoaderHourlyCost*RelevanceLoadingIC+LoaderHourlyCost*RelevanceLoadingID+LoaderHourlyCost*RelevanceLoadingIE)
+    /(RelevanceLoadingIA*VolPerPMHloadingIA+RelevanceLoadingIB*VolPerPMHloadingIB+RelevanceLoadingIC*VolPerPMHloadingIC+RelevanceLoadingID*VolPerPMHloadingID+RelevanceLoadingIE*VolPerPMHloadingIE):0):0;
+    // II. Loading CTL Logs
+    CostLoadCTL=load_cost==true?
+    (TreeVolSLT>0?CHardwoodSLT*100*(LoaderHourlyCost*RelevanceLoadingIIA+LoaderHourlyCost*RelevanceLoadingIIB+LoaderHourlyCost*RelevanceLoadingIIC)
+    /(RelevanceLoadingIIA*VolPerPMHloadingIIA+RelevanceLoadingIIB*VolPerPMHloadingIIB+RelevanceLoadingIIC*VolPerPMHloadingIIC):0):0;
+
+    return Math.round(CostLoad * 100) / 100; // round to at most 2 decimal places
 }
