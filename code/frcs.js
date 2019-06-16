@@ -1,3 +1,4 @@
+'use strict'
 //Input variables
 let e, inputElements, cut_type, system, Slope, elevation, machine, load_cost, area, move_in_dist,
     CalcMoveIn, CalcResidues;
@@ -20,6 +21,7 @@ let RemovalsCT, RemovalsSLT, RemovalsLLT, TreeVolCT, TreeVolSLT, TreeVolLLT,
     ManualMachineSizeALT, ManualMachineSize, MechMachineSize, ChipperSize, NonSelfLevelCabDummy,
     CSlopeFB_Harv, CRemovalsFB_Harv, CSlopeSkidForwLoadSize,
     CHardwoodCT, CHardwoodSLT, CHardwoodLLT, CHardwoodST, CHardwoodALT, CHardwood;
+    let TreesPerCycleIIB;
 //Output variables
 let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptional,
     TotalPrimaryAndOptional, TotalPrimaryProductsAndOptionalResidues,
@@ -28,7 +30,7 @@ let BoleVolCCF, ResidueRecoveredPrimary, PrimaryProduct, ResidueRecoveredOptiona
     SkidBunchedAllTrees, ProcessLogTreesLess80cf, LoadLogTrees, ChipWholeTrees, Stump2Truck4PrimaryProductWithoutMovein,
     TotalPerAcre, TotalPerBoleCCF, TotalPerGT;
 //Assumption variables
-// var MaxManualTreeVol, MaxMechTreeVol, MoistureContentFraction, LogLength, LoadWeightLog, LoadWeightChip,
+// var MaxManualTreeVol, MaxMechTreeVol, MoistureContent, LogLength, LoadWeightLog, LoadWeightChip,
 //     CTLTrailSpacing, HdwdCostPremium, ResidueRecovFracWT, ResidueRecovFracCTL;
 //test purpose
 // var outputText, outputText2, outputText3;
@@ -84,7 +86,7 @@ function calculate(){
     //Other Assumptions --hardcoded--
     let MaxManualTreeVol = 150;
     let MaxMechTreeVol=80;
-    let MoistureContentFraction=0.50;
+    let MoistureContent=0.50;
     let LogLength=32;
     let LoadWeightLog=25;
     let LoadWeightChip=25;
@@ -243,13 +245,12 @@ function calculate(){
 // For All Products, $/ac--
 
 /*---------hardcoded-----------*/ //Todo: Find the equations for var below
-    let TreesPerCycleIIB;
     let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
     let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
     let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize);
     let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT);
-    let CostChipWT=7.76;
+    let CostChipWT=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT);
     let MoveInCosts1G39=79.06;
     let CostChipLooseRes=7.37;
     let InLimits1=1; 
@@ -275,13 +276,6 @@ function calculate(){
     document.getElementById("CCF").textContent = Math.round(TotalPerBoleCCF).toString();
     document.getElementById("Ton").textContent = Math.round(TotalPerGT).toString();
     document.getElementById("Acre").textContent = Math.round(TotalPerAcre).toString();
-
-// highlight outputs color
-    // let output = document.getElementsByClassName("output");
-    // output[0].style.background="yellow";
-    // for (let i = 0; i < output.length; i++) {
-    //     output[i].style.background = "yellow";
-    // }
 }
 
 /**
@@ -876,4 +870,168 @@ function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT
     /(RelevanceLoadingIIA*VolPerPMHloadingIIA+RelevanceLoadingIIB*VolPerPMHloadingIIB+RelevanceLoadingIIC*VolPerPMHloadingIIC):0):0;
 
     return Math.round(CostLoad * 100) / 100; // round to at most 2 decimal places
+}
+
+function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT){
+    let ExchangeVans=5.3;
+    // Chipping Calculated Values
+    let PMH_LoaderS,PMH_ChipperS,PMH_ChipperB,LoadWeightDry,TreeWeightDry,CTLLogWeight,CTLLogWeightDry,ChipperHourlyCost;
+    // I. Chip Whole Trees
+    // A) (Johnson, 89)
+    let ChipperHP1A,GTperPMHchippingIA,VolPerPMHchippingIA,CostPerCCFchippingIA,RelevanceChippingIA;
+    // B) Morbark 22 (Hartsough, unpublished)
+    let VolPerPMHchippingIB,CostPerCCFchippingIB,RelevanceChippingIB;
+    // C) Morbark 60/36 (Hartsough et al, 97)
+    let ProbDelayFractionIC,LogsPerSwingIC,ChipTimePerSwingIC,SlashIC,TimePerVanIC,VolPerPMHchippingIC,CostPerCCFchippingIC,RelevanceChippingIC;
+    // D) User-Defined Chip Whole Trees
+    let VolPerPMHchippingID,CostPerCCFchippingID,RelevanceChippingID;
+    // II. Chain Flail DDC Whole Trees
+    // A) adjusted from Chip Whole Trees
+    let FlailProdAdjustmentIIA,FlailHrlyCostAdjustmentIIA,CostPerPMHchippingIIA,CostPerCCFchippingIIA,VolPerPMHchippingIIA,RelevanceChippingIIA;
+    // B) User-Defined Chain Flail DDC WT
+    let VolPerPMHchippingIIB,CostPerCCFchippingIIB,RelevanceChippingIIB;
+    // III. Chip CTL Logs
+    // A) Morbark 27 (Drews et al, 98)
+    let ProbDelayFractionIIIA,TimePerGTchippingIIIA,TimePerVanIIIA,VolPerPMHchippingIIIA,CostPerCCFchippingIIIA,RelevanceChippingIIIA;
+    // B) Morbark 60/36 (Hartsough et al, 97)
+    let ProdDelayFractionIIIB,LogsPerSwingIIIB,ChipTimePerSwingIIIB,SlashIIIB,TimePerVanIIIB,VolPerPMHchippingIIIB,CostPerCCFchippingIIIB,RelevanceChippingIIIB;
+    // C) User-Defined Chip CTL Logs
+    let VolPerPMHchippingIIIC,CostPerCCFchippingIIIC,RelevanceChippingIIIC;
+    // IV. Chip Piled Loose Residues at Landing
+    // A) Drum chippers (Desrochers, L., D. Puttock and M. Ryans. 95. Recovery of roadside residues using drum chippers. FERIC Technical Report TR-111)
+    let BDTperPMHchippingIVA,BDTperPMHchippingIVA2,BDTperPMHchippingIVAavg,GTperPMHchippingIVA,CostPerPMHchippingIVA,CostPerGTchippingIVA,RelevanceChippingIVA;
+    // B) User-Defined Chip Piled Loose Residues at Landing
+    let GTperPMHchippingIVB,CostPerGTchippingIVB,RelevanceChippingIVB;
+    // V. Chip Bundles of Residue at Landing
+    // A) Assume 50% faster than chipping loose residues
+    let GTperPMHchippingVA,CostPerGTchippingVA,RelevanceChippingVA;
+    // B) User-Defined Chip Bundles of Residue at Landing
+    let GTperPMHchippingVB,CostPerGTchippingVB,RelevanceChippingVB;
+    // Chipping Summary
+    // I. Chip Whole Trees
+    let CostChipWT;
+    // II. Chain Flail DDC WT
+    let CostDDChipWT;
+    // III. Chip CTL Logs
+    let CostChipCTL;
+    // IV. Chip Piled Loose Residues at Landing
+    let CostChipLooseRes;
+    // V. Chip Bundles of Residue at Landing
+    let CostChipBundledRes;
+
+    // Chipping Calculated Values
+    PMH_LoaderS=146.74; //hardcoded
+    PMH_ChipperS=166.53; //hardcoded
+    PMH_ChipperB=244.64; //hardcoded
+    LoadWeightDry=LoadWeightChip*(1-MoistureContent);
+    TreeWeightDry=TreeVolCT*WoodDensityCT*(1-MoistureContent);
+    CTLLogWeight=CTLLogVolCT*WoodDensityCT;
+    CTLLogWeightDry=CTLLogWeight*(1-MoistureContent);
+    ChipperHourlyCost=PMH_ChipperS*(1-ChipperSize)+PMH_ChipperB*ChipperSize;
+
+    // I. Chip Whole Trees
+    // A) (Johnson, 89)
+    ChipperHP1A=Math.min(700,Math.max(200,100+100*Math.sqrt(TreeVolCT)));
+    GTperPMHchippingIA=-17+ChipperHP1A/6;
+    VolPerPMHchippingIA=GTperPMHchippingIA*2000/WoodDensityCT;
+    CostPerCCFchippingIA=100*ChipperHourlyCost/VolPerPMHchippingIA;
+    RelevanceChippingIA=1;
+    // B) Morbark 22 (Hartsough, unpublished)
+    VolPerPMHchippingIB=Math.min(4000,463*Math.pow(TreeVolCT,0.668));
+    CostPerCCFchippingIB=100*ChipperHourlyCost/VolPerPMHchippingIB;
+    RelevanceChippingIB=1;
+    // C) Morbark 60/36 (Hartsough et al, 97)
+    ProbDelayFractionIC=0.038;
+    LogsPerSwingIC=1.2+338/TreeWeightDry;
+    ChipTimePerSwingIC=0.25+0.0264*LogsPerSwingIC+0.000498*TreeWeightDry;
+    SlashIC=0.93;
+    TimePerVanIC=ChipTimePerSwingIC*(1+ProbDelayFractionIC)/(TreeWeightDry*LogsPerSwingIC)*2000*LoadWeightDry+(SlashIC+ExchangeVans);
+    VolPerPMHchippingIC=LoadWeightChip/(WoodDensityCT/2000)/(TimePerVanIC/60);
+    CostPerCCFchippingIC=100*ChipperHourlyCost/VolPerPMHchippingIC;
+    RelevanceChippingIC=TreeWeightDry<400?1:(TreeWeightDry<800?2-TreeWeightDry/400:0);
+    // D) User-Defined Chip Whole Trees
+    VolPerPMHchippingID=0.001;
+    CostPerCCFchippingID=100*ChipperHourlyCost/VolPerPMHchippingID;
+    RelevanceChippingID=0;
+
+    // II. Chain Flail DDC Whole Trees
+
+    // B) User-Defined Chain Flail DDC WT
+    VolPerPMHchippingIIB=0.001;
+    CostPerCCFchippingIIB=100*ChipperHourlyCost/VolPerPMHchippingIIB;
+    RelevanceChippingIIB=0;
+    
+    // III. Chip CTL Logs
+    // A) Morbark 27 (Drews et al, 98)
+    ProbDelayFractionIIIA=0.111;
+    TimePerGTchippingIIIA=Math.max(0.8,(2.05-0.00541*CTLLogWeight)*(1+ProbDelayFractionIIIA));
+    TimePerVanIIIA=TimePerGTchippingIIIA*LoadWeightChip+ExchangeVans;
+    VolPerPMHchippingIIIA=LoadWeightChip/(WoodDensityCT/2000)/(TimePerVanIIIA/60);
+    CostPerCCFchippingIIIA=100*ChipperHourlyCost/VolPerPMHchippingIIIA;
+    RelevanceChippingIIIA=Math.max(0.1,CTLLogWeight<100?1:(CTLLogWeight<200?2-CTLLogWeight/100:0));
+    // B) Morbark 60/36 (Hartsough et al, 97)
+    ProdDelayFractionIIIB=0.038;
+    LogsPerSwingIIIB=1.2+338/CTLLogWeightDry;
+    ChipTimePerSwingIIIB=0.25+0.0264*LogsPerSwingIIIB+0.000498*CTLLogWeightDry;
+    SlashIIIB=0.93;
+    TimePerVanIIIB=ChipTimePerSwingIIIB*(1+ProdDelayFractionIIIB)/(CTLLogWeightDry*LogsPerSwingIIIB)*2000*LoadWeightDry+(SlashIIIB+ExchangeVans);
+    VolPerPMHchippingIIIB=LoadWeightChip/(WoodDensityCT/2000)/(TimePerVanIIIB/60);
+    CostPerCCFchippingIIIB=100*ChipperHourlyCost/VolPerPMHchippingIIIB;
+    RelevanceChippingIIIB=CTLLogWeightDry<400?1:(CTLLogWeightDry<800?2-CTLLogWeightDry/400:0);
+    // C) User-Defined Chip CTL Logs
+    VolPerPMHchippingIIIC=0.001;
+    CostPerCCFchippingIIIC=100*ChipperHourlyCost/VolPerPMHchippingIIIC;
+    RelevanceChippingIIIC=0;
+    
+    // IV. Chip Piled Loose Residues at Landing
+    // A) Drum chippers (Desrochers, L., D. Puttock and M. Ryans. 95. Recovery of roadside residues using drum chippers. FERIC Technical Report TR-111)
+    BDTperPMHchippingIVA=13.5;
+    BDTperPMHchippingIVA2=31;
+    BDTperPMHchippingIVAavg=(BDTperPMHchippingIVA+BDTperPMHchippingIVA2)/2;
+    GTperPMHchippingIVA=BDTperPMHchippingIVAavg/MoistureContent;
+    CostPerPMHchippingIVA=ChipperHourlyCost+PMH_LoaderS;
+    CostPerGTchippingIVA=CostPerPMHchippingIVA/GTperPMHchippingIVA;
+    RelevanceChippingIVA=1;
+    // B) User-Defined Chip Piled Loose Residues at Landing
+    GTperPMHchippingIVB=0.001;
+    CostPerGTchippingIVB=CostPerPMHchippingIVA/GTperPMHchippingIVB;
+    RelevanceChippingIVB=0;
+
+    // V. Chip Bundles of Residue at Landing
+    // A) Assume 50% faster than chipping loose residues
+    GTperPMHchippingVA=1.5*GTperPMHchippingIVA;
+    CostPerGTchippingVA=CostPerPMHchippingIVA/GTperPMHchippingVA;
+    RelevanceChippingVA=1;
+    // B) User-Defined Chip Bundles of Residue at Landing
+    GTperPMHchippingVB=0.0001;
+    CostPerGTchippingVB=CostPerPMHchippingIVA/GTperPMHchippingVB;
+    RelevanceChippingVB=0;
+
+    // Chipping Summary
+    // I. Chip Whole Trees
+    CostChipWT=TreeVolCT>0?CHardwoodCT*100*(ChipperHourlyCost*RelevanceChippingIA+ChipperHourlyCost*RelevanceChippingIB+ChipperHourlyCost*RelevanceChippingIC+ChipperHourlyCost*RelevanceChippingID)
+    /(RelevanceChippingIA*VolPerPMHchippingIA+RelevanceChippingIB*VolPerPMHchippingIB+RelevanceChippingIC*VolPerPMHchippingIC+RelevanceChippingID*VolPerPMHchippingID):0;
+    // II. Chain Flail DDC WT
+    // A) adjusted from Chip Whole Trees
+    FlailProdAdjustmentIIA=0.9;
+    FlailHrlyCostAdjustmentIIA=1.1;
+    CostPerPMHchippingIIA=FlailHrlyCostAdjustmentIIA*ChipperHourlyCost;
+    // need CostChipWT to calculate CostPerCCFchippingIIA
+    CostPerCCFchippingIIA=(FlailHrlyCostAdjustmentIIA/FlailProdAdjustmentIIA)*CostChipWT;
+    VolPerPMHchippingIIA=100*CostPerPMHchippingIIA/CostPerCCFchippingIIA;
+    RelevanceChippingIIA=Math.max(RelevanceChippingIA,RelevanceChippingIB,RelevanceChippingIC);
+    //result
+    CostDDChipWT=TreeVolCT>0?CHardwoodCT*100*(CostPerPMHchippingIIA*RelevanceChippingIIA+ChipperHourlyCost*RelevanceChippingIIB)
+    /(RelevanceChippingIIA*VolPerPMHchippingIIA+RelevanceChippingIIB*VolPerPMHchippingIIB):0;
+    // III. Chip CTL Logs
+    CostChipCTL=TreeVolCT>0?CHardwoodCT*100*(ChipperHourlyCost*RelevanceChippingIIIA+ChipperHourlyCost*RelevanceChippingIIIB+ChipperHourlyCost*RelevanceChippingIIIC)
+    /(RelevanceChippingIIIA*VolPerPMHchippingIIIA+RelevanceChippingIIIB*VolPerPMHchippingIIIB+RelevanceChippingIIIC*VolPerPMHchippingIIIC):0;
+    // IV. Chip Piled Loose Residues at Landing
+    CostChipLooseRes=(CostPerPMHchippingIVA*RelevanceChippingIVA+CostPerPMHchippingIVA*RelevanceChippingIVB)
+    /(RelevanceChippingIVA*GTperPMHchippingIVA+RelevanceChippingIVB*GTperPMHchippingIVB);
+    // V. Chip Bundles of Residue at Landing
+    CostChipBundledRes=(CostPerPMHchippingIVA*RelevanceChippingVA+CostPerPMHchippingIVA*RelevanceChippingVB)
+    /(RelevanceChippingVA*GTperPMHchippingVA+RelevanceChippingVB*GTperPMHchippingVB);
+
+    return Math.round(CostChipWT * 100) / 100; // round to at most 2 decimal places
 }
