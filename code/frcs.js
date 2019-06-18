@@ -1,6 +1,6 @@
 'use strict'
 //Input variables
-let e, inputElements, cut_type, system, Slope, elevation, machine, load_cost, area, move_in_dist,
+let e, inputElements, cut_type, system, Slope, elevation, machine, load_cost, Area, MoveInDist,
     CalcMoveIn, CalcResidues;
 //Input variables
 let UserSpecWDCT, UserSpecWDSLT, UserSpecWDLLT,
@@ -71,8 +71,8 @@ function calculate(){
         CalcMoveIn = 0;
     }
     //area treated and one-way move-in distance are needed when movein_cost is checked.
-    area = document.getElementById("area").value;
-    move_in_dist = document.getElementById("move_in_dist").value;
+    Area = document.getElementById("area").value;
+    MoveInDist = document.getElementById("move_in_dist").value;
 
     //if include the costs of collecting and chipping residues
     inputElements = document.getElementsByClassName('residue_collect');
@@ -251,7 +251,7 @@ function calculate(){
     let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize);
     let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT);
     let CostChipWT=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT);
-    let MoveInCosts1G39=79.06;
+    let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT);
     let CostChipLooseRes=7.37;
     let InLimits1=1; 
 /*---------hardcoded-----------*/
@@ -1034,4 +1034,62 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     /(RelevanceChippingVA*GTperPMHchippingVA+RelevanceChippingVB*GTperPMHchippingVB);
 
     return Math.round(CostChipWT * 100) / 100; // round to at most 2 decimal places
+}
+
+
+function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
+    // Move-In Assumptions
+    let SpeedLoaded,SpeedBack,MoveInLabor,LoadHrs,LoadHrsYarder,TruckMoveInCosts,TruckDriverMoveInCosts;
+    // Move-In Calculated Values
+    let TravLoadedHrs,BackhaulHrs,LowboyCost;
+    // System Costs
+    // Mech WT
+    let LowboyLoadsMechWT;
+    // Fixed
+    let fellerbuncherFixedMechWT,skidderFixedMechWT,processorFixedMechWT,loaderFixedMechWT,chipperFixedMechWT,totalFixedMechWT;
+    // Variable
+    let fellerbuncherVariableMechWT,skidderVariableMechWT,processorVariableMechWT,loaderVariableMechWT,chipperVariableMechWT,BackhaulVariableMechWT,totalVariableMechWT;
+    // Total
+    let totalMechWT,CostPerCCFmechWT;    
+    
+    // Move-In Assumptions
+    SpeedLoaded=25;
+    SpeedBack=40;
+    MoveInLabor=0;
+    LoadHrs=2;
+    LoadHrsYarder=4;
+    TruckMoveInCosts=35;
+    TruckDriverMoveInCosts=18;
+    // Move-In Calculated Values
+    TravLoadedHrs=MoveInDist/SpeedLoaded;
+    BackhaulHrs=MoveInDist/SpeedBack;
+    LowboyCost=TruckMoveInCosts+TruckDriverMoveInCosts;
+    // System Costs
+    // Mech WT
+    LowboyLoadsMechWT=4+(VolPerAcreCT>0?1:0);
+    let FB_OwnCost=89.54; // hardcoded
+    let Skidder_OwnCost=55.31; // hardcoded
+    let Processor_OwnCost=103.85; // hardcoded
+    let Loader_OwnCost=61.79; // hardcoded
+    let Chipper_OwnCost=64.29; // hardcoded
+    // Fixed
+    fellerbuncherFixedMechWT=(LowboyCost+FB_OwnCost+MoveInLabor)*LoadHrs;
+    skidderFixedMechWT=(LowboyCost+Skidder_OwnCost+MoveInLabor)*LoadHrs;
+    processorFixedMechWT=(LowboyCost+Processor_OwnCost+MoveInLabor)*LoadHrs;
+    loaderFixedMechWT=(LowboyCost+Loader_OwnCost+MoveInLabor)*LoadHrs;
+    chipperFixedMechWT=VolPerAcreCT>0?(LowboyCost+Chipper_OwnCost+MoveInLabor)*LoadHrs:0;
+    totalFixedMechWT=fellerbuncherFixedMechWT+skidderFixedMechWT+processorFixedMechWT+loaderFixedMechWT+chipperFixedMechWT;
+    // Variable
+    fellerbuncherVariableMechWT=(LowboyCost+FB_OwnCost)/SpeedLoaded;
+    skidderVariableMechWT=(LowboyCost+Skidder_OwnCost)/SpeedLoaded;
+    processorVariableMechWT=(LowboyCost+Processor_OwnCost)/SpeedLoaded;
+    loaderVariableMechWT=(LowboyCost+Loader_OwnCost)/SpeedLoaded;
+    chipperVariableMechWT=VolPerAcreCT>0?(LowboyCost+Chipper_OwnCost)/SpeedLoaded:0;
+    BackhaulVariableMechWT=LowboyCost*LowboyLoadsMechWT/SpeedBack;
+    totalVariableMechWT=fellerbuncherVariableMechWT+skidderVariableMechWT+processorVariableMechWT+loaderVariableMechWT+chipperVariableMechWT+BackhaulVariableMechWT;
+    // Total
+    totalMechWT=totalFixedMechWT+totalVariableMechWT*MoveInDist;
+    CostPerCCFmechWT=totalMechWT*100/(Area*TreeVol*Removals);
+    
+    return Math.round(CostPerCCFmechWT * 100) / 100; // round to at most 2 decimal places
 }
