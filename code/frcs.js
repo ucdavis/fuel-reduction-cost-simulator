@@ -250,9 +250,10 @@ function calculate(){
     let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
     let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize);
     let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT);
-    let CostChipWT=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT);
+    let ChippingResults=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT);
+    let CostChipWT=ChippingResults.CostChipWT;
     let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT);
-    let CostChipLooseRes=7.37;
+    let CostChipLooseRes=ChippingResults.CostChipLooseRes;
     let InLimits1=1; 
 /*---------hardcoded-----------*/
 
@@ -1033,7 +1034,16 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     CostChipBundledRes=(CostPerPMHchippingIVA*RelevanceChippingVA+CostPerPMHchippingIVA*RelevanceChippingVB)
     /(RelevanceChippingVA*GTperPMHchippingVA+RelevanceChippingVB*GTperPMHchippingVB);
 
-    return Math.round(CostChipWT * 100) / 100; // round to at most 2 decimal places
+    // results: round to at most 2 decimal places
+    CostChipWT=Math.round(CostChipWT * 100) / 100;
+    CostDDChipWT=Math.round(CostDDChipWT * 100) / 100;
+    CostChipCTL=Math.round(CostChipCTL * 100) / 100;
+    CostChipLooseRes=Math.round(CostChipLooseRes * 100) / 100;
+    CostChipBundledRes=Math.round(CostChipBundledRes * 100) / 100;
+
+    let results={'CostChipWT':CostChipWT,'CostDDChipWT':CostDDChipWT,'CostChipCTL':CostChipCTL,'CostChipLooseRes':CostChipLooseRes,'CostChipBundledRes':CostChipBundledRes};
+    console.log(results);
+    return results;
 }
 
 
