@@ -234,6 +234,9 @@ function calculate(){
 // TotalResidues
     ResidueUncutTrees=0;
     TotalResidues=ResidueRecoveredPrimary+ResidueRecoveredOptional+ResidueUncutTrees+GroundFuel+PiledFuel;
+// Limits
+    let InLimits1=InLimits(TreeVolCT,TreeVolSLT,TreeVolLLT,TreeVolALT,TreeVol,Slope);
+    
 // System Cost Elements-------
 // For Primary Products (boles & WT residues), $/CCF of material treated by the activity
 
@@ -254,7 +257,6 @@ function calculate(){
     let CostChipWT=ChippingResults.CostChipWT;
     let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT);
     let CostChipLooseRes=ChippingResults.CostChipLooseRes;
-    let InLimits1=1; 
 /*---------hardcoded-----------*/
 
     ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
@@ -1042,7 +1044,7 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     CostChipBundledRes=Math.round(CostChipBundledRes * 100) / 100;
 
     let results={'CostChipWT':CostChipWT,'CostDDChipWT':CostDDChipWT,'CostChipCTL':CostChipCTL,'CostChipLooseRes':CostChipLooseRes,'CostChipBundledRes':CostChipBundledRes};
-    console.log(results);
+    // console.log(results);
     return results;
 }
 
@@ -1102,4 +1104,31 @@ function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
     CostPerCCFmechWT=totalMechWT*100/(Area*TreeVol*Removals);
     
     return Math.round(CostPerCCFmechWT * 100) / 100; // round to at most 2 decimal places
+}
+
+function InLimits(TreeVolCT,TreeVolSLT,TreeVolLLT,TreeVolALT,TreeVol,Slope) {
+    // Mech WT
+    let MaxLLTperAcre,MaxLLTasPercentALT,ExceededMaxLLT,AvgTreeSizeLimit4Chipping,AvgTreeSizeLimit4Processing,AvgTreeSizeLimit4ManualFellLimbBuck,AvgTreeSizeLimit4loading,AvgTreeSize4GrappleSkidding,
+    ExceededMaxTreeVol,SkiddingLimit,ExceededMaxSkidLimit,YardingDistLimit,ExceededMaxYardingDist,InLimits1;
+
+    // Mech WT
+    MaxLLTperAcre=null;
+    MaxLLTasPercentALT=null;
+    ExceededMaxLLT=0;
+    AvgTreeSizeLimit4Chipping=80;
+    AvgTreeSizeLimit4Processing=80;
+    AvgTreeSizeLimit4ManualFellLimbBuck=250;
+    AvgTreeSizeLimit4loading=250;
+    AvgTreeSize4GrappleSkidding=250;
+    ExceededMaxTreeVol
+    =(TreeVolCT>AvgTreeSizeLimit4Chipping || TreeVolSLT>AvgTreeSizeLimit4Processing || TreeVolLLT>AvgTreeSizeLimit4ManualFellLimbBuck || TreeVolALT>AvgTreeSizeLimit4loading || TreeVol>AvgTreeSize4GrappleSkidding)?1:0;
+    // Slope, %
+    SkiddingLimit=40; // Slope
+    ExceededMaxSkidLimit=Slope>SkiddingLimit?1:0;
+    // Yarding distance, ft
+    YardingDistLimit=0;
+    ExceededMaxYardingDist=0;
+    InLimits1=(ExceededMaxLLT==1 || ExceededMaxTreeVol==1 || ExceededMaxSkidLimit==1 || ExceededMaxYardingDist==1) ? null:1;
+
+    return InLimits1;
 }
