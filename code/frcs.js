@@ -220,34 +220,24 @@ function calculate(){
 
 //------------------------------------------ output --------------------------------------------------------------------
 // ----System Product Summary--------------
-// Amounts Recovered Per Acre
+    // Amounts Recovered Per Acre
     BoleVolCCF=VolPerAcre/100;
     ResidueRecoveredPrimary=ResidueRecovFracWT*ResidueCT;
     PrimaryProduct=BoleWt+ ResidueRecoveredPrimary;
     ResidueRecoveredOptional = CalcResidues===1?(ResidueRecovFracWT*ResidueSLT)+(ResidueRecovFracWT*ResidueLLT):0;
     TotalPrimaryAndOptional=PrimaryProduct + ResidueRecoveredOptional;
     TotalPrimaryProductsAndOptionalResidues=PrimaryProduct+ResidueRecoveredOptional;
-// Amounts Unrecovered and Left within the Stand Per Acre
+    // Amounts Unrecovered and Left within the Stand Per Acre
     GroundFuel=ResidueLLT+ResidueST*(1-ResidueRecovFracWT);
-// Amounts Unrecovered and Left at the Landing
+    // Amounts Unrecovered and Left at the Landing
     PiledFuel=CalcResidues===1?0:ResidueSLT*ResidueRecovFracWT;
-// TotalResidues
+    // TotalResidues
     ResidueUncutTrees=0;
     TotalResidues=ResidueRecoveredPrimary+ResidueRecoveredOptional+ResidueUncutTrees+GroundFuel+PiledFuel;
 // Limits
     let InLimits1=InLimits(TreeVolCT,TreeVolSLT,TreeVolLLT,TreeVolALT,TreeVol,Slope);
     
 // System Cost Elements-------
-// For Primary Products (boles & WT residues), $/CCF of material treated by the activity
-
-// For Optional Residues, $/GT of additional residue recovered
-// Chip Loose Residues: from log trees <=80 cf
-// =CostChipLooseRes*CollectOption*InLimits1
-// Residue Move-In Costs, $/GT = =0*CalcMoveIn*CalcResidues*InLimits1
-
-// For All Products, $/ac--
-
-/*---------hardcoded-----------*/ //Todo: Find the equations for var below
     let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
     let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
@@ -257,9 +247,8 @@ function calculate(){
     let CostChipWT=ChippingResults.CostChipWT;
     let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT);
     let CostChipLooseRes=ChippingResults.CostChipLooseRes;
-/*---------hardcoded-----------*/
 
-    ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
+    // C. For All Products, $/ac
     FellAndBunchTreesLess80cf=CostFellBunch*VolPerAcreST/100*InLimits1;
     ManualFellLimbBuckTreesLarger80cf=CostManFLBLLT*VolPerAcreLLT/100*InLimits1;
     SkidBunchedAllTrees=CostSkidBun*VolPerAcre/100*InLimits1;
@@ -268,10 +257,12 @@ function calculate(){
     ChipWholeTrees=CostChipWT*VolPerAcreCT/100*InLimits1;
     Stump2Truck4PrimaryProductWithoutMovein=FellAndBunchTreesLess80cf+ManualFellLimbBuckTreesLarger80cf+SkidBunchedAllTrees+ProcessLogTreesLess80cf+LoadLogTrees+ChipWholeTrees;
     Movein4PrimaryProduct=MoveInCosts1G39*CalcMoveIn*BoleVolCCF*InLimits1;
-    OntoTruck4ResiduesWoMovein=ChipLooseResiduesFromLogTreesLess80cf; //for Mech WT sys;
-    let Movein4Residues=0; // Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
 
-//Results 
+    ChipLooseResiduesFromLogTreesLess80cf=CostChipLooseRes*CalcResidues*ResidueRecoveredOptional*InLimits1;
+    OntoTruck4ResiduesWoMovein=ChipLooseResiduesFromLogTreesLess80cf; //for Mech WT sys;
+    let Movein4Residues=0*CalcMoveIn*CalcResidues*ResidueRecoveredOptional*InLimits1;
+
+// III. System Cost Summaries
     TotalPerAcre=Stump2Truck4PrimaryProductWithoutMovein+Movein4PrimaryProduct+OntoTruck4ResiduesWoMovein+Movein4Residues;
     TotalPerBoleCCF=TotalPerAcre/BoleVolCCF;
     TotalPerGT=TotalPerAcre/TotalPrimaryProductsAndOptionalResidues;
@@ -456,7 +447,7 @@ function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPe
     // Summary
     let CostManFLBLLT;
 
-    let PMH_Chainsaw=95.65; // hardcoded
+    let PMH_Chainsaw=95.64657955; // hardcoded
 // I. Felling Only
     // IA (McNeel, 94)
     SelectionTimePerTreelltA=0.568+0.0193*0.305*WalkDistLLT+0.0294*2.54*DBHLLT;
@@ -512,7 +503,7 @@ function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPe
     VolPerPMHlltIIB=TreeVolLLT/(TimePerTreelltIIB/60);
     CostPerCCFlltIIB=100*PMH_Chainsaw/VolPerPMHlltIIB;
     // RelevancelltIIB=(TreeVolLLT<1?0:(TreeVolLLT<2?-1+TreeVolLLT/1:(TreeVolLLT<70?1:1.2-TreeVolLLT/350)));
-    RelevancelltIIB=1;
+    RelevancelltIIB=TreeVol<1?0:(TreeVol<2?-1+TreeVol/1:(TreeVol<70?1:1.2-TreeVol/350)); // ='Felling (all trees)'!E40
     // IIC (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
     DelayFraclltIIC=0.197;
     TimePerTreelltIIC=(1.772+0.02877*TreeVolLLT-2.6486/TreeVolLLT)*(1+DelayFraclltIIC);
@@ -528,7 +519,7 @@ function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPe
         (PMH_Chainsaw*RelevancelltIIA+PMH_Chainsaw*RelevancelltIIB+PMH_Chainsaw*RelevancelltIIC+PMH_Chainsaw*RelevancelltIID)
         /(RelevancelltIIA*VolPerPMHlltIIA+RelevancelltIIB*VolPerPMHlltIIB+RelevancelltIIC*VolPerPMHlltIIC+RelevancelltIID*VolPerPMHlltIID):0);
     
-    return Math.round(CostManFLBLLT * 100) / 100; // round to at most 2 decimal places
+    return CostManFLBLLT;
 }
 
 function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialCut,
@@ -582,8 +573,8 @@ function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialC
     TurnVol=(PartialCut==0?44.87:(PartialCut==1?31.62:null))*Math.pow(TreeVol,0.282)*CSlopeSkidForwLoadSize;
     LogsPerTurnS=TurnVol/LogVol;
     TreesPerTurnS=TurnVol/TreeVol;
-    PMH_SkidderB=189.61; // hardcoded
-    PMH_SkidderS=133.92; //hardcoded
+    PMH_SkidderB=189.6113334; // hardcoded
+    PMH_SkidderS=133.9201221; //hardcoded
     SkidderHourlyCost=PMH_SkidderS*(1-ManualMachineSize)+PMH_SkidderB*ManualMachineSize;
 
 // I Choker, Unbunched
@@ -706,12 +697,12 @@ function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialC
         /(RelevanceSkidIVA*VolPerPMHskidIVA+RelevanceSkidIVB*VolPerPMHskidIVB+RelevanceSkidIVC*VolPerPMHskidIVC+RelevanceSkidIVD*VolPerPMHskidIVD
             +RelevanceSkidIVE*VolPerPMHskidIVE+RelevanceSkidIVF*VolPerPMHskidIVF+RelevanceSkidIVG*VolPerPMHskidIVG+RelevanceSkidIVH*VolPerPMHskidIVH);
 
-    return Math.round(CostSkidBun * 100) / 100;
+    return CostSkidBun;
 }
 
 function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize){
-    let PMH_ProcessorS=209.64 // hardcoded
-    let PMH_ProcessorB=265.46 // hardcoded
+    let PMH_ProcessorS=209.6417668 // hardcoded
+    let PMH_ProcessorB=265.4554487 // hardcoded
 
     // Processing Calculated Values
     let ProcessorHourlyCost;
@@ -780,7 +771,7 @@ function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize
         /(RelevanceProcessA*VolPerPMHProcessA+RelevanceProcessB*VolPerPMHprocessB+RelevanceProcessC*VolPerPMHprocessC+RelevanceProcessD*VolPerPMHprocessD
             +RelevanceProcessE*VolPerPMHprocessE+RelevanceProcessF*VolPerPMHprocessF+RelevanceProcessG*VolPerPMHprocessG+RelevanceProcessH*VolPerPMHprocessH):0);
 
-    return Math.round(CostProcess * 100) / 100; // round to at most 2 decimal places
+    return CostProcess;
 }
 
 function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT){
@@ -812,8 +803,8 @@ function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT
     let CostLoadCTL;
 
     ExchangeTrucks=5;
-    PMH_LoaderS=146.74; // hardcoded
-    PMH_LoaderB=180.18; // hardcoded
+    PMH_LoaderS=146.7425596; // hardcoded
+    PMH_LoaderB=180.1779855; // hardcoded
     // Loading Calculated Values
     LoadVolALT=LoadWeightLog*2000/(WoodDensityALT*100);
     LoadVolSLT=LoadWeightLog*2000/(WoodDensitySLT*100);
@@ -872,7 +863,7 @@ function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT
     (TreeVolSLT>0?CHardwoodSLT*100*(LoaderHourlyCost*RelevanceLoadingIIA+LoaderHourlyCost*RelevanceLoadingIIB+LoaderHourlyCost*RelevanceLoadingIIC)
     /(RelevanceLoadingIIA*VolPerPMHloadingIIA+RelevanceLoadingIIB*VolPerPMHloadingIIB+RelevanceLoadingIIC*VolPerPMHloadingIIC):0):0;
 
-    return Math.round(CostLoad * 100) / 100; // round to at most 2 decimal places
+    return CostLoad;
 }
 
 function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT){
@@ -923,9 +914,9 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     let CostChipBundledRes;
 
     // Chipping Calculated Values
-    PMH_LoaderS=146.74; //hardcoded
-    PMH_ChipperS=166.53; //hardcoded
-    PMH_ChipperB=244.64; //hardcoded
+    PMH_LoaderS=146.7425596; //hardcoded
+    PMH_ChipperS=166.5332661; //hardcoded
+    PMH_ChipperB=244.6444891; //hardcoded
     LoadWeightDry=LoadWeightChip*(1-MoistureContent);
     TreeWeightDry=TreeVolCT*WoodDensityCT*(1-MoistureContent);
     CTLLogWeight=CTLLogVolCT*WoodDensityCT;
@@ -1036,13 +1027,6 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     CostChipBundledRes=(CostPerPMHchippingIVA*RelevanceChippingVA+CostPerPMHchippingIVA*RelevanceChippingVB)
     /(RelevanceChippingVA*GTperPMHchippingVA+RelevanceChippingVB*GTperPMHchippingVB);
 
-    // results: round to at most 2 decimal places
-    CostChipWT=Math.round(CostChipWT * 100) / 100;
-    CostDDChipWT=Math.round(CostDDChipWT * 100) / 100;
-    CostChipCTL=Math.round(CostChipCTL * 100) / 100;
-    CostChipLooseRes=Math.round(CostChipLooseRes * 100) / 100;
-    CostChipBundledRes=Math.round(CostChipBundledRes * 100) / 100;
-
     let results={'CostChipWT':CostChipWT,'CostDDChipWT':CostDDChipWT,'CostChipCTL':CostChipCTL,'CostChipLooseRes':CostChipLooseRes,'CostChipBundledRes':CostChipBundledRes};
     // console.log(results);
     return results;
@@ -1079,11 +1063,11 @@ function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
     // System Costs
     // Mech WT
     LowboyLoadsMechWT=4+(VolPerAcreCT>0?1:0);
-    let FB_OwnCost=89.54; // hardcoded
-    let Skidder_OwnCost=55.31; // hardcoded
-    let Processor_OwnCost=103.85; // hardcoded
-    let Loader_OwnCost=61.79; // hardcoded
-    let Chipper_OwnCost=64.29; // hardcoded
+    let FB_OwnCost=89.53504467; // hardcoded
+    let Skidder_OwnCost=55.31143828; // hardcoded
+    let Processor_OwnCost=103.8505096; // hardcoded
+    let Loader_OwnCost=61.78935447; // hardcoded
+    let Chipper_OwnCost=64.28841072; // hardcoded
     // Fixed
     fellerbuncherFixedMechWT=(LowboyCost+FB_OwnCost+MoveInLabor)*LoadHrs;
     skidderFixedMechWT=(LowboyCost+Skidder_OwnCost+MoveInLabor)*LoadHrs;
@@ -1102,8 +1086,8 @@ function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
     // Total
     totalMechWT=totalFixedMechWT+totalVariableMechWT*MoveInDist;
     CostPerCCFmechWT=totalMechWT*100/(Area*TreeVol*Removals);
-    
-    return Math.round(CostPerCCFmechWT * 100) / 100; // round to at most 2 decimal places
+
+    return CostPerCCFmechWT;
 }
 
 function InLimits(TreeVolCT,TreeVolSLT,TreeVolLLT,TreeVolALT,TreeVol,Slope) {
