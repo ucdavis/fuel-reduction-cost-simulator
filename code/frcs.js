@@ -83,7 +83,7 @@ function calculate(){
         CalcResidues = 0;
     }
 
-    //Other Assumptions --hardcoded--
+    //Other Assumptions
     let MaxManualTreeVol = 150;
     let MaxMechTreeVol=80;
     let MoistureContent=0.50;
@@ -240,14 +240,14 @@ function calculate(){
     let CostMachine=MachineCosts();
     
 // System Cost Elements-------
-    let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
-    let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT);
-    let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam);
-    let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize);
-    let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT);
-    let ChippingResults=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT);
+    let CostFellBunch=FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST,CostMachine);
+    let CostManFLBLLT=FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,cut_type,DBHLLT,LogsPerTreeLLT,CostMachine);
+    let CostSkidBun=Skidding(Slope,deliver_dist,Removals,TreeVol,WoodDensity,LogLength,cut_type,CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam,CostMachine);
+    let CostProcess=Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize,CostMachine);
+    let CostLoad=Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT,CostMachine);
+    let ChippingResults=Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT,CostMachine);
     let CostChipWT=ChippingResults.CostChipWT;
-    let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT);
+    let MoveInCosts1G39=MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT,CostMachine);
     let CostChipLooseRes=ChippingResults.CostChipLooseRes;
 
     // C. For All Products, $/ac
@@ -277,7 +277,7 @@ function calculate(){
 /**
  * @return {number}
  */
-function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST){
+function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST,CostMachine){
     //IA Melroe Bobcat (Johnson, 79) //FellBunch(Slope,RemovalsST,TreeVolST,cut_type,DBHST,NonSelfLevelCabDummy,CSlopeFB_Harv,CRemovalsFB_Harv,CHardwoodST);
     let DistBetweenTrees,TimePerTreeIA,VolPerPMHIA,CostPerPMHIA,CostPerCCFIA,RelevanceIA;
     //IB Chainsaw Heads
@@ -305,7 +305,7 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
         CostPerPMHIIG,CostPerCCFIIG,RelevanceIIG;
 
     /*--------------Fell&Bunch START---------------------------*/
-    let PMH_DriveToTree=181.30; //Todo: (hardcoded)
+    let PMH_DriveToTree=CostMachine.PMH_DriveToTree;
     DistBetweenTrees=Math.sqrt(43560/Math.max(RemovalsST,1));
 // I. Drive-To-Tree
     // IA: Melroe Bobcat (Johnson, 79)
@@ -338,15 +338,15 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
     RelevanceID=(DBHST<10?1:(DBHST<15?3-DBHST/5:0))*(Slope<10?1:(Slope<20?2-Slope/10:0));
 // II. Swing Boom
     // IIA: Drott (Johnson, 79) not used at present
-    let PMH_SwingBoom=233.26; //Todo: (hardcoded)
-    TimePerTreeIIA =0.388+0.0137*DistBetweenTrees+0.0398*Slope;
-    VolPerPMHIIA =TreeVolST/(TimePerTreeIIA/60);
-    CostPerPMHIIA =PMH_SwingBoom;
-    CostPerCCFIIA =100*CostPerPMHIIA/VolPerPMHIIA;
-    RelevanceIIA=0; //hardcoded
+    let PMH_SwingBoom=CostMachine.PMH_SwingBoom;
+    TimePerTreeIIA=0.388+0.0137*DistBetweenTrees+0.0398*Slope;
+    VolPerPMHIIA=TreeVolST/(TimePerTreeIIA/60);
+    CostPerPMHIIA=PMH_SwingBoom;
+    CostPerCCFIIA=100*CostPerPMHIIA/VolPerPMHIIA;
+    RelevanceIIA=0;
 
     // IIB: Timbco 2520&Cat 227 (Johnson, 88)
-    let PMH_SelfLevel=238;//Todo: (hardcoded)
+    let PMH_SelfLevel=CostMachine.PMH_SelfLevel;
     let BoomReachIIB=24; //
     TreeInReachIIB =RemovalsST*Math.PI*Math.pow(BoomReachIIB,2)/43560;
     TreesPerCycleIIB =Math.max(1,TreeInReachIIB);
@@ -420,7 +420,7 @@ function FellBunch(Slope,RemovalsST,TreeVolST,DBHST,NonSelfLevelCabDummy,CSlopeF
     return WeightedAverage;
 }
 
-function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPerTreeLLT){
+function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPerTreeLLT,CostMachine){
     let WalkDistLLT = Math.sqrt(43560/Math.max(RemovalsLLT,1));
 // I. Felling Only
     // IA (McNeel, 94)
@@ -449,7 +449,7 @@ function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPe
     // Summary
     let CostManFLBLLT;
 
-    let PMH_Chainsaw=95.64657955; // hardcoded
+    let PMH_Chainsaw=CostMachine.PMH_Chainsaw;
 // I. Felling Only
     // IA (McNeel, 94)
     SelectionTimePerTreelltA=0.568+0.0193*0.305*WalkDistLLT+0.0294*2.54*DBHLLT;
@@ -525,7 +525,7 @@ function FellLargeLogTrees(Slope,RemovalsLLT,TreeVolLLT,PartialCut,DBHLLT,LogsPe
 }
 
 function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialCut,
-    CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam){
+    CSlopeSkidForwLoadSize,LogsPerTree,LogVol,ManualMachineSize,BFperCF,ButtDiam,CostMachine){
 // Skidding Calculated Values
     let TurnVol,LogsPerTurnS,TreesPerTurnS,PMH_SkidderB,PMH_SkidderS,SkidderHourlyCost;
 // I Choker, Unbunched
@@ -575,8 +575,8 @@ function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialC
     TurnVol=(PartialCut==0?44.87:(PartialCut==1?31.62:null))*Math.pow(TreeVol,0.282)*CSlopeSkidForwLoadSize;
     LogsPerTurnS=TurnVol/LogVol;
     TreesPerTurnS=TurnVol/TreeVol;
-    PMH_SkidderB=189.6113334; // hardcoded
-    PMH_SkidderS=133.9201221; //hardcoded
+    PMH_SkidderB=CostMachine.PMH_SkidderB;
+    PMH_SkidderS=CostMachine.PMH_SkidderS;
     SkidderHourlyCost=PMH_SkidderS*(1-ManualMachineSize)+PMH_SkidderB*ManualMachineSize;
 
 // I Choker, Unbunched
@@ -702,9 +702,9 @@ function Skidding(Slope,YardDist,Removals,TreeVol,WoodDensity,LogLength,PartialC
     return CostSkidBun;
 }
 
-function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize){
-    let PMH_ProcessorS=209.6417668 // hardcoded
-    let PMH_ProcessorB=265.4554487 // hardcoded
+function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize,CostMachine){
+    let PMH_ProcessorS=CostMachine.PMH_ProcessorS;
+    let PMH_ProcessorB=CostMachine.PMH_ProcessorB;
 
     // Processing Calculated Values
     let ProcessorHourlyCost;
@@ -776,7 +776,7 @@ function Processing(TreeVolSLT,DBHSLT,ButtDiamSLT,LogsPerTreeSLT,MechMachineSize
     return CostProcess;
 }
 
-function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT){
+function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT,DBHALT,DBHSLT,ManualMachineSizeALT,CostMachine){
     let ExchangeTrucks,PMH_LoaderS,PMH_LoaderB;
     // Loading Calculated Values
     let LoadVolALT,LoadVolSLT,LoaderHourlyCost;
@@ -805,8 +805,8 @@ function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT
     let CostLoadCTL;
 
     ExchangeTrucks=5;
-    PMH_LoaderS=146.7425596; // hardcoded
-    PMH_LoaderB=180.1779855; // hardcoded
+    PMH_LoaderS=CostMachine.PMH_LoaderS;
+    PMH_LoaderB=CostMachine.PMH_LoaderB;
     // Loading Calculated Values
     LoadVolALT=LoadWeightLog*2000/(WoodDensityALT*100);
     LoadVolSLT=LoadWeightLog*2000/(WoodDensitySLT*100);
@@ -868,7 +868,7 @@ function Loading(LoadWeightLog,WoodDensityALT,WoodDensitySLT,CTLLogVol,LogVolALT
     return CostLoad;
 }
 
-function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT){
+function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwoodCT,CostMachine){
     let ExchangeVans=5.3;
     // Chipping Calculated Values
     let PMH_LoaderS,PMH_ChipperS,PMH_ChipperB,LoadWeightDry,TreeWeightDry,CTLLogWeight,CTLLogWeightDry,ChipperHourlyCost;
@@ -916,9 +916,9 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
     let CostChipBundledRes;
 
     // Chipping Calculated Values
-    PMH_LoaderS=146.7425596; //hardcoded
-    PMH_ChipperS=166.5332661; //hardcoded
-    PMH_ChipperB=244.6444891; //hardcoded
+    PMH_LoaderS=CostMachine.PMH_LoaderS;
+    PMH_ChipperS=CostMachine.PMH_ChipperS;
+    PMH_ChipperB=CostMachine.PMH_ChipperB;
     LoadWeightDry=LoadWeightChip*(1-MoistureContent);
     TreeWeightDry=TreeVolCT*WoodDensityCT*(1-MoistureContent);
     CTLLogWeight=CTLLogVolCT*WoodDensityCT;
@@ -1035,7 +1035,7 @@ function Chipping(TreeVolCT,WoodDensityCT,LoadWeightChip,MoistureContent,CHardwo
 }
 
 
-function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
+function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT,CostMachine){
     // Move-In Assumptions
     let SpeedLoaded,SpeedBack,MoveInLabor,LoadHrs,LoadHrsYarder,TruckMoveInCosts,TruckDriverMoveInCosts;
     // Move-In Calculated Values
@@ -1065,11 +1065,11 @@ function MoveInCosts(Area,MoveInDist,TreeVol,Removals,VolPerAcreCT){
     // System Costs
     // Mech WT
     LowboyLoadsMechWT=4+(VolPerAcreCT>0?1:0);
-    let FB_OwnCost=89.53504467; // hardcoded
-    let Skidder_OwnCost=55.31143828; // hardcoded
-    let Processor_OwnCost=103.8505096; // hardcoded
-    let Loader_OwnCost=61.78935447; // hardcoded
-    let Chipper_OwnCost=64.28841072; // hardcoded
+    let FB_OwnCost=CostMachine.FB_OwnCost;
+    let Skidder_OwnCost=CostMachine.Skidder_OwnCost;
+    let Processor_OwnCost=CostMachine.Processor_OwnCost;
+    let Loader_OwnCost=CostMachine.Loader_OwnCost;
+    let Chipper_OwnCost=CostMachine.Chipper_OwnCost;
     // Fixed
     fellerbuncherFixedMechWT=(LowboyCost+FB_OwnCost+MoveInLabor)*LoadHrs;
     skidderFixedMechWT=(LowboyCost+Skidder_OwnCost+MoveInLabor)*LoadHrs;
@@ -1172,11 +1172,11 @@ function MachineCosts() {
     WageAndBenRate=35.25197962; // =OtherWage // hardcoded
     interest=0.08;
     insuranceAtax=0.07;
-    Diesel_fuel_price=3.327;
+    Diesel_fuel_price=3.327; // hardcoded
     smh=1600;
 
     // Chainsaw
-    PurchasePriceChainsaw=824.4620612; //hardcoded
+    PurchasePriceChainsaw=824.4620612; // hardcoded
     HorsepowerChainsaw=0;
     LifeChainsaw=1;
     svChainsaw=0.2;
@@ -1276,13 +1276,14 @@ function MachineCosts() {
     fcrForwarder=0.025;
     rmForwarder=1;
     // Small
-    PurchasePriceForwarderS=282672.7067;
+    PurchasePriceForwarderS=282672.7067; // hardcoded
     HorsepowerForwarderS=110;
     svForwarderS=0.25;
+    // some vars have the same value as in Skidder, therefore keep those Skidder vars in the function below 
     let ForwarderS=CostCalc(PurchasePriceForwarderS,HorsepowerForwarderS,LifeForwarder,svForwarderS,utSkidder,rmForwarder,fcrForwarder,loSkidder,personsSkidder,wbSkidder);
     let PMH_ForwarderS=ForwarderS[1];
     // Big
-    PurchasePriceForwarderB=365118.9128;
+    PurchasePriceForwarderB=365118.9128; //hardcoded
     HorsepowerForwarderB=200;
     svForwarderB=0.2;
     let ForwarderB=CostCalc(PurchasePriceForwarderB,HorsepowerForwarderB,LifeForwarder,svForwarderB,utSkidder,rmForwarder,fcrForwarder,loSkidder,personsSkidder,wbSkidder);
@@ -1319,12 +1320,12 @@ function MachineCosts() {
     personsProcessor=1;
     wbProcessor=personsProcessor*WageAndBenRate;
     // Small
-    PurchasePriceProcessorS=353340.8834;
+    PurchasePriceProcessorS=353340.8834; // hardcoded
     HorsepowerProcessorS=120;
     let ProcessorS=CostCalc(PurchasePriceProcessorS,HorsepowerProcessorS,LifeProcessor,svProcessor,utProcessor,rmProcessor,fcrProcessor,loProcessor,personsProcessor,wbProcessor);
     let PMH_ProcessorS=ProcessorS[1];
     // Big
-    PurchasePriceProcessorB=471121.1778;
+    PurchasePriceProcessorB=471121.1778; // hardcoded
     HorsepowerProcessorB=200;
     let ProcessorB=CostCalc(PurchasePriceProcessorB,HorsepowerProcessorB,LifeProcessor,svProcessor,utProcessor,rmProcessor,fcrProcessor,loProcessor,personsProcessor,wbProcessor);
     let PMH_ProcessorB=ProcessorB[1];
@@ -1340,12 +1341,12 @@ function MachineCosts() {
     personsLoader=1;
     wbLoader=personsLoader*WageAndBenRate;
     // Small
-    PurchasePriceLoaderS=223782.5595;
+    PurchasePriceLoaderS=223782.5595; // hardcoded
     HorsepowerLoaderS=120;
     let LoaderS=CostCalc(PurchasePriceLoaderS,HorsepowerLoaderS,LifeLoader,svLoader,utLoader,rmLoader,fcrLoader,loLoader,personsLoader,wbLoader);
     let PMH_LoaderS=LoaderS[1];
     // Big
-    PurchasePriceLoaderB=294450.7361;
+    PurchasePriceLoaderB=294450.7361; // hardcoded
     HorsepowerLoaderB=200;
     let LoaderB=CostCalc(PurchasePriceLoaderB,HorsepowerLoaderB,LifeLoader,svLoader,utLoader,rmLoader,fcrLoader,loLoader,personsLoader,wbLoader);
     let PMH_LoaderB=LoaderB[1];
@@ -1361,33 +1362,31 @@ function MachineCosts() {
     personsChipper=1;
     wbChipper=personsChipper*WageAndBenRate;
     // Small
-    PurchasePriceChipperS=235560.5889;
+    PurchasePriceChipperS=235560.5889; // hardcoded
     HorsepowerChipperS=350;
     let ChipperS=CostCalc(PurchasePriceChipperS,HorsepowerChipperS,LifeChipper,svChipper,utChipper,rmChipper,fcrChipper,loChipper,personsChipper,wbChipper);
     let PMH_ChipperS=ChipperS[1];
     // Big
-    PurchasePriceChipperB=353340.8834;
+    PurchasePriceChipperB=353340.8834; // hardcoded
     HorsepowerChipperB=700;
     let ChipperB=CostCalc(PurchasePriceChipperB,HorsepowerChipperB,LifeChipper,svChipper,utChipper,rmChipper,fcrChipper,loChipper,personsChipper,wbChipper);
     let PMH_ChipperB=ChipperB[1];
     let Chipper_OwnCost=(ChipperS[0]+ChipperB[0])/2;
 
     // Bundler
-    PurchasePriceBundler=530011.325;
+    PurchasePriceBundler=530011.325; // hardcoded
     HorsepowerBundler=180;
     fcrBundler=0.025;
     // the other vars are the same as Chipper's, therefore pass chipper vars in the function below
     let Bundler=CostCalc(PurchasePriceBundler,HorsepowerBundler,LifeChipper,svChipper,utChipper,rmChipper,fcrBundler,loChipper,personsChipper,wbChipper);
     let PMH_Bundler=Bundler[1];
     let Bundler_OwnCost=Bundler[0];
-
-    console.log('PMH_YarderS = '+PMH_YarderS);
     
     let resultObj = {'PMH_Chainsaw': PMH_Chainsaw,'PMH_DriveToTree': PMH_DriveToTree,'PMH_SwingBoom':PMH_SwingBoom,'PMH_SelfLevel':PMH_SelfLevel,'FB_OwnCost':FB_OwnCost,
     'PMH_HarvS':PMH_HarvS,'PMH_HarvB':PMH_HarvB,'Harvester_OwnCost':Harvester_OwnCost,'PMH_SkidderS':PMH_SkidderS,'PMH_SkidderB':PMH_SkidderB,'Skidder_OwnCost':Skidder_OwnCost,
     'PMH_ForwarderS':PMH_ForwarderS,'PMH_ForwarderB':PMH_ForwarderB,'Forwarder_OwnCost':Forwarder_OwnCost,'PMH_YarderS': PMH_YarderS,'PMH_YarderI': PMH_YarderI,'Yarder_OwnCost': Yarder_OwnCost,
     'PMH_ProcessorS':PMH_ProcessorS,'PMH_ProcessorB':PMH_ProcessorB,'Processor_OwnCost':Processor_OwnCost,'PMH_LoaderS':PMH_LoaderS,'PMH_LoaderB':PMH_LoaderB,'Loader_OwnCost':Loader_OwnCost,
-    'PMH_Bundler':PMH_Bundler,'Bundler_OwnCost':Bundler_OwnCost};
+    'PMH_ChipperS':PMH_ChipperS,'PMH_ChipperB':PMH_ChipperB,'Chipper_OwnCost':Chipper_OwnCost,'PMH_Bundler':PMH_Bundler,'Bundler_OwnCost':Bundler_OwnCost};
     console.log(resultObj);
     return resultObj;
 
