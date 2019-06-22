@@ -1258,7 +1258,7 @@ function MachineCosts() {
     personsSkidder=1;
     wbSkidder =personsSkidder*WageAndBenRate;
     // Small
-    PurchasePriceSkidderS=164892.4122; //hardcoded
+    PurchasePriceSkidderS=164892.4122; // hardcoded
     HorsepowerSkidderS=120;
     LifeSkidderS=5;
     let SkidderS=CostCalc(PurchasePriceSkidderS,HorsepowerSkidderS,LifeSkidderS,svSkidder,utSkidder,rmSkidder,fcrSkidder,loSkidder,personsSkidder,wbSkidder);
@@ -1283,7 +1283,7 @@ function MachineCosts() {
     let ForwarderS=CostCalc(PurchasePriceForwarderS,HorsepowerForwarderS,LifeForwarder,svForwarderS,utSkidder,rmForwarder,fcrForwarder,loSkidder,personsSkidder,wbSkidder);
     let PMH_ForwarderS=ForwarderS[1];
     // Big
-    PurchasePriceForwarderB=365118.9128; //hardcoded
+    PurchasePriceForwarderB=365118.9128; // hardcoded
     HorsepowerForwarderB=200;
     svForwarderB=0.2;
     let ForwarderB=CostCalc(PurchasePriceForwarderB,HorsepowerForwarderB,LifeForwarder,svForwarderB,utSkidder,rmForwarder,fcrForwarder,loSkidder,personsSkidder,wbSkidder);
@@ -1291,7 +1291,7 @@ function MachineCosts() {
     let Forwarder_OwnCost=(ForwarderS[0]+ForwarderB[0])/2;
     
     // Yarder small
-    PurchasePriceYarderS=188448.4711; //hardcoded
+    PurchasePriceYarderS=188448.4711; // hardcoded
     HorsepowerYarderS=100;
     LifeYarder=10;
     svYarder=0.1;
