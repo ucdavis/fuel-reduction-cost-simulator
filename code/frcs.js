@@ -1124,11 +1124,44 @@ function MachineCosts() {
     let WageAndBenRateF,WageAndBenRate,interest,insuranceAtax,Diesel_fuel_price,smh;
     // Chainsaw
     let PurchasePriceChainsaw,HorsepowerChainsaw,LifeChainsaw,svChainsaw,utChainsaw,rmChainsaw,fcrChainsaw,loChainsaw,personsChainsaw,wbChainsaw;
+    // Harvester
+    //global 
+    let LifeHarvester,svHarvester,utHarvester,rmHarvester,fcrHarvester,loHarvester,personsHarvester,wbHarvester;
+    // Small
+    let PurchasePriceHarvesterS,HorsepowerHarvesterS;
+    // Big
+    let PurchasePriceHarvesterB,HorsepowerHarvesterB;
+    // Skidder
+    let svSkidder,utSkidder,rmSkidder,fcrSkidder,loSkidder,personsSkidder,wbSkidder;
+    // Small
+    let PurchasePriceSkidderS,HorsepowerSkidderS,LifeSkidderS;
+    // Big
+    let PurchasePriceSkidderB,HorsepowerSkidderB,LifeSkidderB;
     // Yard small
     let PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder;
     // Yarder intermediate    
     let PurchasePriceYarderI,HorsepowerYarderI;
-
+    // Processor
+    let LifeProcessor,svProcessor,utProcessor,rmProcessor,fcrProcessor,loProcessor,personsProcessor,wbProcessor;
+    // Small
+    let PurchasePriceProcessorS,HorsepowerProcessorS;
+    // Big
+    let PurchasePriceProcessorB,HorsepowerProcessorB;
+    // Loader
+    let LifeLoader,svLoader,utLoader,rmLoader,fcrLoader,loLoader,personsLoader,wbLoader;
+    // Small
+    let PurchasePriceLoaderS,HorsepowerLoaderS;
+    // Big
+    let PurchasePriceLoaderB,HorsepowerLoaderB;
+    // Chipper
+    let LifeChipper,svChipper,utChipper,rmChipper,fcrChipper,loChipper,personsChipper,wbChipper;
+    // Small
+    let PurchasePriceChipperS,HorsepowerChipperS;
+    // Big
+    let PurchasePriceChipperB,HorsepowerChipperB;
+    // Bundler
+    let PurchasePriceBundler,HorsepowerBundler,fcrBundler;
+    
     WageAndBenRateF=44.44814821; // =FallBuckWage // hardcoded
     WageAndBenRate=35.25197962; // =OtherWage // hardcoded
     interest=0.08;
@@ -1137,7 +1170,7 @@ function MachineCosts() {
     smh=1600;
 
     // Chainsaw
-    PurchasePriceChainsaw=824.4620612;
+    PurchasePriceChainsaw=824.4620612; //hardcoded
     HorsepowerChainsaw=0;
     LifeChainsaw=1;
     svChainsaw=0.2;
@@ -1149,7 +1182,6 @@ function MachineCosts() {
     wbChainsaw= WageAndBenRateF;
     let Chainsaw=CostCalc(PurchasePriceChainsaw,HorsepowerChainsaw,LifeChainsaw,svChainsaw,utChainsaw,rmChainsaw,fcrChainsaw,loChainsaw,personsChainsaw,wbChainsaw);
     let PMH_Chainsaw=Chainsaw[1];
-    console.log('PMH_Chainsaw = ' + Chainsaw[1]);
 
     // FBuncher
     let fcrFBuncher,loFBuncher,personsFBuncher,wbFBuncher;
@@ -1161,7 +1193,7 @@ function MachineCosts() {
     // DriveToTree
     let PurchasePriceFBuncherDTT,HorsepowerFBuncherDTT,LifeFBuncherDTT,svFBuncherDTT,utFBuncherDTT,rmFBuncherDTT;
 
-    PurchasePriceFBuncherDTT=176670.4417;
+    PurchasePriceFBuncherDTT=176670.4417; // hardcoded
     HorsepowerFBuncherDTT=150;
     LifeFBuncherDTT=3;
     svFBuncherDTT=0.2;
@@ -1172,7 +1204,7 @@ function MachineCosts() {
     //SwingBoom
     let PurchasePriceFBuncherSB,HorsepowerFBuncherSB,LifeFBuncherSB,svFBuncherSB,utFBuncherSB,rmFBuncherSB;
 
-    PurchasePriceFBuncherSB=365118.9128;
+    PurchasePriceFBuncherSB=365118.9128; // hardcoded
     HorsepowerFBuncherSB=200;
     LifeFBuncherSB=5;
     svFBuncherSB=0.15;
@@ -1187,15 +1219,8 @@ function MachineCosts() {
     let PMH_SelfLevel=SelfLeveling[1];
 
     let FB_OwnCost=(DriveToTree[0]+SwingBoom[0]+SelfLeveling[0])/3;
-
-    // Harvester
-    //global 
-    let LifeHarvester,svHarvester,utHarvester,rmHarvester,fcrHarvester,loHarvester,personsHarvester,wbHarvester;
-    // Small
-    let PurchasePriceHarvesterS,HorsepowerHarvesterS;
-    // Big
-    let PurchasePriceHarvesterB,HorsepowerHarvesterB;
     
+    // Harvester
     LifeHarvester=4;
     svHarvester=0.2;
     utHarvester=0.65;
@@ -1205,24 +1230,19 @@ function MachineCosts() {
     personsHarvester=1;
     wbHarvester=personsHarvester*WageAndBenRate;
     // Small
-    PurchasePriceHarvesterS=412231.0306;
+    PurchasePriceHarvesterS=412231.0306; // hardcoded
     HorsepowerHarvesterS=120;
     let HarvesterS=CostCalc(PurchasePriceHarvesterS,HorsepowerHarvesterS,LifeHarvester,svHarvester,utHarvester,rmHarvester,fcrHarvester,loHarvester,personsHarvester,wbHarvester);
     let PMH_HarvS=HarvesterS[1];
     // Big
-    PurchasePriceHarvesterB=530011.325;
+    PurchasePriceHarvesterB=530011.325; // hardcoded
     HorsepowerHarvesterB=200;
     let HarvesterB=CostCalc(PurchasePriceHarvesterB,HorsepowerHarvesterB,LifeHarvester,svHarvester,utHarvester,rmHarvester,fcrHarvester,loHarvester,personsHarvester,wbHarvester);
     let PMH_HarvB=HarvesterB[1];
 
     let Harvester_OwnCost=(HarvesterS[0]+HarvesterB[0])/2;
 
-    // Skidder
-    let svSkidder,utSkidder,rmSkidder,fcrSkidder,loSkidder,personsSkidder,wbSkidder;
-    // Small
-    let PurchasePriceSkidderS,HorsepowerSkidderS,LifeSkidderS;
-    // Big
-    let PurchasePriceSkidderB,HorsepowerSkidderB,LifeSkidderB;
+
     // Skidder global
     svSkidder=0.2;
     utSkidder=0.65;
@@ -1232,22 +1252,18 @@ function MachineCosts() {
     personsSkidder=1;
     wbSkidder =personsSkidder*WageAndBenRate;
     // Small
-    PurchasePriceSkidderS=164892.4122;
+    PurchasePriceSkidderS=164892.4122; //hardcoded
     HorsepowerSkidderS=120;
     LifeSkidderS=5;
     let SkidderS=CostCalc(PurchasePriceSkidderS,HorsepowerSkidderS,LifeSkidderS,svSkidder,utSkidder,rmSkidder,fcrSkidder,loSkidder,personsSkidder,wbSkidder);
     let PMH_SkidderS=SkidderS[1];
-    console.log('PMH_SkidderS = ' +PMH_SkidderS );
     // Big
-    PurchasePriceSkidderB=235560.5889;
+    PurchasePriceSkidderB=235560.5889; // hardcoded
     HorsepowerSkidderB=200;
     LifeSkidderB=4;
     let SkidderB=CostCalc(PurchasePriceSkidderB,HorsepowerSkidderB,LifeSkidderB,svSkidder,utSkidder,rmSkidder,fcrSkidder,loSkidder,personsSkidder,wbSkidder);
     let PMH_SkidderB=SkidderB[1];
-    console.log('PMH_SkidderB = ' +PMH_SkidderB );
-
     let Skidder_OwnCost=(SkidderS[0]+SkidderB[0])/2;
-    console.log('Skidder_OwnCost = ' +Skidder_OwnCost );
     
     // Yarder small
     PurchasePriceYarderS=188448.4711; //hardcoded
@@ -1259,20 +1275,92 @@ function MachineCosts() {
     fcrYarder=0.04;
     loYarder=0.1;
     personsYarder=5;
-    wbYarder=personsYarder*WageAndBenRate
-    // Yarder intermediate    
-    PurchasePriceYarderI=388674.9717;
-    HorsepowerYarderI=200;
     let YarderS=CostCalc(PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder);
     let PMH_YarderS=YarderS[1];
+    wbYarder=personsYarder*WageAndBenRate
+    // Yarder intermediate    
+    PurchasePriceYarderI=388674.9717; // hardcoded
+    HorsepowerYarderI=200;
     let YarderI=CostCalc(PurchasePriceYarderI,HorsepowerYarderI,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder);
     let PMH_YarderI=YarderI[1];
     let Yarder_OwnCost=(YarderS[0]+YarderI[0])/2;
 
+    // Processor
+    LifeProcessor=5;
+    svProcessor=0.2;
+    utProcessor=0.65;
+    rmProcessor=1;
+    fcrProcessor=0.022;
+    loProcessor=0.37;
+    personsProcessor=1;
+    wbProcessor=personsProcessor*WageAndBenRate;
+    // Small
+    PurchasePriceProcessorS=353340.8834;
+    HorsepowerProcessorS=120;
+    let ProcessorS=CostCalc(PurchasePriceProcessorS,HorsepowerProcessorS,LifeProcessor,svProcessor,utProcessor,rmProcessor,fcrProcessor,loProcessor,personsProcessor,wbProcessor);
+    let PMH_ProcessorS=ProcessorS[1];
+    // Big
+    PurchasePriceProcessorB=471121.1778;
+    HorsepowerProcessorB=200;
+    let ProcessorB=CostCalc(PurchasePriceProcessorB,HorsepowerProcessorB,LifeProcessor,svProcessor,utProcessor,rmProcessor,fcrProcessor,loProcessor,personsProcessor,wbProcessor);
+    let PMH_ProcessorB=ProcessorB[1];
+    let Processor_OwnCost=(ProcessorS[0]+ProcessorB[0])/2;
+
+    // Loader
+    LifeLoader=5;
+    svLoader=0.3;
+    utLoader=0.65;
+    rmLoader=0.9;
+    fcrLoader=0.022;
+    loLoader=0.37;
+    personsLoader=1;
+    wbLoader=personsLoader*WageAndBenRate;
+    // Small
+    PurchasePriceLoaderS=223782.5595;
+    HorsepowerLoaderS=120;
+    let LoaderS=CostCalc(PurchasePriceLoaderS,HorsepowerLoaderS,LifeLoader,svLoader,utLoader,rmLoader,fcrLoader,loLoader,personsLoader,wbLoader);
+    let PMH_LoaderS=LoaderS[1];
+    // Big
+    PurchasePriceLoaderB=294450.7361;
+    HorsepowerLoaderB=200;
+    let LoaderB=CostCalc(PurchasePriceLoaderB,HorsepowerLoaderB,LifeLoader,svLoader,utLoader,rmLoader,fcrLoader,loLoader,personsLoader,wbLoader);
+    let PMH_LoaderB=LoaderB[1];
+    let Loader_OwnCost=(LoaderS[0]+LoaderB[0])/2;
+    
+    // Chipper
+    LifeChipper=5;
+    svChipper=0.2;
+    utChipper=0.75;
+    rmChipper=1;
+    fcrChipper=0.023;
+    loChipper=0.37;
+    personsChipper=1;
+    wbChipper=personsChipper*WageAndBenRate;
+    // Small
+    PurchasePriceChipperS=235560.5889;
+    HorsepowerChipperS=350;
+    let ChipperS=CostCalc(PurchasePriceChipperS,HorsepowerChipperS,LifeChipper,svChipper,utChipper,rmChipper,fcrChipper,loChipper,personsChipper,wbChipper);
+    let PMH_ChipperS=ChipperS[1];
+    // Big
+    PurchasePriceChipperB=353340.8834;
+    HorsepowerChipperB=700;
+    let ChipperB=CostCalc(PurchasePriceChipperB,HorsepowerChipperB,LifeChipper,svChipper,utChipper,rmChipper,fcrChipper,loChipper,personsChipper,wbChipper);
+    let PMH_ChipperB=ChipperB[1];
+    let Chipper_OwnCost=(ChipperS[0]+ChipperB[0])/2;
+
+    // Bundler
+    PurchasePriceBundler=530011.325;
+    HorsepowerBundler=180;
+    fcrBundler=0.025;
+    // the other vars are the same as Chipper's, therefore pass chipper vars in the function below
+    let Bundler=CostCalc(PurchasePriceBundler,HorsepowerBundler,LifeChipper,svChipper,utChipper,rmChipper,fcrBundler,loChipper,personsChipper,wbChipper);
+    let PMH_Bundler=Bundler[1];
+    let Bundler_OwnCost=Bundler[0];
     
     let resultObj = {'PMH_Chainsaw': PMH_Chainsaw,'PMH_DriveToTree': PMH_DriveToTree,'PMH_SwingBoom':PMH_SwingBoom,'PMH_SelfLevel':PMH_SelfLevel,'FB_OwnCost':FB_OwnCost,
     'PMH_HarvS':PMH_HarvS,'PMH_HarvB':PMH_HarvB,'Harvester_OwnCost':Harvester_OwnCost,'PMH_SkidderS':PMH_SkidderS,'PMH_SkidderB':PMH_SkidderB,'Skidder_OwnCost':Skidder_OwnCost,
-    'PMH_YarderS': PMH_YarderS,'PMH_YarderI': PMH_YarderI,'Yarder_OwnCost': Yarder_OwnCost};
+    'PMH_YarderS': PMH_YarderS,'PMH_YarderI': PMH_YarderI,'Yarder_OwnCost': Yarder_OwnCost,'PMH_ProcessorS':PMH_ProcessorS,'PMH_ProcessorB':PMH_ProcessorB,'Processor_OwnCost':Processor_OwnCost,
+    'PMH_LoaderS':PMH_LoaderS,'PMH_LoaderB':PMH_LoaderB,'Loader_OwnCost':Loader_OwnCost,'PMH_Bundler':PMH_Bundler,'Bundler_OwnCost':Bundler_OwnCost};
     console.log(resultObj);
     return resultObj;
 
