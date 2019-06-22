@@ -1122,8 +1122,10 @@ function InLimits(TreeVolCT,TreeVolSLT,TreeVolLLT,TreeVolALT,TreeVol,Slope) {
 function MachineCosts() {
     // global var
     let WageAndBenRateF,WageAndBenRate,interest,insuranceAtax,Diesel_fuel_price,smh;
+    // Chainsaw
+    let PurchasePriceChainsaw,HorsepowerChainsaw,LifeChainsaw,svChainsaw,utChainsaw,rmChainsaw,fcrChainsaw,loChainsaw,personsChainsaw,wbChainsaw;
     // Yard small
-    let PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder;
+    let PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder;
     // Yarder intermediate    
     let PurchasePriceYarderI,HorsepowerYarderI;
 
@@ -1133,6 +1135,58 @@ function MachineCosts() {
     insuranceAtax=0.07;
     Diesel_fuel_price=3.327;
     smh=1600;
+
+    // Chainsaw
+    PurchasePriceChainsaw=824.4620612;
+    HorsepowerChainsaw=0;
+    LifeChainsaw=1;
+    svChainsaw=0.2;
+    utChainsaw=0.5;
+    rmChainsaw=7;
+    fcrChainsaw=0;
+    loChainsaw=0;
+    personsChainsaw=0;
+    wbChainsaw= WageAndBenRateF;
+    let Chainsaw=CostCalc(PurchasePriceChainsaw,HorsepowerChainsaw,LifeChainsaw,svChainsaw,utChainsaw,rmChainsaw,fcrChainsaw,loChainsaw,personsChainsaw,wbChainsaw);
+    let PMH_Chainsaw=Chainsaw[1];
+    console.log('PMH_Chainsaw = ' + Chainsaw[1]);
+
+    // FBuncher
+    let fcrFBuncher,loFBuncher,personsFBuncher,wbFBuncher;
+    // FBuncher global
+    fcrFBuncher=0.026;
+    loFBuncher=0.37;
+    personsFBuncher=1;
+    wbFBuncher=personsFBuncher*WageAndBenRate;
+    // DriveToTree
+    let PurchasePriceFBuncherDTT,HorsepowerFBuncherDTT,LifeFBuncherDTT,svFBuncherDTT,utFBuncherDTT,rmFBuncherDTT;
+
+    PurchasePriceFBuncherDTT=176670.4417;
+    HorsepowerFBuncherDTT=150;
+    LifeFBuncherDTT=3;
+    svFBuncherDTT=0.2;
+    utFBuncherDTT=0.65;
+    rmFBuncherDTT=1;
+    let DriveToTree=CostCalc(PurchasePriceFBuncherDTT,HorsepowerFBuncherDTT,LifeFBuncherDTT,svFBuncherDTT,utFBuncherDTT,rmFBuncherDTT,fcrFBuncher,loFBuncher,personsFBuncher,wbFBuncher);
+    let PMH_DriveToTree=DriveToTree[1];
+    //SwingBoom
+    let PurchasePriceFBuncherSB,HorsepowerFBuncherSB,LifeFBuncherSB,svFBuncherSB,utFBuncherSB,rmFBuncherSB;
+
+    PurchasePriceFBuncherSB=365118.9128;
+    HorsepowerFBuncherSB=200;
+    LifeFBuncherSB=5;
+    svFBuncherSB=0.15;
+    utFBuncherSB=0.6;
+    rmFBuncherSB=0.75;
+    let SwingBoom=CostCalc(PurchasePriceFBuncherSB,HorsepowerFBuncherSB,LifeFBuncherSB,svFBuncherSB,utFBuncherSB,rmFBuncherSB,fcrFBuncher,loFBuncher,personsFBuncher,wbFBuncher);
+    let PMH_SwingBoom=SwingBoom[1];
+    // SelfLeveling
+    let HorsepowerFBuncherSL;
+    HorsepowerFBuncherSL=240;
+    let SelfLeveling=CostCalc(PurchasePriceFBuncherSB,HorsepowerFBuncherSL,LifeFBuncherSB,svFBuncherSB,utFBuncherSB,rmFBuncherSB,fcrFBuncher,loFBuncher,personsFBuncher,wbFBuncher);
+    let PMH_SelfLevel=SelfLeveling[1];
+
+    let FB_OwnCost=(DriveToTree[0]+SwingBoom[0]+SelfLeveling[0])/3;
 
     // Yarder small
     PurchasePriceYarderS=188448.4711; //hardcoded
@@ -1144,25 +1198,24 @@ function MachineCosts() {
     fcrYarder=0.04;
     loYarder=0.1;
     personsYarder=5;
+    wbYarder=personsYarder*WageAndBenRate
     // Yarder intermediate    
     PurchasePriceYarderI=388674.9717;
     HorsepowerYarderI=200;
-
-    let YarderS=CostCalc(PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder);
+    let YarderS=CostCalc(PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder);
     let PMH_YarderS=YarderS[1];
-    let YarderI=CostCalc(PurchasePriceYarderI,HorsepowerYarderI,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder);
+    let YarderI=CostCalc(PurchasePriceYarderI,HorsepowerYarderI,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder);
     let PMH_YarderI=YarderI[1];
     let Yarder_OwnCost=(YarderS[0]+YarderI[0])/2;
 
-    let resultObj = {'PMH_YarderS': PMH_YarderS,'PMH_YarderI': PMH_YarderI,'Yarder_OwnCost': Yarder_OwnCost};
+    let resultObj = {'PMH_Chainsaw': PMH_Chainsaw,'PMH_DriveToTree': PMH_DriveToTree,'PMH_SwingBoom':PMH_SwingBoom,'PMH_SelfLevel':PMH_SelfLevel,'FB_OwnCost':FB_OwnCost,'PMH_YarderS': PMH_YarderS,'PMH_YarderI': PMH_YarderI,'Yarder_OwnCost': Yarder_OwnCost};
     console.log(resultObj);
     return resultObj;
 
-    function CostCalc(PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder){
-        let wbYarder,SalvageYarderS,AnnualDepreciationYarder,avgYearlyInvestmentYarder,PMHyarder,InterestCostYarder,InsuranceAndTaxCost,YearlyOwnershipCostYarder,OwnershipCostSMHyarder,OwnershipCostPMHyarder,FuelCostYarder,
+    function CostCalc(PurchasePriceYarderS,HorsepowerYarderS,LifeYarder,svYarder,utYarder,rmYarder,fcrYarder,loYarder,personsYarder,wbYarder){
+        let SalvageYarderS,AnnualDepreciationYarder,avgYearlyInvestmentYarder,PMHyarder,InterestCostYarder,InsuranceAndTaxCost,YearlyOwnershipCostYarder,OwnershipCostSMHyarder,OwnershipCostPMHyarder,FuelCostYarder,
         LubeCostYarder,RepairAndMaintenanceCostYarder,LaborCostPMHyarder,OperatingCostPMHyarder,OperatingCostSMHyarder,TotalCostSMHyarder,TotalCostPMHyarderS;
 
-        wbYarder=personsYarder*WageAndBenRate;
         SalvageYarderS=PurchasePriceYarderS*svYarder;
         AnnualDepreciationYarder=(PurchasePriceYarderS-SalvageYarderS)/LifeYarder;
         avgYearlyInvestmentYarder=(((PurchasePriceYarderS-SalvageYarderS)*(LifeYarder+1)/(2*LifeYarder))+SalvageYarderS);
