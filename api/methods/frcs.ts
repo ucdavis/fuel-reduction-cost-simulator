@@ -2,7 +2,9 @@ import { Chipping } from './chipping';
 import { FellBunch } from './fellbunch';
 import { FellLargeLogTrees } from './felllargelogtrees';
 import { CostMachineMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { InLimits } from './inlimits';
 import { Loading } from './loading';
+import { MoveInCosts } from './moveincost';
 import { Processing } from './processing';
 import { Skidding } from './skidding';
 
@@ -178,7 +180,8 @@ export function calculate(inputVar: InputVarMod) {
     const ChippingResults = Chipping(inputVar.TreeVolCT, WoodDensityCT, LoadWeightChip,
                                      MoistureContent, CHardwoodCT, CostMachine, CTLLogVolCT, ChipperSize);
     const CostChipWT = ChippingResults.CostChipWT;
-    let MoveInCosts1G39 = MoveInCosts(Area, MoveInDist, TreeVol, Removals, VolPerAcreCT, CostMachine);
+    const MoveInCosts1G39
+        = MoveInCosts(inputVar.Area, inputVar.MoveInDist, TreeVol, Removals, VolPerAcreCT, CostMachine);
     const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
     // C. For All Products, $/ac
@@ -188,12 +191,15 @@ export function calculate(inputVar: InputVarMod) {
     const ProcessLogTreesLess80cf = CostProcess * VolPerAcreSLT / 100 * InLimits1;
     const LoadLogTrees = CostLoad * VolPerAcreALT / 100 * InLimits1;
     const ChipWholeTrees = CostChipWT * VolPerAcreCT / 100 * InLimits1;
-    const Stump2Truck4PrimaryProductWithoutMovein = FellAndBunchTreesLess80cf + ManualFellLimbBuckTreesLarger80cf + SkidBunchedAllTrees + ProcessLogTreesLess80cf + LoadLogTrees + ChipWholeTrees;
-    const Movein4PrimaryProduct = MoveInCosts1G39 * CalcMoveIn * BoleVolCCF * InLimits1;
+    const Stump2Truck4PrimaryProductWithoutMovein = FellAndBunchTreesLess80cf
+        + ManualFellLimbBuckTreesLarger80cf + SkidBunchedAllTrees
+        + ProcessLogTreesLess80cf + LoadLogTrees + ChipWholeTrees;
+    const Movein4PrimaryProduct = MoveInCosts1G39 * inputVar.CalcMoveIn * BoleVolCCF * InLimits1;
 
-    const ChipLooseResiduesFromLogTreesLess80cf = CostChipLooseRes * inputVar.CalcResidues * ResidueRecoveredOptional * InLimits1;
+    const ChipLooseResiduesFromLogTreesLess80cf = CostChipLooseRes * inputVar.CalcResidues
+        * ResidueRecoveredOptional * InLimits1;
     const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf; // for Mech WT sys;
-    const  Movein4Residues = 0 * CalcMoveIn * inputVar.CalcResidues * ResidueRecoveredOptional * InLimits1;
+    const  Movein4Residues = 0 * inputVar.CalcMoveIn * inputVar.CalcResidues * ResidueRecoveredOptional * InLimits1;
 
 // III. System Cost Summaries
     const TotalPerAcre = Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
@@ -207,90 +213,6 @@ export function calculate(inputVar: InputVarMod) {
 /**
  * @return {number}
  */
-
-function MoveInCosts(Area, MoveInDist, TreeVol, Removals, VolPerAcreCT, CostMachine) {
-    // Move-In Assumptions
-    let SpeedLoaded, SpeedBack, MoveInLabor, LoadHrs, LoadHrsYarder, TruckMoveInCosts, TruckDriverMoveInCosts;
-    // Move-In Calculated Values
-    let TravLoadedHrs, BackhaulHrs, LowboyCost;
-    // System Costs
-    // Mech WT
-    let LowboyLoadsMechWT;
-    // Fixed
-    let fellerbuncherFixedMechWT, skidderFixedMechWT, processorFixedMechWT, loaderFixedMechWT, chipperFixedMechWT, totalFixedMechWT;
-    // Variable
-    let fellerbuncherVariableMechWT, skidderVariableMechWT, processorVariableMechWT, loaderVariableMechWT, chipperVariableMechWT, BackhaulVariableMechWT, totalVariableMechWT;
-    // Total
-    let totalMechWT, CostPerCCFmechWT;
-    
-    // Move-In Assumptions
-    SpeedLoaded = 25;
-    SpeedBack = 40;
-    MoveInLabor = 0;
-    LoadHrs = 2;
-    LoadHrsYarder = 4;
-    TruckMoveInCosts = 35;
-    TruckDriverMoveInCosts = 18;
-    // Move-In Calculated Values
-    TravLoadedHrs = MoveInDist / SpeedLoaded;
-    BackhaulHrs = MoveInDist / SpeedBack;
-    LowboyCost = TruckMoveInCosts + TruckDriverMoveInCosts;
-    // System Costs
-    // Mech WT
-    LowboyLoadsMechWT = 4 + (VolPerAcreCT > 0 ? 1 : 0);
-    const FB_OwnCost = CostMachine.FB_OwnCost;
-    const Skidder_OwnCost = CostMachine.Skidder_OwnCost;
-    const Processor_OwnCost = CostMachine.Processor_OwnCost;
-    const Loader_OwnCost = CostMachine.Loader_OwnCost;
-    const Chipper_OwnCost = CostMachine.Chipper_OwnCost;
-    // Fixed
-    fellerbuncherFixedMechWT = (LowboyCost + FB_OwnCost + MoveInLabor) * LoadHrs;
-    skidderFixedMechWT = (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
-    processorFixedMechWT = (LowboyCost + Processor_OwnCost + MoveInLabor) * LoadHrs;
-    loaderFixedMechWT = (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
-    chipperFixedMechWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
-    totalFixedMechWT = fellerbuncherFixedMechWT + skidderFixedMechWT + processorFixedMechWT + loaderFixedMechWT + chipperFixedMechWT;
-    // Variable
-    fellerbuncherVariableMechWT = (LowboyCost + FB_OwnCost) / SpeedLoaded;
-    skidderVariableMechWT = (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
-    processorVariableMechWT = (LowboyCost + Processor_OwnCost) / SpeedLoaded;
-    loaderVariableMechWT = (LowboyCost + Loader_OwnCost) / SpeedLoaded;
-    chipperVariableMechWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
-    BackhaulVariableMechWT = LowboyCost * LowboyLoadsMechWT / SpeedBack;
-    totalVariableMechWT = fellerbuncherVariableMechWT + skidderVariableMechWT + processorVariableMechWT + loaderVariableMechWT + chipperVariableMechWT + BackhaulVariableMechWT;
-    // Total
-    totalMechWT = totalFixedMechWT + totalVariableMechWT * MoveInDist;
-    CostPerCCFmechWT = totalMechWT * 100 / (Area * TreeVol * Removals);
-
-    return CostPerCCFmechWT;
-}
-
-function InLimits(TreeVolCT, TreeVolSLT, TreeVolLLT, TreeVolALT, TreeVol, Slope) {
-    // Mech WT
-    let MaxLLTperAcre, MaxLLTasPercentALT, ExceededMaxLLT, AvgTreeSizeLimit4Chipping, AvgTreeSizeLimit4Processing, AvgTreeSizeLimit4ManualFellLimbBuck, AvgTreeSizeLimit4loading, AvgTreeSize4GrappleSkidding,
-    ExceededMaxTreeVol, SkiddingLimit, ExceededMaxSkidLimit, YardingDistLimit, ExceededMaxYardingDist, InLimits1;
-
-    // Mech WT
-    MaxLLTperAcre = null;
-    MaxLLTasPercentALT = null;
-    ExceededMaxLLT = 0;
-    AvgTreeSizeLimit4Chipping = 80;
-    AvgTreeSizeLimit4Processing = 80;
-    AvgTreeSizeLimit4ManualFellLimbBuck = 250;
-    AvgTreeSizeLimit4loading = 250;
-    AvgTreeSize4GrappleSkidding = 250;
-    ExceededMaxTreeVol
-    = (inputVar.TreeVolCT > AvgTreeSizeLimit4Chipping || inputVar.TreeVolSLT > AvgTreeSizeLimit4Processing || inputVar.TreeVolLLT > AvgTreeSizeLimit4ManualFellLimbBuck || TreeVolALT > AvgTreeSizeLimit4loading || TreeVol > AvgTreeSize4GrappleSkidding) ? 1 : 0;
-    // inputVar.Slope, %
-    SkiddingLimit = 40; // inputVar.Slope
-    ExceededMaxSkidLimit = inputVar.Slope > SkiddingLimit ? 1 : 0;
-    // Yarding distance, ft
-    YardingDistLimit = 0;
-    ExceededMaxYardingDist = 0;
-    InLimits1 = (ExceededMaxLLT == 1 || ExceededMaxTreeVol == 1 || ExceededMaxSkidLimit == 1 || ExceededMaxYardingDist == 1) ? null : 1;
-
-    return InLimits1;
-}
 
 function MachineCosts() {
     // global var
