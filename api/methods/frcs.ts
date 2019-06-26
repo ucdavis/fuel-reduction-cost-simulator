@@ -1,6 +1,8 @@
 import { FellBunch } from './fellbunch';
 import { FellLargeLogTrees } from './felllargelogtrees';
 import { CostMachineMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { Loading } from './loading';
+import { Processing } from './processing';
 import { Skidding } from './skidding';
 
 export function calculate(inputVar: InputVarMod) {
@@ -167,8 +169,11 @@ export function calculate(inputVar: InputVarMod) {
     = Skidding(inputVar.Slope, inputVar.deliver_dist, Removals, TreeVol, WoodDensity, LogLength,
                inputVar.cut_type, CSlopeSkidForwLoadSize, LogsPerTree, LogVol,
                ManualMachineSize, BFperCF, ButtDiam, CostMachine, TreesPerCycleIIB, CHardwood);
-    let CostProcess = Processing(inputVar.TreeVolSLT, DBHSLT, ButtDiamSLT, LogsPerTreeSLT, MechMachineSize, CostMachine);
-    let CostLoad = Loading(LoadWeightLog, WoodDensityALT, WoodDensitySLT, CTLLogVol, LogVolALT, DBHALT, DBHSLT, ManualMachineSizeALT, CostMachine);
+    const CostProcess = Processing(inputVar.TreeVolSLT, DBHSLT, ButtDiamSLT,
+                                   LogsPerTreeSLT, MechMachineSize, CostMachine, CHardwoodSLT);
+    const CostLoad = Loading(LoadWeightLog, WoodDensityALT, WoodDensitySLT, CTLLogVol, LogVolALT,
+                             DBHALT, DBHSLT, ManualMachineSizeALT, CostMachine, inputVar.load_cost,
+                             TreeVolALT, CHardwoodALT, inputVar.TreeVolSLT, CHardwoodSLT);
     let ChippingResults = Chipping(inputVar.TreeVolCT, WoodDensityCT, LoadWeightChip, MoistureContent, CHardwoodCT, CostMachine);
     const CostChipWT = ChippingResults.CostChipWT;
     let MoveInCosts1G39 = MoveInCosts(Area, MoveInDist, TreeVol, Removals, VolPerAcreCT, CostMachine);
@@ -200,172 +205,6 @@ export function calculate(inputVar: InputVarMod) {
 /**
  * @return {number}
  */
-
-function Processing(inputVar.TreeVolSLT, DBHSLT, ButtDiamSLT, LogsPerTreeSLT, MechMachineSize, CostMachine) {
-    const PMH_ProcessorS = CostMachine.PMH_ProcessorS;
-    const PMH_ProcessorB = CostMachine.PMH_ProcessorB;
-
-    // Processing Calculated Values
-    let ProcessorHourlyCost;
-    // A) Hahn Stroke Processor (Gonsier&Mandzak, 87)
-    let TimePerTreeProcessA, VolPerPMHProcessA, CostPerCCFprocessA, RelevanceProcessA;
-    // B) Stroke Processor (MacDonald, 90)
-    let TimePerTreeProcessB, VolPerPMHprocessB, CostPerCCFprocessB, RelevanceProcessB;
-    // C) Roger Stroke Processor (Johnson, 88)
-    let TimePerTreeProcessC, VolPerPMHprocessC, CostPerCCFprocessC, RelevanceProcessC;
-    // D) Harricana Stroke Processor (Johnson, 88)
-    let TimePerTreeProcessD, VolPerPMHprocessD, CostPerCCFprocessD, RelevanceProcessD;
-    // E) Hitachi EX150/Keto 500 (Schroder&Johnson, 97)
-    let TimePerTreeProcessE, VolPerPMHprocessE, CostPerCCFprocessE, RelevanceProcessE;
-    // F) FERIC Generic (Gingras, J.F. 96. The cost of product sorting during harvesting. FERIC Technical Note TN-245)
-    let VolPerPMHprocessF, CostPerCCFprocessF, RelevanceProcessF;
-    // G) Valmet 546 Woodstar Processor (Holtzscher, M. and B. Lanford 1997 Tree diameter effects on costs and productivity of cut-to-length systems. For. Prod. J. 47(3):25-30)
-    let TimePerTreeProcessG, VolPerPMHprocessG, CostPerCCFprocessG, RelevanceProcessG;
-    // H) User-Defined
-    let VolPerPMHprocessH, CostPerCCFprocessH, RelevanceProcessH;
-    // Processing Summary
-    let CostProcess;
-
-    // Processing Calculated Values
-    ProcessorHourlyCost = PMH_ProcessorS * (1 - MechMachineSize) + PMH_ProcessorB * MechMachineSize;
-    // A) Hahn Stroke Processor (Gonsier&Mandzak, 87)
-    TimePerTreeProcessA = 1.26 * (0.232 + 0.0494 * DBHSLT);
-    VolPerPMHProcessA = inputVar.TreeVolSLT / (TimePerTreeProcessA / 60);
-    CostPerCCFprocessA = 100 * ProcessorHourlyCost / VolPerPMHProcessA;
-    RelevanceProcessA = (DBHSLT < 15 ? 1 : (DBHSLT < 20 ? 4 - DBHSLT / 5 : 0));
-    // B) Stroke Processor (MacDonald, 90)
-    TimePerTreeProcessB = 0.153 + 0.0145 * ButtDiamSLT;
-    VolPerPMHprocessB = inputVar.TreeVolSLT / (TimePerTreeProcessB / 60);
-    CostPerCCFprocessB = 100 * ProcessorHourlyCost / VolPerPMHprocessB;
-    RelevanceProcessB = (ButtDiamSLT < 20 ? 1 : (ButtDiamSLT < 30 ? 3 - ButtDiamSLT / 10 : 0));
-    // C) Roger Stroke Processor (Johnson, 88)
-    TimePerTreeProcessC = -0.05 + 0.6844 * LogsPerTreeSLT + 5 * Math.pow(10, -8) * Math.pow(inputVar.TreeVolSLT, 2);
-    VolPerPMHprocessC = inputVar.TreeVolSLT / (TimePerTreeProcessC / 60);
-    CostPerCCFprocessC = 100 * ProcessorHourlyCost / VolPerPMHprocessC;
-    RelevanceProcessC = 1;
-    // D) Harricana Stroke Processor (Johnson, 88)
-    TimePerTreeProcessD = -0.13 + 0.001 * Math.pow(ButtDiamSLT, 2) + 0.5942 * LogsPerTreeSLT;
-    VolPerPMHprocessD = inputVar.TreeVolSLT / (TimePerTreeProcessD / 60);
-    CostPerCCFprocessD = 100 * ProcessorHourlyCost / VolPerPMHprocessD;
-    RelevanceProcessD = 1;
-    // E) Hitachi EX150/Keto 500 (Schroder&Johnson, 97)
-    TimePerTreeProcessE = Math.pow(0.67 + 0.0116 * inputVar.TreeVolSLT, 2);
-    VolPerPMHprocessE = inputVar.TreeVolSLT / (TimePerTreeProcessE / 60);
-    CostPerCCFprocessE = 100 * ProcessorHourlyCost / VolPerPMHprocessE;
-    RelevanceProcessE = (inputVar.TreeVolSLT < 50 ? 1 : (inputVar.TreeVolSLT < 100 ? 2 - inputVar.TreeVolSLT / 50 : 0));
-    // F) FERIC Generic (Gingras, J.F. 96. The cost of product sorting during harvesting. FERIC Technical Note TN-245)
-    VolPerPMHprocessF = (41.16 / 0.02832) * Math.pow(inputVar.TreeVolSLT / 35.31, 0.4902);
-    CostPerCCFprocessF = 100 * ProcessorHourlyCost / VolPerPMHprocessF;
-    RelevanceProcessF = 1;
-    // G) Valmet 546 Woodstar Processor (Holtzscher, M. and B. Lanford 1997 Tree diameter effects on costs and productivity of cut-to-length systems. For. Prod. J. 47(3):25-30)
-    TimePerTreeProcessG = -0.341 + 0.1243 * DBHSLT;
-    VolPerPMHprocessG = inputVar.TreeVolSLT / (TimePerTreeProcessG / 60);
-    CostPerCCFprocessG = 100 * ProcessorHourlyCost / VolPerPMHprocessG;
-    RelevanceProcessG = (inputVar.TreeVolSLT < 20 ? 1 : (inputVar.TreeVolSLT < 40 ? 2 - inputVar.TreeVolSLT / 20 : 0));
-    // H) User-Defined
-    VolPerPMHprocessH = 0.001;
-    CostPerCCFprocessH = 100 * ProcessorHourlyCost / VolPerPMHprocessH;
-    RelevanceProcessH = 0;
-    // Processing Summary
-    CostProcess = (inputVar.TreeVolSLT > 0 ? CHardwoodSLT * 100 * (ProcessorHourlyCost * RelevanceProcessA + ProcessorHourlyCost * RelevanceProcessB + ProcessorHourlyCost * RelevanceProcessC
-        + ProcessorHourlyCost * RelevanceProcessD + ProcessorHourlyCost * RelevanceProcessE + ProcessorHourlyCost * RelevanceProcessF + ProcessorHourlyCost * RelevanceProcessG + ProcessorHourlyCost * RelevanceProcessH)
-        / (RelevanceProcessA * VolPerPMHProcessA + RelevanceProcessB * VolPerPMHprocessB + RelevanceProcessC * VolPerPMHprocessC + RelevanceProcessD * VolPerPMHprocessD
-            + RelevanceProcessE * VolPerPMHprocessE + RelevanceProcessF * VolPerPMHprocessF + RelevanceProcessG * VolPerPMHprocessG + RelevanceProcessH * VolPerPMHprocessH) : 0);
-
-    return CostProcess;
-}
-
-function Loading(LoadWeightLog, WoodDensityALT, WoodDensitySLT, CTLLogVol, LogVolALT, DBHALT, DBHSLT, ManualMachineSizeALT, CostMachine) {
-    let ExchangeTrucks, PMH_LoaderS, PMH_LoaderB;
-    // Loading Calculated Values
-    let LoadVolALT, LoadVolSLT, LoaderHourlyCost;
-    // I. Loading Full-Length Logs
-    // A) Front-End Loader (Vaughan, 89)
-    let TimePerLoadIA, VolPerPMHloadingIA, CostPerCCFloadingIA, RelevanceLoadingIA;
-    // B) Knuckleboom Loader, Small Logs (Brown&Kellogg, 96)
-    let CCFperPmin, TimePerLoadIB, VolPerPMHloadingIB, CostPerCCFloadingIB, RelevanceLoadingIB;
-    // C) Loaders (Hartsough et al, 98)
-    let TimePerCCFloadingIC, TimePerLoadIC, VolPerPMHloadingIC, CostPerCCFloadingIC, RelevanceLoadingIC;
-    // D) Loaders (Jackson et al, 84)
-    let VolPerPMHloadingID, CostPerCCFloadingID, RelevanceLoadingID;
-    // E) User-Defined Load Full-Length Logs
-    let VolPerPMHloadingIE, CostPerCCFloadingIE, RelevanceLoadingIE;
-    // II. Loading CTL Logs
-    // A) Knuckleboom Loader, CTL Logs (Brown&Kellogg, 96)
-    let CCFperPminLoadingIIA, TimePerLoadIIA, VolPerPMHloadingIIA, CostPerCCFloadingIIA, RelevanceLoadingIIA;
-    // B) Loaders (Jackson et al, 84)
-    let VolPerPMHloadingIIB, CostPerCCFloadingIIB, RelevanceLoadingIIB;
-    // C) User-Defined Load CTL Logs
-    let VolPerPMHloadingIIC, CostPerCCFloadingIIC, RelevanceLoadingIIC;
-    // Loading Summary
-    // I. Loading Full-Length Logs
-    let CostLoad;
-    // II. Loading CTL Logs
-    let CostLoadCTL;
-
-    ExchangeTrucks = 5;
-    PMH_LoaderS = CostMachine.PMH_LoaderS;
-    PMH_LoaderB = CostMachine.PMH_LoaderB;
-    // Loading Calculated Values
-    LoadVolALT = LoadWeightLog * 2000 / (WoodDensityALT * 100);
-    LoadVolSLT = LoadWeightLog * 2000 / (WoodDensitySLT * 100);
-    LoaderHourlyCost = PMH_LoaderS * (1 - ManualMachineSizeALT) + PMH_LoaderB * ManualMachineSizeALT;
-
-    // I. Loading Full-Length Logs
-    // A) Front-End Loader (Vaughan, 89)
-    TimePerLoadIA = 22 - 0.129 * LogVolALT + ExchangeTrucks;
-    VolPerPMHloadingIA = 100 * LoadVolALT / (TimePerLoadIA / 60);
-    CostPerCCFloadingIA = 100 * LoaderHourlyCost / VolPerPMHloadingIA;
-    RelevanceLoadingIA = LogVolALT < 10 ? 0 : (LogVolALT < 40 ? -1 / 3 + LogVolALT / 30 : 1);
-    // B) Knuckleboom Loader, Small Logs (Brown&Kellogg, 96)
-    CCFperPmin = 0.1 + 0.019 * LogVolALT;
-    TimePerLoadIB = LoadVolALT / CCFperPmin + ExchangeTrucks;
-    VolPerPMHloadingIB = 100 * LoadVolALT / (TimePerLoadIB / 60);
-    CostPerCCFloadingIB = 100 * LoaderHourlyCost / VolPerPMHloadingIB;
-    RelevanceLoadingIB = LogVolALT < 10 ? 1 : (LogVolALT < 20 ? 2 - LogVolALT / 10 : 0);
-    // C) Loaders (Hartsough et al, 98)
-    TimePerCCFloadingIC = 0.66 + 46.2 / DBHALT;
-    TimePerLoadIC = TimePerCCFloadingIC * LoadVolALT;
-    VolPerPMHloadingIC = 6000 / TimePerCCFloadingIC;
-    CostPerCCFloadingIC = 100 * LoaderHourlyCost / VolPerPMHloadingIC;
-    RelevanceLoadingIC = 0.8; // hardcoded
-    // D) Loaders (Jackson et al, 84)
-    VolPerPMHloadingID = 100 * (11.04 + 0.522 * LogVolALT - 0.00173 * Math.pow(LogVolALT, 2));
-    CostPerCCFloadingID = 100 * LoaderHourlyCost / VolPerPMHloadingID;
-    RelevanceLoadingID = LogVolALT < 75 ? 1 : (LogVolALT < 100 ? 4 - LogVolALT / 25 : 0);
-    // E) User-Defined Load Full-Length Logs
-    VolPerPMHloadingIE = 0.001;
-    CostPerCCFloadingIE = 100 * LoaderHourlyCost / VolPerPMHloadingIE;
-    RelevanceLoadingIE = 0;
-
-    // II. Loading CTL Logs
-    // A) Knuckleboom Loader, CTL Logs (Brown&Kellogg, 96)
-    CCFperPminLoadingIIA = 0.1 + 0.019 * CTLLogVol;
-    TimePerLoadIIA = LoadVolSLT / CCFperPminLoadingIIA + ExchangeTrucks;
-    VolPerPMHloadingIIA = 100 * LoadVolSLT / (TimePerLoadIIA / 60);
-    CostPerCCFloadingIIA = 100 * LoaderHourlyCost / VolPerPMHloadingIIA;
-    RelevanceLoadingIIA = CTLLogVol < 10 ? 1 : (CTLLogVol < 20 ? 2 - CTLLogVol / 10 : 0);
-    // B) Loaders (Jackson et al, 84)
-    VolPerPMHloadingIIB = 100 * (11.04 + 0.522 * CTLLogVol - 0.00173 * Math.pow(CTLLogVol, 2));
-    CostPerCCFloadingIIB = 100 * LoaderHourlyCost / VolPerPMHloadingIIB;
-    RelevanceLoadingIIB = 0.5;
-    // C) User-Defined Load CTL Logs
-    VolPerPMHloadingIIC = 0.001;
-    CostPerCCFloadingIIC = 100 * LoaderHourlyCost / VolPerPMHloadingIIC;
-    RelevanceLoadingIIC = 0;
-
-    // Loading Summary
-    // I. Loading Full-Length Logs
-    CostLoad = load_cost == true ?
-    (TreeVolALT > 0 ? CHardwoodALT * 100 * (LoaderHourlyCost * RelevanceLoadingIA + LoaderHourlyCost * RelevanceLoadingIB + LoaderHourlyCost * RelevanceLoadingIC + LoaderHourlyCost * RelevanceLoadingID + LoaderHourlyCost * RelevanceLoadingIE)
-    / (RelevanceLoadingIA * VolPerPMHloadingIA + RelevanceLoadingIB * VolPerPMHloadingIB + RelevanceLoadingIC * VolPerPMHloadingIC + RelevanceLoadingID * VolPerPMHloadingID + RelevanceLoadingIE * VolPerPMHloadingIE) : 0) : 0;
-    // II. Loading CTL Logs
-    CostLoadCTL = load_cost == true ?
-    (inputVar.TreeVolSLT > 0 ? CHardwoodSLT * 100 * (LoaderHourlyCost * RelevanceLoadingIIA + LoaderHourlyCost * RelevanceLoadingIIB + LoaderHourlyCost * RelevanceLoadingIIC)
-    / (RelevanceLoadingIIA * VolPerPMHloadingIIA + RelevanceLoadingIIB * VolPerPMHloadingIIB + RelevanceLoadingIIC * VolPerPMHloadingIIC) : 0) : 0;
-
-    return CostLoad;
-}
 
 function Chipping(inputVar.TreeVolCT, WoodDensityCT, LoadWeightChip, MoistureContent, CHardwoodCT, CostMachine) {
     let ExchangeVans = 5.3;
