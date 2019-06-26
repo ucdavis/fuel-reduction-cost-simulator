@@ -1,5 +1,3 @@
-// 20190205164428
-// https://raw.githubusercontent.com/rethink-education/rethink-reading-streaming-server/master/tslint.json?token=AAMYAZLJhM0tLxdUwzMdxPrhW6xhKGetks5cY2hswA%3D%3D
 {
     "extends": [
         "tslint-eslint-rules"

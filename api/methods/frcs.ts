@@ -203,10 +203,10 @@ export function calculate(inputVar: InputVarMod) {
     const  Movein4Residues = 0 * inputVar.CalcMoveIn * inputVar.CalcResidues * ResidueRecoveredOptional * InLimits1;
 
 // III. System Cost Summaries
-    const TotalPerAcre = Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
-        + OntoTruck4ResiduesWoMovein + Movein4Residues;
-    const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
-    const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
+    const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
+        + OntoTruck4ResiduesWoMovein + Movein4Residues);
+    const TotalPerBoleCCF = Math.round(TotalPerAcre / BoleVolCCF);
+    const TotalPerGT = Math.round(TotalPerAcre / TotalPrimaryProductsAndOptionalResidues);
 
-    return { 'TotalPerAcre': TotalPerAcre, 'TotalPerBoleCCF': TotalPerBoleCCF, 'TotalPerGT': TotalPerGT };
+    return { 'TotalPerBoleCCF': TotalPerBoleCCF, 'TotalPerGT': TotalPerGT, 'TotalPerAcre': TotalPerAcre };
 }

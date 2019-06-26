@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import { calculate } from './methods/frcs.js';
+import { calculate } from './methods/frcs';
 import { InputVarMod } from './methods/frcs.model';
 
 dotenv.config();
@@ -17,9 +17,10 @@ app.get('/frcsrun', async (req, res) => {
   const params: InputVarMod = req.body;
   console.log(req.body);
   const result = await calculate(params);
+  console.log(result);
   res.json(result);
 });
 
 app.get('/', (req, res) => res.send('Hello World!!!'));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Listening on port ${port}!`));

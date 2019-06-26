@@ -236,7 +236,7 @@ function MachineCosts() {
                        'PMH_LoaderS': PMH_LoaderS, 'PMH_LoaderB': PMH_LoaderB, 'Loader_OwnCost': Loader_OwnCost,
                        'PMH_ChipperS': PMH_ChipperS, 'PMH_ChipperB': PMH_ChipperB, 'Chipper_OwnCost': Chipper_OwnCost,
                        'PMH_Bundler': PMH_Bundler, 'Bundler_OwnCost': Bundler_OwnCost};
-    console.log(resultObj);
+    // console.log(resultObj);
     return resultObj;
 
     function CostCalc(PurchasePriceYarder: number, HorsepowerYarder: number, Life: number,
