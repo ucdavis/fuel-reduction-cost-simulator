@@ -1,4 +1,5 @@
 import { FellBunch } from './fellbunch';
+import { FellLargeLogTrees } from './felllargelogtrees';
 import { CostMachineMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
 
 export function calculate(inputVar: InputVarMod) {
@@ -153,12 +154,15 @@ export function calculate(inputVar: InputVarMod) {
 // Machine costs
     const CostMachine: CostMachineMod = MachineCosts();
 // System Cost Elements-------
-    const FellBunchResults = FellBunch(inputVar.Slope, RemovalsST, TreeVolST, DBHST,
-                                       NonSelfLevelCabDummy, CSlopeFB_Harv, CRemovalsFB_Harv, CHardwoodST, CostMachine);
+    const FellBunchResults
+    = FellBunch(inputVar.Slope, RemovalsST, TreeVolST, DBHST,
+                NonSelfLevelCabDummy, CSlopeFB_Harv, CRemovalsFB_Harv, CHardwoodST, CostMachine);
     const CostFellBunch = FellBunchResults.CostFellBunch;
     const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
-    let CostManFLBLLT = FellLargeLogTrees(inputVar.Slope, inputVar.RemovalsLLT, inputVar.TreeVolLLT, cut_type, DBHLLT, LogsPerTreeLLT, CostMachine);
-    let CostSkidBun = Skidding(inputVar.Slope, deliver_dist, Removals, TreeVol, WoodDensity, LogLength, cut_type, CinputVar.SlopeSkidForwLoadSize, LogsPerTree, LogVol, ManualMachineSize, BFperCF, ButtDiam, CostMachine, TreesPerCycleIIB);
+    const CostManFLBLLT
+    = FellLargeLogTrees(inputVar.Slope, inputVar.RemovalsLLT,inputVar.TreeVolLLT, TreeVol,
+                        inputVar.cut_type, DBHLLT, LogsPerTreeLLT, CHardwoodLLT, CostMachine);
+    let CostSkidBun = Skidding(inputVar.Slope, deliver_dist, Removals, TreeVol, WoodDensity, LogLength, inputVar.cut_type, CinputVar.SlopeSkidForwLoadSize, LogsPerTree, LogVol, ManualMachineSize, BFperCF, ButtDiam, CostMachine, TreesPerCycleIIB);
     let CostProcess = Processing(inputVar.TreeVolSLT, DBHSLT, ButtDiamSLT, LogsPerTreeSLT, MechMachineSize, CostMachine);
     let CostLoad = Loading(LoadWeightLog, WoodDensityALT, WoodDensitySLT, CTLLogVol, LogVolALT, DBHALT, DBHSLT, ManualMachineSizeALT, CostMachine);
     let ChippingResults = Chipping(inputVar.TreeVolCT, WoodDensityCT, LoadWeightChip, MoistureContent, CHardwoodCT, CostMachine);
@@ -192,110 +196,6 @@ export function calculate(inputVar: InputVarMod) {
 /**
  * @return {number}
  */
-
-function FellLargeLogTrees(inputVar.Slope, inputVar.RemovalsLLT, inputVar.TreeVolLLT, PartialCut, DBHLLT, LogsPerTreeLLT, CostMachine) {
-    let WalkDistLLT = Math.sqrt(43560 / Math.max(inputVar.RemovalsLLT, 1));
-// I. Felling Only
-    // IA (McNeel, 94)
-    let SelectionTimePerTreelltA, ClearcutTimePerTreelltA, TimePerTreelltA, VolPerPMHlltA, CostPerCCFlltA, RelevancelltA;
-    // IB (Peterson, 87)
-    let TimePerTreelltB, VolPerPMHlltB, CostPerCCFlltB, RelevancelltB;
-    // IC (Keatley, 2000)
-    let TimePerTreelltC, VolPerPMHlltC, CostPerCCFlltC, RelevancelltC;
-    // ID (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    let TimePerTreelltD, VolPerPMHlltD, CostPerCCFlltD, RelevancelltD;
-    // IE User-Defined Felling Only
-    let VolPerPMHlltE, CostPerCCFlltE, RelevancelltE;
-    // Summary
-    let CostManFellLLT;
-// II. Felling, Limbing & Bucking
-    // IIA (Kellogg&Olsen, 86)
-    let EastsideAdjustment, ClearcutAdjustment, TimePerTreelltIIA, VolPerPMHlltIIA, CostPerCCFlltIIA, RelevancelltIIA;
-    // IIB (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.
-    // Research Contribtion 21.  Forest Research Laboratory, Oregon State University, Corvallis.
-    let LimbslltIIB, LogslltIIB, WedgelltIIB, CorridorlltIIB, NotBetweenOpeningslltIIB, OpeningslltIIB, HeavyThinlltIIB,
-        DelayFraclltIIB, TimePerTreelltIIB, VolPerPMHlltIIB, CostPerCCFlltIIB, RelevancelltIIB;
-    // IIC (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    let DelayFraclltIIC, TimePerTreelltIIC, VolPerPMHlltIIC, CostPerCCFlltIIC, RelevancelltIIC;
-    // IID User-Defined Felling, Limbing & Bucking
-    let VolPerPMHlltIID, CostPerCCFlltIID, RelevancelltIID;
-    // Summary
-    let CostManFLBLLT;
-
-    const PMH_Chainsaw = CostMachine.PMH_Chainsaw;
-// I. Felling Only
-    // IA (McNeel, 94)
-    SelectionTimePerTreelltA = 0.568 + 0.0193 * 0.305 * WalkDistLLT + 0.0294 * 2.54 * DBHLLT;
-    ClearcutTimePerTreelltA = 0.163 + 0.0444 * 0.305 * WalkDistLLT + 0.0323 * 2.54 * DBHLLT;
-    TimePerTreelltA = (PartialCut == 1 ? SelectionTimePerTreelltA : Math.min(SelectionTimePerTreelltA, ClearcutTimePerTreelltA));
-    VolPerPMHlltA = inputVar.TreeVolLLT / (TimePerTreelltA / 60);
-    CostPerCCFlltA = 100 * PMH_Chainsaw / VolPerPMHlltA;
-    RelevancelltA = 1;
-    // IB (Peterson, 87)
-    TimePerTreelltB = (DBHLLT < 10 ? 0.33 + 0.012 * DBHLLT : 0.1 + 0.0111 * Math.pow(DBHLLT, 1.496));
-    VolPerPMHlltB = inputVar.TreeVolLLT / (TimePerTreelltB / 60);
-    CostPerCCFlltB = 100 * PMH_Chainsaw / VolPerPMHlltB;
-    RelevancelltB = 1;
-    // IC (Keatley, 2000)
-    TimePerTreelltC = Math.sqrt(4.58 + 0.07 * WalkDistLLT + 0.16 * DBHLLT);
-    VolPerPMHlltC = inputVar.TreeVolLLT / (TimePerTreelltC / 60);
-    CostPerCCFlltC = 100 * PMH_Chainsaw / VolPerPMHlltC;
-    RelevancelltC = 1;
-    // ID (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    TimePerTreelltD = 1.082 + 0.01505 * inputVar.TreeVolLLT - 0.634 / inputVar.TreeVolLLT;
-    VolPerPMHlltD = inputVar.TreeVolLLT / (TimePerTreelltD / 60);
-    CostPerCCFlltD = 100 * PMH_Chainsaw / VolPerPMHlltD;
-    RelevancelltD = (inputVar.TreeVolLLT < 5 ? 0 : (inputVar.TreeVolLLT < 15 ? -0.5 + inputVar.TreeVolLLT / 10 : (inputVar.TreeVolLLT < 90 ? 1 : (inputVar.TreeVolLLT < 180 ? 2 - inputVar.TreeVolLLT / 90 : 0))));
-    // IE User-Defined Felling Only
-    VolPerPMHlltE = 0.001;
-    CostPerCCFlltE = 100 * PMH_Chainsaw / VolPerPMHlltE;
-    RelevancelltE = 0;
-    // Summary
-    CostManFellLLT = (inputVar.TreeVolLLT > 0 ?
-        CHardwoodLLT * 100 * (PMH_Chainsaw * RelevancelltA + PMH_Chainsaw * RelevancelltB + PMH_Chainsaw * RelevancelltC + PMH_Chainsaw * RelevancelltD + PMH_Chainsaw * RelevancelltE)
-        / (RelevancelltA * VolPerPMHlltA + RelevancelltB * VolPerPMHlltB + RelevancelltC * VolPerPMHlltC + RelevancelltD * VolPerPMHlltD + RelevancelltE * VolPerPMHlltE) : 0);
-
-// II. Felling, Limbing & Bucking
-    // IIA (Kellogg&Olsen, 86)
-    EastsideAdjustment = 1.2;
-    ClearcutAdjustment = 0.9;
-    TimePerTreelltIIA = EastsideAdjustment * (PartialCut == 1 ? 1 : (PartialCut == 0 ? ClearcutAdjustment : null)) * (1.33 + 0.0187 * WalkDistLLT + 0.0143 * inputVar.Slope + 0.0987 * inputVar.TreeVolLLT + 0.14);
-    VolPerPMHlltIIA = inputVar.TreeVolLLT / (TimePerTreelltIIA / 60);
-    CostPerCCFlltIIA = 100 * PMH_Chainsaw / VolPerPMHlltIIA;
-    RelevancelltIIA = 1;
-    // IIB (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs: experience from the Willamette Young Stand Project.
-    // Research Contribtion 21.  Forest Research Laboratory, Oregon State University, Corvallis.
-    LimbslltIIB = 31.5;
-    LogslltIIB = LogsPerTreeLLT;
-    WedgelltIIB = 0.02;
-    CorridorlltIIB = 0.21;
-    NotBetweenOpeningslltIIB = 1;
-    OpeningslltIIB = 0;
-    HeavyThinlltIIB = (PartialCut ? 0 : 1);
-    DelayFraclltIIB = 0.25;
-    TimePerTreelltIIB = (-0.465 + 0.102 * DBHLLT + 0.016 * LimbslltIIB + 0.562 * LogslltIIB + 0.009 * inputVar.Slope + 0.734 * WedgelltIIB + 0.137 * CorridorlltIIB
-        + 0.449 * NotBetweenOpeningslltIIB + 0.437 * OpeningslltIIB + 0.426 * HeavyThinlltIIB) * (1 + DelayFraclltIIB);
-    VolPerPMHlltIIB = inputVar.TreeVolLLT / (TimePerTreelltIIB / 60);
-    CostPerCCFlltIIB = 100 * PMH_Chainsaw / VolPerPMHlltIIB;
-    // RelevancelltIIB=(inputVar.TreeVolLLT<1?0:(inputVar.TreeVolLLT<2?-1+inputVar.TreeVolLLT/1:(inputVar.TreeVolLLT<70?1:1.2-inputVar.TreeVolLLT/350)));
-    RelevancelltIIB = TreeVol < 1 ? 0 : (TreeVol < 2 ? -1 + TreeVol / 1 : (TreeVol < 70 ? 1 : 1.2 - TreeVol / 350)); // ='Felling (all trees)'!E40
-    // IIC (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of harvesting system performance.  FERIC Technical Report TR-120)
-    DelayFraclltIIC = 0.197;
-    TimePerTreelltIIC = (1.772 + 0.02877 * inputVar.TreeVolLLT - 2.6486 / inputVar.TreeVolLLT) * (1 + DelayFraclltIIC);
-    VolPerPMHlltIIC = inputVar.TreeVolLLT / (TimePerTreelltIIC / 60);
-    CostPerCCFlltIIC = 100 * PMH_Chainsaw / VolPerPMHlltIIC;
-    RelevancelltIIC = (inputVar.TreeVolLLT < 5 ? 0 : (inputVar.TreeVolLLT < 15 ? -0.5 + inputVar.TreeVolLLT / 10 : 1));
-    // IID User-Defined Felling, Limbing & Bucking
-    VolPerPMHlltIID = 0.001;
-    CostPerCCFlltIID = 100 * PMH_Chainsaw / VolPerPMHlltIID;
-    RelevancelltIID = 0;
-    // Summary
-    CostManFLBLLT = (inputVar.TreeVolLLT > 0 ? CHardwoodLLT * 100 *
-        (PMH_Chainsaw * RelevancelltIIA + PMH_Chainsaw * RelevancelltIIB + PMH_Chainsaw * RelevancelltIIC + PMH_Chainsaw * RelevancelltIID)
-        / (RelevancelltIIA * VolPerPMHlltIIA + RelevancelltIIB * VolPerPMHlltIIB + RelevancelltIIC * VolPerPMHlltIIC + RelevancelltIID * VolPerPMHlltIID) : 0);
-    
-    return CostManFLBLLT;
-}
 
 function Skidding(inputVar.Slope, YardDist, Removals, TreeVol, WoodDensity, LogLength, PartialCut,
                   CinputVar.SlopeSkidForwLoadSize, LogsPerTree, LogVol, ManualMachineSize, BFperCF, ButtDiam, CostMachine, TreesPerCycleIIB) {

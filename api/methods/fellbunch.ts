@@ -1,4 +1,5 @@
 import { CostMachineMod } from './frcs.model';
+
 function FellBunch(Slope: number, RemovalsST: number, TreeVolST: number, DBHST: number, NonSelfLevelCabDummy: number,
                    CSlopeFB_Harv: number, CRemovalsFB_Harv: number, CHardwoodST: number, CostMachine: CostMachineMod) {
 /*--------------Fell&Bunch START---------------------------*/
@@ -109,7 +110,7 @@ const MoveFracIIG = 0.5 / (Math.trunc(TreesInReachIIG / TreesPerAccumIIG) + 1);
 const MoveIIG = 0.192 + 0.00779 * (BoomReachIIG + DistBetweenTrees) + 0.35 * HybridIIG;
 const FellIIG = 0.285 + 0.126 * TreesPerAccumIIG + 0.0176 * DBHST * TreesPerAccumIIG - 0.0394 * DeadIIG;
 const TimePerAccumIIG = MoveFracIIG * MoveIIG + FellIIG;
-const TimePerTreeIIG = (TimePerAccumIIG * (1 + DelayFracIIG) / TreesPerAccumIIG) * (1 + SlopeFB_Harv);
+const TimePerTreeIIG = (TimePerAccumIIG * (1 + DelayFracIIG) / TreesPerAccumIIG) * (1 + CSlopeFB_Harv);
 const VolPerPMHIIG = TreeVolST / TimePerTreeIIG * 60;
 const CostPerPMHIIG = PMH_SwingBoom * NonSelfLevelCabDummy + PMH_SelfLevel * (1 - NonSelfLevelCabDummy);
 const CostPerCCFIIG = 100 * CostPerPMHIIG / VolPerPMHIIG;
