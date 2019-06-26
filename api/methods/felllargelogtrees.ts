@@ -1,6 +1,6 @@
 import { CostMachineMod } from './frcs.model';
 
-function FellLargeLogTrees(Slope: number, RemovalsLLT: number, TreeVolLLT: number, TreeVol: number, PartialCut: boolean,
+function FellLargeLogTrees(Slope: number, RemovalsLLT: number, TreeVolLLT: number, TreeVol: number, PartialCut: number,
                            DBHLLT: number, LogsPerTreeLLT: number, CHardwoodLLT: number, CostMachine: CostMachineMod) {
 const WalkDistLLT = Math.sqrt(43560 / Math.max(RemovalsLLT, 1));
 const PMH_Chainsaw = CostMachine.PMH_Chainsaw;
@@ -8,7 +8,7 @@ const PMH_Chainsaw = CostMachine.PMH_Chainsaw;
 // IA (McNeel, 94)
 const SelectionTimePerTreelltA = 0.568 + 0.0193 * 0.305 * WalkDistLLT + 0.0294 * 2.54 * DBHLLT;
 const ClearcutTimePerTreelltA = 0.163 + 0.0444 * 0.305 * WalkDistLLT + 0.0323 * 2.54 * DBHLLT;
-const TimePerTreelltA = (PartialCut === true
+const TimePerTreelltA = (PartialCut === 1
 ? SelectionTimePerTreelltA : Math.min(SelectionTimePerTreelltA, ClearcutTimePerTreelltA));
 const VolPerPMHlltA = TreeVolLLT / (TimePerTreelltA / 60);
 const CostPerCCFlltA = 100 * PMH_Chainsaw / VolPerPMHlltA;
@@ -45,8 +45,8 @@ const CostManFellLLT = (TreeVolLLT > 0 ? CHardwoodLLT * 100 *
 // IIA (Kellogg&Olsen, 86)
 const EastsideAdjustment = 1.2;
 const ClearcutAdjustment = 0.9;
-const TimePerTreelltIIA = EastsideAdjustment * (PartialCut === true ?
-1 : (PartialCut === false ? ClearcutAdjustment : 0))
+const TimePerTreelltIIA = EastsideAdjustment * (PartialCut === 1 ?
+1 : (PartialCut === 0 ? ClearcutAdjustment : 0))
 * (1.33 + 0.0187 * WalkDistLLT + 0.0143 * Slope + 0.0987 * TreeVolLLT + 0.14);
 const VolPerPMHlltIIA = TreeVolLLT / (TimePerTreelltIIA / 60);
 const CostPerCCFlltIIA = 100 * PMH_Chainsaw / VolPerPMHlltIIA;
@@ -60,7 +60,7 @@ const WedgelltIIB = 0.02;
 const CorridorlltIIB = 0.21;
 const NotBetweenOpeningslltIIB = 1;
 const OpeningslltIIB = 0;
-const HeavyThinlltIIB = (PartialCut ? 0 : 1);
+const HeavyThinlltIIB = (PartialCut === 1 ? 0 : 1);
 const DelayFraclltIIB = 0.25;
 const TimePerTreelltIIB = (-0.465 + 0.102 * DBHLLT + 0.016 * LimbslltIIB
 + 0.562 * LogslltIIB + 0.009 * Slope + 0.734 * WedgelltIIB + 0.137 * CorridorlltIIB
