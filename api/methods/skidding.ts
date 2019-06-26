@@ -103,7 +103,7 @@ const CycletimeSkidIVB = EastsideAdjustmentSkidIVB
 const VolPerPMHskidIVB = TurnVol / (CycletimeSkidIVB / 60);
 const CostPerCCFskidIVB = 100 * SkidderHourlyCost / VolPerPMHskidIVB;
 const RelevanceSkidIVB = 0.50;
-// IVC John Deere 748E (Kosicki, K. 00. Productivities and costs of two harvesting trials 
+// IVC John Deere 748E (Kosicki, K. 00. Productivities and costs of two harvesting trials
 // in a western Alberta riparian zone. FERIC Advantage 1(19))
 const LoadingStopsSkidIVC = 2.1;
 const TurnTimeSkidIVC = 0.65 + 0.0054 * YardDist + 0.244 * LoadingStopsSkidIVC;

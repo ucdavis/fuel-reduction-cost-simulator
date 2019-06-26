@@ -98,7 +98,7 @@ const CostPerCCFIIF = 100 * CostPerPMHIIF / VolPerPMHIIF;
 const RelevanceIIF = (TreeVolST < 20 ? 1 : (TreeVolST < 50 ? 5 / 3 - TreeVolST / 30 : 0))
 * (Slope < 5 ? 0 : (Slope < 20 ? -1 / 3 + Slope / 15 : 1));
 // IIG: Timbco 420 (Hartsough, B., E. Drews, J. McNeel, T. Durston and B. Stokes. 97.
-// Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.  
+// Comparison of mechanized systems for thinning ponderosa pine and mixed conifer stands.
 // Forest Products Journal 47(11/12):59-68)
 const HybridIIG = 0;
 const DeadIIG = 0;
