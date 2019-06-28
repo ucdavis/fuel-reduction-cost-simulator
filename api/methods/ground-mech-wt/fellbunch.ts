@@ -1,4 +1,4 @@
-import { CostMachineMod } from './frcs.model';
+import { CostMachineMod } from '../frcs.model';
 
 function FellBunch(Slope: number, RemovalsST: number, TreeVolST: number, DBHST: number, NonSelfLevelCabDummy: number,
                    CSlopeFB_Harv: number, CRemovalsFB_Harv: number, CHardwoodST: number, CostMachine: CostMachineMod) {

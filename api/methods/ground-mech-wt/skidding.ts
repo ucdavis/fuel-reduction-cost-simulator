@@ -1,4 +1,4 @@
-import { CostMachineMod } from './frcs.model';
+import { CostMachineMod } from '../frcs.model';
 
 function Skidding(Slope: number, YardDist: number, Removals: number, TreeVol: number, WoodDensity: number,
                   LogLength: number, PartialCut: number, CSlopeSkidForwLoadSize: number, LogsPerTree: number,

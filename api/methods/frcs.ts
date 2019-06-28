@@ -1,13 +1,13 @@
 import { Chipping } from './chipping';
-import { FellBunch } from './fellbunch';
 import { FellLargeLogTrees } from './felllargelogtrees';
 import { CostMachineMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { FellBunch } from './ground-mech-wt/fellbunch';
+import { Skidding } from './ground-mech-wt/skidding';
 import { InLimits } from './inlimits';
 import { Loading } from './loading';
 import { MachineCosts } from './machinecosts';
 import { MoveInCosts } from './moveincost';
 import { Processing } from './processing';
-import { Skidding } from './skidding';
 
 export function calculate(inputVar: InputVarMod) {
 
