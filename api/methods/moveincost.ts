@@ -1,4 +1,6 @@
+// MoveInCosts sheet
 import { CostMachineMod } from './frcs.model';
+
 function MoveInCosts(Area: number, MoveInDist: number, TreeVol: number,
                      Removals: number, VolPerAcreCT: number, CostMachine: CostMachineMod) {
 // Move-In Assumptions

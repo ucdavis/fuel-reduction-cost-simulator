@@ -1,3 +1,4 @@
+// MachineCosts sheet
 function MachineCosts() {
     const WageAndBenRateF = 44.44814821; // =FallBuckWage // hardcoded
     const WageAndBenRate = 35.25197962; // =OtherWage // hardcoded

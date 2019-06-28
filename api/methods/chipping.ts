@@ -1,3 +1,4 @@
+// Chipping sheet
 import { CostMachineMod } from './frcs.model';
 
 function Chipping(TreeVolCT: number, WoodDensityCT: number, LoadWeightChip: number, MoistureContent: number,

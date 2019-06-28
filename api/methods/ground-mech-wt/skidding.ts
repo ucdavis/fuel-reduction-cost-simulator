@@ -1,3 +1,4 @@
+// Skidding sheet
 import { CostMachineMod } from '../frcs.model';
 
 function Skidding(Slope: number, YardDist: number, Removals: number, TreeVol: number, WoodDensity: number,

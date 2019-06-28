@@ -1,3 +1,4 @@
+// Processing sheet
 import { CostMachineMod } from './frcs.model';
 
 function Processing(TreeVolSLT: number, DBHSLT: number, ButtDiamSLT: number, LogsPerTreeSLT: number,
