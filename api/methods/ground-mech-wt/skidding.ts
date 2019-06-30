@@ -2,13 +2,13 @@
 import { CostMachineMod } from '../frcs.model';
 
 function Skidding(Slope: number, YardDist: number, Removals: number, TreeVol: number, WoodDensity: number,
-                  LogLength: number, PartialCut: number, CSlopeSkidForwLoadSize: number, LogsPerTree: number,
+                  LogLength: number, PartialCut: boolean, CSlopeSkidForwLoadSize: number, LogsPerTree: number,
                   LogVol: number, ManualMachineSize: number, BFperCF: number, ButtDiam: number,
                   CostMachine: CostMachineMod, TreesPerCycleIIB: number, CHardwood: number) {
 
 // Skidding Calculated Values
-const TurnVol = (PartialCut === 0 ?
-44.87 : (PartialCut === 1 ? 31.62 : 0)) * Math.pow(TreeVol, 0.282) * CSlopeSkidForwLoadSize;
+const TurnVol = (!PartialCut ?
+44.87 : (PartialCut ? 31.62 : 0)) * Math.pow(TreeVol, 0.282) * CSlopeSkidForwLoadSize;
 const LogsPerTurnS = TurnVol / LogVol;
 const TreesPerTurnS = TurnVol / TreeVol;
 const PMH_SkidderB = CostMachine.PMH_SkidderB;
@@ -61,7 +61,7 @@ const CostPerCCFskidIIA = 100 * SkidderHourlyCost / VolPerPMHskidIIA;
 const RelevanceSkidIIA = (ButtDiam < 20 ? 1 : (ButtDiam < 25 ? 5 - ButtDiam / 5 : 0));
 // IIB JD 648 (Gebhardt, 77)
 const GroundRatingSkidIIB = 1.1;
-const TypeOfCutSkidIIB = 1.5 * PartialCut;
+const TypeOfCutSkidIIB = PartialCut ? 1.5 : 0;
 const TurnTimeSkidIIB = 1.072 + 0.00314 * YardDist + 0.0192 * Slope + 0.315 * TypeOfCutSkidIIB
 + 0.489 * LogsPerTurnS - 0.819 * GroundRatingSkidIIB + 0.00469 * IntMoveDistS + 0.00139 * TurnVol * BFperCF;
 const VolPerPMHskidIIB = TurnVol / (TurnTimeSkidIIB / 60);

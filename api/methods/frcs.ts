@@ -1,7 +1,7 @@
 // Inputs & Outputs sheets
 import { Chipping } from './chipping';
 import { FellLargeLogTrees } from './felllargelogtrees';
-import { CostMachineMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { CostMachineMod, InputVarMod } from './frcs.model';
 import { FellBunch } from './ground-mech-wt/fellbunch';
 import { Skidding } from './ground-mech-wt/skidding';
 import { InLimits } from './inlimits';
@@ -144,14 +144,14 @@ export function calculate(inputVar: InputVarMod) {
     const BoleVolCCF = VolPerAcre / 100;
     const ResidueRecoveredPrimary = ResidueRecovFracWT * ResidueCT;
     const PrimaryProduct = BoleWt + ResidueRecoveredPrimary;
-    const ResidueRecoveredOptional = inputVar.CalcResidues === 1 ? (ResidueRecovFracWT * ResidueSLT)
+    const ResidueRecoveredOptional = inputVar.CalcResidues ? (ResidueRecovFracWT * ResidueSLT)
         + (ResidueRecovFracWT * ResidueLLT) : 0;
     const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
     const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
     // Amounts Unrecovered and Left within the Stand Per Acre
     const GroundFuel = ResidueLLT + ResidueST * (1 - ResidueRecovFracWT);
     // Amounts Unrecovered and Left at the Landing
-    const PiledFuel = inputVar.CalcResidues === 1 ? 0 : ResidueSLT * ResidueRecovFracWT;
+    const PiledFuel = inputVar.CalcResidues ? 0 : ResidueSLT * ResidueRecovFracWT;
     // TotalResidues
     const ResidueUncutTrees = 0;
     const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional
@@ -196,12 +196,13 @@ export function calculate(inputVar: InputVarMod) {
     const Stump2Truck4PrimaryProductWithoutMovein = FellAndBunchTreesLess80cf
         + ManualFellLimbBuckTreesLarger80cf + SkidBunchedAllTrees
         + ProcessLogTreesLess80cf + LoadLogTrees + ChipWholeTrees;
-    const Movein4PrimaryProduct = MoveInCosts1G39 * inputVar.CalcMoveIn * BoleVolCCF * InLimits1;
+    const Movein4PrimaryProduct = inputVar.CalcMoveIn ? MoveInCosts1G39 * BoleVolCCF * InLimits1 : 0;
 
-    const ChipLooseResiduesFromLogTreesLess80cf = CostChipLooseRes * inputVar.CalcResidues
-        * ResidueRecoveredOptional * InLimits1;
+    const ChipLooseResiduesFromLogTreesLess80cf = inputVar.CalcResidues ? CostChipLooseRes
+        * ResidueRecoveredOptional * InLimits1 : 0;
     const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf; // for Mech WT sys;
-    const  Movein4Residues = 0 * inputVar.CalcMoveIn * inputVar.CalcResidues * ResidueRecoveredOptional * InLimits1;
+    const  Movein4Residues = (inputVar.CalcMoveIn && inputVar.CalcResidues) ?
+        0 * ResidueRecoveredOptional * InLimits1 : 0;
 
 // III. System Cost Summaries
     const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct

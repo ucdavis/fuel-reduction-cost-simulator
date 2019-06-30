@@ -3,7 +3,7 @@ import { CostMachineMod } from './frcs.model';
 
 function Loading(LoadWeightLog: number, WoodDensityALT: number, WoodDensitySLT: number,
                  CTLLogVol: number, LogVolALT: number, DBHALT: number, DBHSLT: number,
-                 ManualMachineSizeALT: number, CostMachine: CostMachineMod, load_cost: number,
+                 ManualMachineSizeALT: number, CostMachine: CostMachineMod, load_cost: boolean,
                  TreeVolALT: number, CHardwoodALT: number, TreeVolSLT: number, CHardwoodSLT: number) {
 
 const ExchangeTrucks = 5;
@@ -59,7 +59,7 @@ const RelevanceLoadingIIC = 0;
 
 // Loading Summary
 // I. Loading Full-Length Logs
-const CostLoad = load_cost === 1 ?
+const CostLoad = load_cost ?
 (TreeVolALT > 0 ? CHardwoodALT * 100 * (LoaderHourlyCost * RelevanceLoadingIA
 + LoaderHourlyCost * RelevanceLoadingIB + LoaderHourlyCost * RelevanceLoadingIC
 + LoaderHourlyCost * RelevanceLoadingID + LoaderHourlyCost * RelevanceLoadingIE)
@@ -67,7 +67,7 @@ const CostLoad = load_cost === 1 ?
 + RelevanceLoadingIC * VolPerPMHloadingIC + RelevanceLoadingID * VolPerPMHloadingID
 + RelevanceLoadingIE * VolPerPMHloadingIE) : 0) : 0;
 // II. Loading CTL Logs
-const CostLoadCTL = load_cost === 0 ?
+const CostLoadCTL = !load_cost ?
 (TreeVolSLT > 0 ? CHardwoodSLT * 100 * (LoaderHourlyCost * RelevanceLoadingIIA
 + LoaderHourlyCost * RelevanceLoadingIIB + LoaderHourlyCost * RelevanceLoadingIIC)
 / (RelevanceLoadingIIA * VolPerPMHloadingIIA + RelevanceLoadingIIB * VolPerPMHloadingIIB
