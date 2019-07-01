@@ -1,6 +1,7 @@
 // Inputs sheet
-import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from './frcs.model';
-import { GroundMechWT } from './ground-mech-wt/ground-mech-wt';
+import { Assumption, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { GroundManualWT } from './ground/ground-manual-wt';
+import { GroundMechWT } from './ground/ground-mech-wt';
 
 export function calculate(input: InputVarMod) {
     const intermediate: IntermediateVarMod = { RemovalsST: 0, RemovalsALT: 0, Removals: 0, TreeVolST: 0,
@@ -26,6 +27,7 @@ export function calculate(input: InputVarMod) {
     const assumption: Assumption = { MaxManualTreeVol: 0, MaxMechTreeVol: 0, MoistureContent: 0, LogLength: 0,
                                      LoadWeightLog: 0, LoadWeightChip: 0, CTLTrailSpacing: 0, HdwdCostPremium: 0,
                                      ResidueRecovFracWT: 0, ResidueRecovFracCTL: 0 };
+    let output: OutputVarMod = { TotalPerBoleCCF: 0, TotalPerGT: 0, TotalPerAcre: 0 };
 
 // Other Assumptions
     assumption.MaxManualTreeVol = 150;
@@ -164,5 +166,13 @@ export function calculate(input: InputVarMod) {
     intermediate.CHardwoodALT = 1 + assumption.HdwdCostPremium * intermediate.HdwdFractionALT;
     intermediate.CHardwood = 1 + assumption.HdwdCostPremium * intermediate.HdwdFraction;
 
-    return GroundMechWT(input, intermediate, assumption);
+    switch (input.system) {
+        case 'Ground-Based Mech WT':
+            output = GroundMechWT(input, intermediate, assumption);
+            break;
+        case 'Ground-Based Manual WT':
+            output = GroundManualWT(input, intermediate, assumption);
+    }
+
+    return output;
 }

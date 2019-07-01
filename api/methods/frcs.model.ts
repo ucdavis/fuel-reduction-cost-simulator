@@ -113,6 +113,12 @@ export interface IntermediateVarMod {
     CHardwood: number;
 }
 
+export interface OutputVarMod {
+    TotalPerBoleCCF: number;
+    TotalPerGT: number;
+    TotalPerAcre: number;
+}
+
 export interface Assumption {
     MaxManualTreeVol: number;
     MaxMechTreeVol: number;
@@ -124,6 +130,18 @@ export interface Assumption {
     HdwdCostPremium: number;
     ResidueRecovFracWT: number;
     ResidueRecovFracCTL: number;
+}
+
+export interface Limit {
+    MaxLLTperAcre: number;
+    MaxLLTasPercentALT: number;
+    AvgTreeSizeLimit4Chipping: number; // average tree size limit for chipping
+    AvgTreeSizeLimit4Processing: number; // average tree size limit for processing
+    AvgTreeSizeLimit4ManualFellLimbBuck: number; // average tree size limit for manual felling, limbing & bucking
+    AvgTreeSizeLimit4loading: number; // average tree size limit for loading
+    AvgTreeSize4GrappleSkidding: number; // average tree size limit for grapple skidding of bunched trees
+    SlopeLimit: number; // Slope, %
+    YardingDistLimit: number; // Yarding distance, ft
 }
 
 export interface CostMachineMod {
