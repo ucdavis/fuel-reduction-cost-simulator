@@ -24,11 +24,106 @@ export interface InputVarMod {
     UserSpecHFLLT: number; // hardwood fraction of large log trees
 
     RemovalsCT: number; // removals of chip trees
-    RemovalsSLT: number;
-    RemovalsLLT: number;
     TreeVolCT: number;
+    RemovalsSLT: number;
     TreeVolSLT: number; // tree volume of small log trees
+    RemovalsLLT: number;
     TreeVolLLT: number;
+}
+
+export interface IntermediateVarMod {
+    RemovalsST: number;
+    RemovalsALT: number;
+    Removals: number;
+    TreeVolST: number;
+    TreeVolALT: number;
+    TreeVol: number;
+    VolPerAcreCT: number;
+    VolPerAcreSLT: number;
+    VolPerAcreLLT: number;
+    VolPerAcreST: number;
+    VolPerAcreALT: number;
+    VolPerAcre: number;
+    DBHCT: number;
+    DBHSLT: number;
+    DBHLLT: number;
+    DBHST: number;
+    DBHALT: number;
+    DBH: number;
+    HeightCT: number;
+    HeightSLT: number;
+    HeightLLT: number;
+    HeightST: number;
+    HeightALT: number;
+    Height: number;
+    WoodDensityCT: number;
+    WoodDensitySLT: number;
+    WoodDensityLLT: number;
+    WoodDensityST: number;
+    WoodDensityALT: number;
+    WoodDensity: number;
+    HdwdFractionCT: number;
+    HdwdFractionSLT: number;
+    HdwdFractionLLT: number;
+    HdwdFractionST: number;
+    HdwdFractionALT: number;
+    HdwdFraction: number;
+    ButtDiamSLT: number;
+    ButtDiamST: number;
+    ButtDiam: number;
+    LogsPerTreeCT: number;
+    LogsPerTreeSLT: number;
+    LogsPerTreeLLT: number;
+    LogsPerTreeST: number;
+    LogsPerTreeALT: number;
+    LogsPerTree: number;
+    LogVolST: number;
+    LogVolALT: number;
+    LogVol: number;
+    CTLLogsPerTreeCT: number;
+    CTLLogsPerTree: number;
+    CTLLogVolCT: number;
+    CTLLogVol: number;
+    BFperCF: number;
+    BoleWtCT: number;
+    BoleWtSLT: number;
+    BoleWtLLT: number;
+    BoleWtST: number;
+    BoleWtALT: number;
+    BoleWt: number;
+    ResidueCT: number;
+    ResidueSLT: number;
+    ResidueLLT: number;
+    ResidueST: number;
+    ResidueALT: number;
+    Residue: number;
+    ManualMachineSizeALT: number;
+    ManualMachineSize: number;
+    MechMachineSize: number;
+    ChipperSize: number;
+    NonSelfLevelCabDummy: number;
+    CSlopeFB_Harv: number;
+    CRemovalsFB_Harv: number;
+    CSlopeSkidForwLoadSize: number;
+    CHardwoodCT: number;
+    CHardwoodSLT: number;
+    CHardwoodLLT: number;
+    CHardwoodST: number;
+    CHardwoodALT: number;
+    CHardwood: number;
+}
+
+export interface Assumption {
+    MaxManualTreeVol: number;
+    MaxMechTreeVol: number;
+    MoistureContent: number;
+    LogLength: number;
+    LoadWeightLog: number;
+    LoadWeightChip: number;
+    CTLTrailSpacing: number;
+    HdwdCostPremium: number;
+    ResidueRecovFracWT: number;
+    ResidueRecovFracCTL: number;
 }
 
 export interface CostMachineMod {
