@@ -1,6 +1,5 @@
 // Outputs sheet: Ground-Based Manual WT column
 import { Chipping } from '../chipping';
-import { FellLargeLogTrees } from '../felllargelogtrees';
 import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from '../frcs.model';
 import { InLimits } from '../inlimits';
 import { Loading } from '../loading';
@@ -19,16 +18,8 @@ function GroundManualWT(input: InputVarMod, intermediate: IntermediateVarMod, as
     const PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
     const ResidueRecoveredOptional = input.CalcResidues ? (assumption.ResidueRecovFracWT * intermediate.ResidueSLT)
         + (assumption.ResidueRecovFracWT * intermediate.ResidueLLT) : 0;
-    const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
     const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
-    // Amounts Unrecovered and Left within the Stand Per Acre
-    const GroundFuel = intermediate.ResidueLLT + intermediate.ResidueST * (1 - assumption.ResidueRecovFracWT);
-    // Amounts Unrecovered and Left at the Landing
-    const PiledFuel = input.CalcResidues ? 0 : intermediate.ResidueSLT * assumption.ResidueRecovFracWT;
-    // TotalResidues
-    const ResidueUncutTrees = 0;
-    const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional
-        + ResidueUncutTrees + GroundFuel + PiledFuel;
+
 // Limits
     const InLimits1
     = InLimits(input.system, input.TreeVolCT, input.TreeVolSLT, input.TreeVolLLT,
@@ -40,7 +31,6 @@ function GroundManualWT(input: InputVarMod, intermediate: IntermediateVarMod, as
     = FellBunch(input.Slope, intermediate.RemovalsST, intermediate.TreeVolST, intermediate.DBHST,
                 intermediate.NonSelfLevelCabDummy, intermediate.CSlopeFB_Harv,
                 intermediate.CRemovalsFB_Harv, intermediate.CHardwoodST, CostMachine);
-    const CostFellBunch = FellBunchResults.CostFellBunch;
     const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
     const FellwtSmallLogOtherResults = FellwtSmallLogOther(input.Slope, intermediate.Removals, intermediate.TreeVolST,
                                                            input.TreeVolLLT, input.cut_type, intermediate.DBHST,
@@ -49,10 +39,6 @@ function GroundManualWT(input: InputVarMod, intermediate: IntermediateVarMod, as
                                                            intermediate.CHardwoodST, intermediate.CHardwoodLLT);
     const CostManFLBLLT2 = FellwtSmallLogOtherResults.CostManFLBLLT2;
     const CostManFellST2 = FellwtSmallLogOtherResults.CostManFellST2;
-    const CostManFLBLLT
-    = FellLargeLogTrees(input.Slope, input.RemovalsLLT, input.TreeVolLLT, intermediate.TreeVol,
-                        input.cut_type, intermediate.DBHLLT, intermediate.LogsPerTreeLLT,
-                        intermediate.CHardwoodLLT, CostMachine);
     const SkiddingResults
     = Skidding(input.Slope, input.deliver_dist, intermediate.Removals, intermediate.TreeVol,
                intermediate.WoodDensity, assumption.LogLength, input.cut_type,

@@ -29,6 +29,18 @@ function InLimits(system: string, TreeVolCT: number, TreeVolSLT: number, TreeVol
             limit.AvgTreeSize4GrappleSkidding = 500;
             limit.SlopeLimit = 40;
             limit.YardingDistLimit = 0;
+            break;
+        case 'Ground-Based Manual Log':
+            limit.MaxLLTperAcre = 0;
+            limit.MaxLLTasPercentALT = 0;
+            limit.AvgTreeSizeLimit4Chipping = 80;
+            limit.AvgTreeSizeLimit4Processing = 9999; // assign a large num to indicate it has no upper limit
+            limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large num to indicate it has no upper limit
+            limit.AvgTreeSizeLimit4loading = 250;
+            limit.AvgTreeSize4GrappleSkidding = 250;
+            limit.SlopeLimit = 40;
+            limit.YardingDistLimit = 0;
+            break;
     }
 
     const ExceededMaxLLT = (limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0) ? 0 : 1; // todo: else

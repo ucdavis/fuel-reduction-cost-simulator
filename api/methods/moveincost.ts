@@ -65,7 +65,26 @@ function MoveInCosts(Area: number, MoveInDist: number, TreeVol: number,
     const totalManualWT = totalFixedManualWT + totalVariableManualWT * MoveInDist;
     const CostPerCCFmanualWT = totalManualWT * 100 / (Area * TreeVol * Removals);
 
-    return { 'CostPerCCFmechWT': CostPerCCFmechWT, 'CostPerCCFmanualWT': CostPerCCFmanualWT };
+    // Manual Log
+    const LowboyLoadsManualLog = 2 + (VolPerAcreCT > 0 ? 1 : 0);
+    // Fixed
+    const skidderFixedManualLog = (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
+    const loaderFixedManualLog = (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
+    const chipperFixedManualLog = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
+    const totalFixedManualLog = skidderFixedManualLog + loaderFixedManualLog + chipperFixedManualLog;
+    // Variable
+    const skidderVariableManualLog = (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
+    const loaderVariableManualLog = (LowboyCost + Loader_OwnCost) / SpeedLoaded;
+    const chipperVariableManualLog = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
+    const BackhaulVariableManualLog = LowboyCost * LowboyLoadsManualLog / SpeedBack;
+    const totalVariableManualLog = skidderVariableManualLog + loaderVariableManualLog
+        + chipperVariableManualLog + BackhaulVariableManualLog;
+    // Total
+    const totalManualLog = totalFixedManualLog + totalVariableManualLog * MoveInDist;
+    const CostPerCCFmanualLog = totalManualLog * 100 / (Area * TreeVol * Removals);
+
+    return { 'CostPerCCFmechWT': CostPerCCFmechWT, 'CostPerCCFmanualWT': CostPerCCFmanualWT,
+             'CostPerCCFmanualLog': CostPerCCFmanualLog };
 }
 
 export { MoveInCosts };

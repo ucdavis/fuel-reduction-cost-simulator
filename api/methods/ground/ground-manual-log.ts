@@ -1,33 +1,23 @@
-// Outputs sheet: Ground-Based Mech WT column
+// Outputs sheet: Ground-Based Manual Log column
 import { Chipping } from '../chipping';
-import { FellLargeLogTrees } from '../felllargelogtrees';
 import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from '../frcs.model';
 import { InLimits } from '../inlimits';
 import { Loading } from '../loading';
 import { MachineCosts } from '../machinecosts';
 import { MoveInCosts } from '../moveincost';
-import { Processing } from '../processing';
+import { FellAllTrees } from './fellalltrees';
 import { FellBunch } from './fellbunch';
 import { Skidding } from './skidding';
 
-function GroundMechWT(input: InputVarMod, intermediate: IntermediateVarMod, assumption: Assumption) {
+function GroundManualLog(input: InputVarMod, intermediate: IntermediateVarMod, assumption: Assumption) {
 // ----System Product Summary--------------
     // Amounts Recovered Per Acre
     const BoleVolCCF = intermediate.VolPerAcre / 100;
-    const ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.ResidueCT;
+    const ResidueRecoveredPrimary = 0;
     const PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
-    const ResidueRecoveredOptional = input.CalcResidues ? (assumption.ResidueRecovFracWT * intermediate.ResidueSLT)
-        + (assumption.ResidueRecovFracWT * intermediate.ResidueLLT) : 0;
-    const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
+    const ResidueRecoveredOptional = 0;
     const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
-    // Amounts Unrecovered and Left within the Stand Per Acre
-    const GroundFuel = intermediate.ResidueLLT + intermediate.ResidueST * (1 - assumption.ResidueRecovFracWT);
-    // Amounts Unrecovered and Left at the Landing
-    const PiledFuel = input.CalcResidues ? 0 : intermediate.ResidueSLT * assumption.ResidueRecovFracWT;
-    // TotalResidues
-    const ResidueUncutTrees = 0;
-    const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional
-        + ResidueUncutTrees + GroundFuel + PiledFuel;
+
 // Limits
     const InLimits1
     = InLimits(input.system, input.TreeVolCT, input.TreeVolSLT, input.TreeVolLLT,
@@ -39,22 +29,14 @@ function GroundMechWT(input: InputVarMod, intermediate: IntermediateVarMod, assu
     = FellBunch(input.Slope, intermediate.RemovalsST, intermediate.TreeVolST, intermediate.DBHST,
                 intermediate.NonSelfLevelCabDummy, intermediate.CSlopeFB_Harv,
                 intermediate.CRemovalsFB_Harv, intermediate.CHardwoodST, CostMachine);
-    const CostFellBunch = FellBunchResults.CostFellBunch;
     const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
-    const CostManFLBLLT
-    = FellLargeLogTrees(input.Slope, input.RemovalsLLT, input.TreeVolLLT, intermediate.TreeVol,
-                        input.cut_type, intermediate.DBHLLT, intermediate.LogsPerTreeLLT,
-                        intermediate.CHardwoodLLT, CostMachine);
     const SkiddingResults
     = Skidding(input.Slope, input.deliver_dist, intermediate.Removals, intermediate.TreeVol,
                intermediate.WoodDensity, assumption.LogLength, input.cut_type,
                intermediate.CSlopeSkidForwLoadSize, intermediate.LogsPerTree, intermediate.LogVol,
                intermediate.ManualMachineSize, intermediate.BFperCF, intermediate.ButtDiam, CostMachine,
                TreesPerCycleIIB, intermediate.CHardwood);
-    const CostSkidBun = SkiddingResults.CostSkidBun;
-    const CostProcess = Processing(input.TreeVolSLT, intermediate.DBHSLT, intermediate.ButtDiamSLT,
-                                   intermediate.LogsPerTreeSLT, intermediate.MechMachineSize,
-                                   CostMachine, intermediate.CHardwoodSLT);
+    const CostSkidUB = SkiddingResults.CostSkidUB;
     const CostLoad = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
                              intermediate.CTLLogVol, intermediate.LogVolALT,
                              intermediate.DBHALT, intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
@@ -69,32 +51,33 @@ function GroundMechWT(input: InputVarMod, intermediate: IntermediateVarMod, assu
                       intermediate.VolPerAcreCT, CostMachine);
     const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
+    const FellAllTreesResults
+    = FellAllTrees(input.Slope, intermediate.Removals, intermediate.TreeVol, input.cut_type, intermediate.DBH,
+                   intermediate.LogsPerTree, CostMachine, intermediate.CHardwood);
+    const CostManFLB = FellAllTreesResults.CostManFLB;
+
     // C. For All Products, $/ac
-    const FellAndBunchTreesLess80cf = CostFellBunch * intermediate.VolPerAcreST / 100 * InLimits1;
-    const ManualFellLimbBuckTreesLarger80cf = CostManFLBLLT * intermediate.VolPerAcreLLT / 100 * InLimits1;
-    const SkidBunchedAllTrees = CostSkidBun * intermediate.VolPerAcre / 100 * InLimits1;
-    const ProcessLogTreesLess80cf = CostProcess * intermediate.VolPerAcreSLT / 100 * InLimits1;
+    const ManualFellLimbBuckAllTrees = CostManFLB * intermediate.VolPerAcre / 100 * InLimits1;
+    console.log('InLimits1: ' + InLimits1);
+    console.log('ManualFellLimbBuckAllTrees: ' + ManualFellLimbBuckAllTrees);
+    const SkidUnbunchedAllTrees = CostSkidUB * intermediate.VolPerAcre / 100 * InLimits1;
+    console.log('SkidUnbunchedAllTrees: ' + SkidUnbunchedAllTrees);
     const LoadLogTrees = CostLoad * intermediate.VolPerAcreALT / 100 * InLimits1;
-    const ChipWholeTrees = CostChipWT * intermediate.VolPerAcreCT / 100 * InLimits1;
+    console.log('LoadLogTrees: ' + LoadLogTrees);
+    const ChipTreeBoles = CostChipWT * intermediate.VolPerAcreCT / 100 * InLimits1;
+    console.log('ChipTreeBoles: ' + ChipTreeBoles);
 
-    const Stump2Truck4PrimaryProductWithoutMovein = FellAndBunchTreesLess80cf
-        + ManualFellLimbBuckTreesLarger80cf + SkidBunchedAllTrees
-        + ProcessLogTreesLess80cf + LoadLogTrees + ChipWholeTrees;
-    const Movein4PrimaryProduct = input.CalcMoveIn ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF * InLimits1 : 0;
-
-    const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ? CostChipLooseRes
-        * ResidueRecoveredOptional * InLimits1 : 0;
-    const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
-    const  Movein4Residues = (input.CalcMoveIn && input.CalcResidues) ?
-        0 * ResidueRecoveredOptional * InLimits1 : 0;
+    const Stump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckAllTrees
+        + SkidUnbunchedAllTrees + LoadLogTrees + ChipTreeBoles;
+    const Movein4PrimaryProduct = input.CalcMoveIn ?
+        MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF * InLimits1 : 0;
 
 // III. System Cost Summaries
-    const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
-        + OntoTruck4ResiduesWoMovein + Movein4Residues);
+    const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct);
     const TotalPerBoleCCF = Math.round(TotalPerAcre / BoleVolCCF);
     const TotalPerGT = Math.round(TotalPerAcre / TotalPrimaryProductsAndOptionalResidues);
 
     return { 'TotalPerBoleCCF': TotalPerBoleCCF, 'TotalPerGT': TotalPerGT, 'TotalPerAcre': TotalPerAcre };
 }
 
-export { GroundMechWT };
+export { GroundManualLog };

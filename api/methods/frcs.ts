@@ -1,5 +1,6 @@
 // Inputs sheet
 import { Assumption, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
 
@@ -172,6 +173,10 @@ export function calculate(input: InputVarMod) {
             break;
         case 'Ground-Based Manual WT':
             output = GroundManualWT(input, intermediate, assumption);
+            break;
+        case 'Ground-Based Manual Log':
+            output = GroundManualLog(input, intermediate, assumption);
+            break;
     }
 
     return output;
