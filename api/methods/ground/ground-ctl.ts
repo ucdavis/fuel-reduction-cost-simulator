@@ -8,6 +8,7 @@ import { MachineCosts } from '../machinecosts';
 import { MoveInCosts } from '../moveincost';
 import { Processing } from '../processing';
 import { FellBunch } from './fellbunch';
+import { Forwarding } from './forwarding';
 import { Harvesting } from './harvesting';
 import { Skidding } from './skidding';
 
@@ -44,6 +45,15 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
                                    intermediate.MechMachineSize, intermediate.CSlopeFB_Harv,
                                    intermediate.CRemovalsFB_Harv, intermediate.DBH,
                                    CostMachine, intermediate.CHardwoodST);
+    const CostForward = Forwarding(input.Slope, intermediate.WoodDensityST, intermediate.TreeVolST,
+                                   assumption.CTLTrailSpacing, intermediate.DBHST, intermediate.CSlopeSkidForwLoadSize,
+                                   intermediate.VolPerAcreST, intermediate.MechMachineSize, input.deliver_dist,
+                                   intermediate.CTLLogVol, CostMachine, intermediate.CHardwoodST);
+    // Todo: replace 0 with associated functions
+    const CostLoadCTL = 0;
+    const CostChipCTL = 0;
+    const CostPerCCFgroundCTL = 0;
+
     const FellBunchResults
     = FellBunch(input.Slope, intermediate.RemovalsST, intermediate.TreeVolST, intermediate.DBHST,
                 intermediate.NonSelfLevelCabDummy, intermediate.CSlopeFB_Harv,
@@ -82,13 +92,14 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
     const HarvestTreesLess80cf = CostHarvest * intermediate.VolPerAcreST / 100 * InLimits1;
     console.log('HarvestTreesLess80cf = ' + HarvestTreesLess80cf);
     const ForwardTreesLess80cf = CostForward * intermediate.VolPerAcreST / 100 * InLimits1;
+    console.log('ForwardTreesLess80cf = ' + ForwardTreesLess80cf);
     const LoadCTLlogTreesLess80cf = CostLoadCTL * intermediate.VolPerAcreSLT / 100 * InLimits1;
     const ChipCTLChipTreeBoles = CostChipCTL * intermediate.VolPerAcreCT / 100 * InLimits1;
 
     const Stump2Truck4PrimaryProductWithoutMovein = HarvestTreesLess80cf + ForwardTreesLess80cf
         + LoadCTLlogTreesLess80cf + ChipCTLChipTreeBoles;
     const Movein4PrimaryProduct = input.CalcMoveIn ?
-        MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF * InLimits1 : 0;
+        CostPerCCFgroundCTL * BoleVolCCF * InLimits1 : 0;
 
     const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ? CostChipLooseRes
         * ResidueRecoveredOptional * InLimits1 : 0;

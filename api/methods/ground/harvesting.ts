@@ -1,4 +1,4 @@
-// Skidding sheet
+// Harvesting sheet
 import { CostMachineMod } from '../frcs.model';
 
 function Harvesting(Slope: number, RemovalsST: number, TreeVolST: number, CTLTrailSpacing: number,
