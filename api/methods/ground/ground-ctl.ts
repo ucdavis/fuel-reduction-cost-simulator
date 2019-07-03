@@ -49,57 +49,32 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
                                    assumption.CTLTrailSpacing, intermediate.DBHST, intermediate.CSlopeSkidForwLoadSize,
                                    intermediate.VolPerAcreST, intermediate.MechMachineSize, input.deliver_dist,
                                    intermediate.CTLLogVol, CostMachine, intermediate.CHardwoodST);
-    // Todo: replace 0 with associated functions
-    const CostLoadCTL = 0;
-    const CostChipCTL = 0;
-    const CostPerCCFgroundCTL = 0;
 
-    const FellBunchResults
-    = FellBunch(input.Slope, intermediate.RemovalsST, intermediate.TreeVolST, intermediate.DBHST,
-                intermediate.NonSelfLevelCabDummy, intermediate.CSlopeFB_Harv,
-                intermediate.CRemovalsFB_Harv, intermediate.CHardwoodST, CostMachine);
-    const CostFellBunch = FellBunchResults.CostFellBunch;
-    const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
-    const CostManFLBLLT
-    = FellLargeLogTrees(input.Slope, input.RemovalsLLT, input.TreeVolLLT, intermediate.TreeVol,
-                        input.cut_type, intermediate.DBHLLT, intermediate.LogsPerTreeLLT,
-                        intermediate.CHardwoodLLT, CostMachine);
-    const SkiddingResults
-    = Skidding(input.Slope, input.deliver_dist, intermediate.Removals, intermediate.TreeVol,
-               intermediate.WoodDensity, assumption.LogLength, input.cut_type,
-               intermediate.CSlopeSkidForwLoadSize, intermediate.LogsPerTree, intermediate.LogVol,
-               intermediate.ManualMachineSize, intermediate.BFperCF, intermediate.ButtDiam, CostMachine,
-               TreesPerCycleIIB, intermediate.CHardwood);
-    const CostSkidBun = SkiddingResults.CostSkidBun;
-    const CostProcess = Processing(input.TreeVolSLT, intermediate.DBHSLT, intermediate.ButtDiamSLT,
-                                   intermediate.LogsPerTreeSLT, intermediate.MechMachineSize,
-                                   CostMachine, intermediate.CHardwoodSLT);
-    const CostLoad = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
-                             intermediate.CTLLogVol, intermediate.LogVolALT,
-                             intermediate.DBHALT, intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
-                             input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT, input.TreeVolSLT,
-                             intermediate.CHardwoodSLT);
+    const LoadingResults = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
+                                   intermediate.CTLLogVol, intermediate.LogVolALT, intermediate.DBHALT,
+                                   intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
+                                   input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT,
+                                   input.TreeVolSLT, intermediate.CHardwoodSLT);
+    const CostLoadCTL = LoadingResults.CostLoadCTL;
     const ChippingResults = Chipping(input.TreeVolCT, intermediate.WoodDensityCT, assumption.LoadWeightChip,
                                      assumption.MoistureContent, intermediate.CHardwoodCT, CostMachine,
                                      intermediate.CTLLogVolCT, intermediate.ChipperSize);
-    const CostChipWT = ChippingResults.CostChipWT;
+    const CostChipCTL = ChippingResults.CostChipCTL;
     const MoveInCostsResults
-        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.Removals,
-                      intermediate.VolPerAcreCT, CostMachine);
+        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.TreeVolST, intermediate.Removals,
+                      intermediate.RemovalsST, intermediate.VolPerAcreCT, CostMachine);
     const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
     // C. For All Products, $/ac
     const HarvestTreesLess80cf = CostHarvest * intermediate.VolPerAcreST / 100 * InLimits1;
-    console.log('HarvestTreesLess80cf = ' + HarvestTreesLess80cf);
     const ForwardTreesLess80cf = CostForward * intermediate.VolPerAcreST / 100 * InLimits1;
-    console.log('ForwardTreesLess80cf = ' + ForwardTreesLess80cf);
     const LoadCTLlogTreesLess80cf = CostLoadCTL * intermediate.VolPerAcreSLT / 100 * InLimits1;
     const ChipCTLChipTreeBoles = CostChipCTL * intermediate.VolPerAcreCT / 100 * InLimits1;
 
     const Stump2Truck4PrimaryProductWithoutMovein = HarvestTreesLess80cf + ForwardTreesLess80cf
         + LoadCTLlogTreesLess80cf + ChipCTLChipTreeBoles;
     const Movein4PrimaryProduct = input.CalcMoveIn ?
-        CostPerCCFgroundCTL * BoleVolCCF * InLimits1 : 0;
+        MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF * InLimits1 : 0;
 
     const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ? CostChipLooseRes
         * ResidueRecoveredOptional * InLimits1 : 0;

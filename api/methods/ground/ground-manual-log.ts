@@ -37,18 +37,19 @@ function GroundManualLog(input: InputVarMod, intermediate: IntermediateVarMod, a
                intermediate.ManualMachineSize, intermediate.BFperCF, intermediate.ButtDiam, CostMachine,
                TreesPerCycleIIB, intermediate.CHardwood);
     const CostSkidUB = SkiddingResults.CostSkidUB;
-    const CostLoad = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
-                             intermediate.CTLLogVol, intermediate.LogVolALT,
-                             intermediate.DBHALT, intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
-                             input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT, input.TreeVolSLT,
-                             intermediate.CHardwoodSLT);
+    const LoadingResults = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
+                                   intermediate.CTLLogVol, intermediate.LogVolALT, intermediate.DBHALT,
+                                   intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
+                                   input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT,
+                                   input.TreeVolSLT, intermediate.CHardwoodSLT);
+    const CostLoad = LoadingResults.CostLoad;
     const ChippingResults = Chipping(input.TreeVolCT, intermediate.WoodDensityCT, assumption.LoadWeightChip,
                                      assumption.MoistureContent, intermediate.CHardwoodCT, CostMachine,
                                      intermediate.CTLLogVolCT, intermediate.ChipperSize);
     const CostChipWT = ChippingResults.CostChipWT;
     const MoveInCostsResults
-        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.Removals,
-                      intermediate.VolPerAcreCT, CostMachine);
+        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.TreeVolST, intermediate.Removals,
+                      intermediate.RemovalsST, intermediate.VolPerAcreCT, CostMachine);
     const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
     const FellAllTreesResults
