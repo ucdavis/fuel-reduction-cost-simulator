@@ -1,8 +1,8 @@
 // MoveInCosts sheet
 import { CostMachineMod } from './frcs.model';
 
-function MoveInCosts(Area: number, MoveInDist: number, TreeVol: number,
-                     Removals: number, VolPerAcreCT: number, CostMachine: CostMachineMod) {
+function MoveInCosts(Area: number, MoveInDist: number, TreeVol: number, TreeVolST: number,
+                     Removals: number, RemovalsST: number, VolPerAcreCT: number, CostMachine: CostMachineMod) {
     // Move-In Assumptions
     const SpeedLoaded = 25;
     const SpeedBack = 40;
@@ -16,75 +16,129 @@ function MoveInCosts(Area: number, MoveInDist: number, TreeVol: number,
     const BackhaulHrs = MoveInDist / SpeedBack;
     const LowboyCost = TruckMoveInCosts + TruckDriverMoveInCosts;
     // System Costs
-    // Mech WT
-    const LowboyLoadsMechWT = 4 + (VolPerAcreCT > 0 ? 1 : 0);
+    const Harvester_OwnCost = CostMachine.Harvester_OwnCost;
+    const Forwarder_OwnCost = CostMachine.Forwarder_OwnCost;
+    const Yarder_OwnCost = CostMachine.Yarder_OwnCost;
     const FB_OwnCost = CostMachine.FB_OwnCost;
     const Skidder_OwnCost = CostMachine.Skidder_OwnCost;
     const Processor_OwnCost = CostMachine.Processor_OwnCost;
     const Loader_OwnCost = CostMachine.Loader_OwnCost;
     const Chipper_OwnCost = CostMachine.Chipper_OwnCost;
+
     // Fixed
-    const fellerbuncherFixedMechWT = (LowboyCost + FB_OwnCost + MoveInLabor) * LoadHrs;
-    const skidderFixedMechWT = (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
-    const processorFixedMechWT = (LowboyCost + Processor_OwnCost + MoveInLabor) * LoadHrs;
-    const loaderFixedMechWT = (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
-    const chipperFixedMechWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
-    const totalFixedMechWT = fellerbuncherFixedMechWT + skidderFixedMechWT
-    + processorFixedMechWT + loaderFixedMechWT + chipperFixedMechWT;
+    function fellerbuncherFixedfunc() {
+        return (LowboyCost + FB_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function skidderFixedfunc() {
+        return (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function processorFixedfunc() {
+        return (LowboyCost + Processor_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function loaderFixedfunc() {
+        return (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function chipperFixedfunc() {
+        return VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
+    }
+    function harvesterFixedfunc() {
+        return (LowboyCost + Harvester_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function forwarderFixedfunc() {
+        return (LowboyCost + Forwarder_OwnCost + MoveInLabor) * LoadHrs;
+    }
+    function yarderFixedfunc() {
+        return (LowboyCost + Yarder_OwnCost + MoveInLabor) * LoadHrs;
+    }
+
+    const fellerbuncherFixed = fellerbuncherFixedfunc();
+    const skidderFixed = skidderFixedfunc();
+    const processorFixed = processorFixedfunc();
+    const loaderFixed = loaderFixedfunc();
+    const chipperFixed = chipperFixedfunc();
+    const harvesterFixed = harvesterFixedfunc();
+    const forwarderFixed = forwarderFixedfunc();
+    const yarderFixed = yarderFixedfunc();
+
     // Variable
-    const fellerbuncherVariableMechWT = (LowboyCost + FB_OwnCost) / SpeedLoaded;
-    const skidderVariableMechWT = (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
-    const processorVariableMechWT = (LowboyCost + Processor_OwnCost) / SpeedLoaded;
-    const loaderVariableMechWT = (LowboyCost + Loader_OwnCost) / SpeedLoaded;
-    const chipperVariableMechWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
-    const BackhaulVariableMechWT = LowboyCost * LowboyLoadsMechWT / SpeedBack;
-    const totalVariableMechWT = fellerbuncherVariableMechWT + skidderVariableMechWT
-    + processorVariableMechWT + loaderVariableMechWT + chipperVariableMechWT + BackhaulVariableMechWT;
+    function fellerbuncherVariablefunc() {
+        return (LowboyCost + FB_OwnCost) / SpeedLoaded;
+    }
+    function skidderVariablefunc() {
+        return (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
+    }
+    function processorVariablefunc() {
+        return (LowboyCost + Processor_OwnCost) / SpeedLoaded;
+    }
+    function loaderVariablefunc() {
+        return (LowboyCost + Loader_OwnCost) / SpeedLoaded;
+    }
+    function chipperVariablefunc() {
+        return VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
+    }
+    function BackhaulVariablefunc(LowboyLoads: number) {
+        return LowboyCost * LowboyLoads / SpeedBack;
+    }
+    function harvesterVariablefunc() {
+        return (LowboyCost + Harvester_OwnCost) / SpeedLoaded;
+    }
+    function forwarderVariablefunc() {
+        return (LowboyCost + Forwarder_OwnCost) / SpeedLoaded;
+    }
+    function yarderVariablefunc() {
+        return (LowboyCost + Yarder_OwnCost) / SpeedLoaded;
+    }
+
+    const fellerbuncherVariable = fellerbuncherVariablefunc();
+    const skidderVariable = skidderVariablefunc();
+    const processorVariable = processorVariablefunc();
+    const loaderVariable = loaderVariablefunc();
+    const chipperVariable = chipperVariablefunc();
+    const harvesterVariable = harvesterVariablefunc();
+    const forwarderVariable = forwarderVariablefunc();
+    const yarderVariable = yarderVariablefunc();
+
+    // Mech WT
+    const LowboyLoadsMechWT = 4 + (VolPerAcreCT > 0 ? 1 : 0);
+    const totalFixedMechWT = fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableMechWT = BackhaulVariablefunc(LowboyLoadsMechWT);
+    const totalVariableMechWT = fellerbuncherVariable + skidderVariable
+        + processorVariable + loaderVariable + chipperVariable + BackhaulVariableMechWT;
     // Total
     const totalMechWT = totalFixedMechWT + totalVariableMechWT * MoveInDist;
     const CostPerCCFmechWT = totalMechWT * 100 / (Area * TreeVol * Removals);
 
     // Manual WT
     const LowboyLoadsManualWT = 3 + (VolPerAcreCT > 0 ? 1 : 0);
-    // Fixed
-    const skidderFixedManualWT = (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
-    const processorFixedManualWT = (LowboyCost + Processor_OwnCost + MoveInLabor) * LoadHrs;
-    const loaderFixedManualWT = (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
-    const chipperFixedManualWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
-    const totalFixedManualWT = skidderFixedManualWT + processorFixedManualWT + loaderFixedManualWT
-        + chipperFixedManualWT;
-    // Variable
-    const skidderVariableManualWT = (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
-    const processorVariableManualWT = (LowboyCost + Processor_OwnCost) / SpeedLoaded;
-    const loaderVariableManualWT = (LowboyCost + Loader_OwnCost) / SpeedLoaded;
-    const chipperVariableManualWT = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
-    const BackhaulVariableManualWT = LowboyCost * LowboyLoadsManualWT / SpeedBack;
-    const totalVariableManualWT = skidderVariableManualWT + processorVariableManualWT + loaderVariableManualWT
-        + chipperVariableManualWT + BackhaulVariableManualWT;
+    const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
+    const totalVariableManualWT = skidderVariable + processorVariable + loaderVariable
+        + chipperVariable + BackhaulVariableManualWT;
     // Total
     const totalManualWT = totalFixedManualWT + totalVariableManualWT * MoveInDist;
     const CostPerCCFmanualWT = totalManualWT * 100 / (Area * TreeVol * Removals);
 
     // Manual Log
     const LowboyLoadsManualLog = 2 + (VolPerAcreCT > 0 ? 1 : 0);
-    // Fixed
-    const skidderFixedManualLog = (LowboyCost + Skidder_OwnCost + MoveInLabor) * LoadHrs;
-    const loaderFixedManualLog = (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
-    const chipperFixedManualLog = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs : 0;
-    const totalFixedManualLog = skidderFixedManualLog + loaderFixedManualLog + chipperFixedManualLog;
-    // Variable
-    const skidderVariableManualLog = (LowboyCost + Skidder_OwnCost) / SpeedLoaded;
-    const loaderVariableManualLog = (LowboyCost + Loader_OwnCost) / SpeedLoaded;
-    const chipperVariableManualLog = VolPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
-    const BackhaulVariableManualLog = LowboyCost * LowboyLoadsManualLog / SpeedBack;
-    const totalVariableManualLog = skidderVariableManualLog + loaderVariableManualLog
-        + chipperVariableManualLog + BackhaulVariableManualLog;
+    const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
+    const totalVariableManualLog = skidderVariable + loaderVariable + chipperVariable + BackhaulVariableManualLog;
     // Total
     const totalManualLog = totalFixedManualLog + totalVariableManualLog * MoveInDist;
     const CostPerCCFmanualLog = totalManualLog * 100 / (Area * TreeVol * Removals);
 
+    // Ground CTL
+    const LowboyLoadsGroundCTL = 3 + (VolPerAcreCT > 0 ? 1 : 0);
+    const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
+    const totalVariableGroundCTL = harvesterVariable + forwarderVariable + loaderVariable
+        + chipperVariable + BackhaulVariableGroundCTL;
+    // Total
+    const totalGroundCTL = totalFixedGroundCTL + totalVariableGroundCTL * MoveInDist;
+    const CostPerCCFgroundCTL = totalGroundCTL * 100 / (Area * TreeVolST * RemovalsST);
+
     return { 'CostPerCCFmechWT': CostPerCCFmechWT, 'CostPerCCFmanualWT': CostPerCCFmanualWT,
-             'CostPerCCFmanualLog': CostPerCCFmanualLog };
+             'CostPerCCFmanualLog': CostPerCCFmanualLog, 'CostPerCCFgroundCTL': CostPerCCFgroundCTL };
 }
 
 export { MoveInCosts };
