@@ -21,7 +21,7 @@ function GroundManualLog(input: InputVarMod, intermediate: IntermediateVarMod, a
 // Limits
     const InLimits1
     = InLimits(input.system, input.TreeVolCT, input.TreeVolSLT, input.TreeVolLLT,
-               intermediate.TreeVolALT, intermediate.TreeVol, input.Slope);
+               intermediate.TreeVolALT, intermediate.TreeVol, input.Slope, input.RemovalsLLT, intermediate.RemovalsALT);
 // Machine costs
     const CostMachine: CostMachineMod = MachineCosts();
 // System Cost Elements-------

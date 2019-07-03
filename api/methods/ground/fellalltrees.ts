@@ -51,6 +51,9 @@ function FellAllTrees(Slope: number, Removals: number, TreeVol: number, PartialC
     const VolPerPMHIIAat = TreeVol / (TimePerTreeIIAat / 60);
     const CostPerCCFIIAat = 100 * CostMachine.PMH_Chainsaw / VolPerPMHIIAat;
     const RelevanceIIAat = 1;
+    // Weight relaxed at upper end to allow extrapolation to larger trees.
+    // Original was IF(treevol<90,1,IF(treevol<180,2-treevol/90,0))
+
     // B) (Kellogg, L., M. Miller and E. Olsen, 1999)  Skyline thinning production and costs:
     // experience from the Willamette Young Stand Project. Research Contribtion 21.
     // Forest Research Laboratory, Oregon State University, Corvallis.
@@ -69,6 +72,9 @@ function FellAllTrees(Slope: number, Removals: number, TreeVol: number, PartialC
     const CostPerCCFIIBat = 100 * CostMachine.PMH_Chainsaw / VolPerPMHIIBat;
     const RelevanceIIBat = TreeVol < 1 ? 0
         : (TreeVol < 2 ? -1 + TreeVol / 1 : (TreeVol < 70 ? 1 : 1.2 - TreeVol / 350));
+    // Weight relaxed at upper end to allow extrapolation to larger trees. Original was
+    // IF(treevol<1,0,IF(treevol<2,-1+treevol/1,IF(treevol<70,1,IF(treevol<140,2-treevol/70,0))))
+
     // C) (Andersson, B. and G. Young, 98. Harvesting coastal second growth forests: summary of
     // harvesting system performance. FERIC Technical Report TR-120)
     const DelayFracIICat = 0.197;
@@ -76,6 +82,9 @@ function FellAllTrees(Slope: number, Removals: number, TreeVol: number, PartialC
     const VolPerPMHIICat = TreeVol / (TimePerTreeIICat / 60);
     const CostPerCCFIICat = 100 * CostMachine.PMH_Chainsaw / VolPerPMHIICat;
     const RelevanceIICat = TreeVol < 5 ? 0 : (TreeVol < 15 ? -0.5 + TreeVol / 10 : 1);
+    // Weight relaxed at upper end to allow extrapolation to larger trees. Original was
+    // IF(treevol<5,0,IF(treevol<15,-0.5+treevol/10,IF(treevol<90,1,IF(treevol<180,2-treevol/90,0))))
+
     // D) User-Defined Felling, Limbing & Bucking
     const VolPerPMHIIDat = 0.001;
     const CostPerCCFIIDat = 100 * CostMachine.PMH_Chainsaw / VolPerPMHIIDat;
