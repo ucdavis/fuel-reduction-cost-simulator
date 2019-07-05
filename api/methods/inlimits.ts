@@ -84,6 +84,17 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
             limit.SlopeLimit = 100;
             limit.YardingDistLimit = 1300;
             break;
+        case 'Cable CTL':
+            limit.MaxLLTperAcre = 10;
+            limit.MaxLLTasPercentALT = 10;
+            limit.AvgTreeSizeLimit4Chipping = 80;
+            limit.AvgTreeSizeLimit4Processing = 80;
+            limit.AvgTreeSizeLimit4ManualFellLimbBuck = 100;
+            limit.AvgTreeSizeLimit4loading = 9999; // assign a large number to indicate it has no upper limit
+            limit.AvgTreeSize4GrappleSkidding = 9999; // assign a large number to indicate it has no upper limit
+            limit.SlopeLimit = 40;
+            limit.YardingDistLimit = 1300;
+            break;
     }
     const ExceededMaxLLT = (limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0) ? 0
         : ((input.RemovalsLLT > limit.MaxLLTperAcre

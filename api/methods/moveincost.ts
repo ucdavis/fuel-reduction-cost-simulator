@@ -178,6 +178,17 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const CostPerCCFcableManualLog = totalCableManualLog * 100
         / (input.Area * intermediate.TreeVol * intermediate.Removals);
 
+    // Cable CTL
+    const LowboyLoadsCableCTL = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+    const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
+    const totalVariableCableCTL = harvesterVariable + yarderVariable + loaderVariable + chipperVariable
+        + BackhaulVariableCableCTL;
+    // Total
+    const totalCableCTL = totalFixedCableCTL + totalVariableCableCTL * input.MoveInDist;
+    const CostPerCCFcableCTL = totalCableCTL * 100
+        / (input.Area * intermediate.TreeVolST * intermediate.RemovalsST);
+
     // Bundling Residues
     const LowboyLoadsBundleResidues = 2;
     const totalFixedBundleResidues = bundlerFixed + forwarderFixed;
@@ -191,7 +202,7 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
              'CostPerCCFmanualLog': CostPerCCFmanualLog, 'CostPerCCFgroundCTL': CostPerCCFgroundCTL,
              'CostPerCCFcableManualWTLog': CostPerCCFcableManualWTLog,
              'CostPerCCFcableManualWT': CostPerCCFcableManualWT, 'CostPerCCFbundleResidues': CostPerCCFbundleResidues,
-             'CostPerCCFcableManualLog': CostPerCCFcableManualLog };
+             'CostPerCCFcableManualLog': CostPerCCFcableManualLog, 'CostPerCCFcableCTL': CostPerCCFcableCTL };
 }
 
 export { MoveInCosts };
