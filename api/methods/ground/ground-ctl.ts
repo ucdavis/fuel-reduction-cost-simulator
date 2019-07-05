@@ -1,18 +1,15 @@
 // Outputs sheet: Ground-Based CTL column
 import { Chipping } from '../chipping';
-import { FellLargeLogTrees } from '../felllargelogtrees';
-import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from '../frcs.model';
+import { AssumptionMod, InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
 import { InLimits } from '../inlimits';
 import { Loading } from '../loading';
 import { MachineCosts } from '../machinecosts';
 import { MoveInCosts } from '../moveincost';
-import { Processing } from '../processing';
-import { FellBunch } from './fellbunch';
+import { BundleForwardResidue } from './bundleforwardresidue';
 import { Forwarding } from './forwarding';
 import { Harvesting } from './harvesting';
-import { Skidding } from './skidding';
 
-function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumption: Assumption) {
+function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumption: AssumptionMod) {
 // ----System Product Summary--------------
     // Amounts Recovered Per Acre
     const BoleVolCCF = intermediate.VolPerAcreST / 100;
@@ -30,40 +27,24 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
     const PiledFuel = 0;
     // TotalResidues
     const ResidueUncutTrees = 0;
-    const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional
-        + ResidueUncutTrees + GroundFuel + PiledFuel;
+    const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional + ResidueUncutTrees
+        + GroundFuel + PiledFuel;
 // Limits
-    const InLimits1
-    = InLimits(input.system, input.TreeVolCT, input.TreeVolSLT, input.TreeVolLLT,
-               intermediate.TreeVolALT, intermediate.TreeVol, input.Slope, input.RemovalsLLT, intermediate.RemovalsALT);
+    const InLimits1 = InLimits(input, intermediate);
 // Machine costs
-    const CostMachine: CostMachineMod = MachineCosts();
+    const machineCost: MachineCostMod = MachineCosts();
 // System Cost Elements-------
-    const CostHarvest = Harvesting(input.Slope, intermediate.RemovalsST, intermediate.TreeVolST,
-                                   assumption.CTLTrailSpacing, input.cut_type, intermediate.DBHST,
-                                   intermediate.ButtDiamST, intermediate.CTLLogsPerTree,
-                                   intermediate.MechMachineSize, intermediate.CSlopeFB_Harv,
-                                   intermediate.CRemovalsFB_Harv, intermediate.DBH,
-                                   CostMachine, intermediate.CHardwoodST);
-    const CostForward = Forwarding(input.Slope, intermediate.WoodDensityST, intermediate.TreeVolST,
-                                   assumption.CTLTrailSpacing, intermediate.DBHST, intermediate.CSlopeSkidForwLoadSize,
-                                   intermediate.VolPerAcreST, intermediate.MechMachineSize, input.deliver_dist,
-                                   intermediate.CTLLogVol, CostMachine, intermediate.CHardwoodST);
-
-    const LoadingResults = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
-                                   intermediate.CTLLogVol, intermediate.LogVolALT, intermediate.DBHALT,
-                                   intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
-                                   input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT,
-                                   input.TreeVolSLT, intermediate.CHardwoodSLT);
+    const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
+    const CostForward = Forwarding(assumption, input, intermediate, machineCost);
+    const LoadingResults = Loading(assumption, input, intermediate, machineCost);
     const CostLoadCTL = LoadingResults.CostLoadCTL;
-    const ChippingResults = Chipping(input.TreeVolCT, intermediate.WoodDensityCT, assumption.LoadWeightChip,
-                                     assumption.MoistureContent, intermediate.CHardwoodCT, CostMachine,
-                                     intermediate.CTLLogVolCT, intermediate.ChipperSize);
+    const ChippingResults = Chipping(assumption, input, intermediate, machineCost);
     const CostChipCTL = ChippingResults.CostChipCTL;
-    const MoveInCostsResults
-        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.TreeVolST, intermediate.Removals,
-                      intermediate.RemovalsST, intermediate.VolPerAcreCT, CostMachine);
-    const CostChipLooseRes = ChippingResults.CostChipLooseRes;
+    const BundleForwardResidueResults = BundleForwardResidue(assumption, input, intermediate, machineCost);
+    const CostBundleResidue = BundleForwardResidueResults.CostBundleResidue;
+    const CostForwardResidueBundles = BundleForwardResidueResults.CostForwardResidueBundles;
+    const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+    const CostChipBundledRes = ChippingResults.CostChipBundledRes;
 
     // C. For All Products, $/ac
     const HarvestTreesLess80cf = CostHarvest * intermediate.VolPerAcreST / 100 * InLimits1;
@@ -75,12 +56,15 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
         + LoadCTLlogTreesLess80cf + ChipCTLChipTreeBoles;
     const Movein4PrimaryProduct = input.CalcMoveIn ?
         MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF * InLimits1 : 0;
-
-    const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ? CostChipLooseRes
-        * ResidueRecoveredOptional * InLimits1 : 0;
-    const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
+    const BundleCTLResidues = input.CalcResidues ?
+        CostBundleResidue * ResidueRecoveredOptional * InLimits1 : 0;
+    const ForwardCTLResidues = input.CalcResidues ?
+        CostForwardResidueBundles * ResidueRecoveredOptional * InLimits1 : 0;
+    const ChipBundledResiduesFromTreesLess80cf = input.CalcResidues ?
+        CostChipBundledRes * ResidueRecoveredOptional * InLimits1 : 0;
+    const OntoTruck4ResiduesWoMovein = ChipBundledResiduesFromTreesLess80cf + BundleCTLResidues + ForwardCTLResidues;
     const  Movein4Residues = (input.CalcMoveIn && input.CalcResidues) ?
-        0 * ResidueRecoveredOptional * InLimits1 : 0;
+        MoveInCostsResults.CostPerCCFbundleResidues * ResidueRecoveredOptional * InLimits1 : 0;
 
 // III. System Cost Summaries
     const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct

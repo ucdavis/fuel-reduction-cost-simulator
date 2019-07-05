@@ -1,15 +1,15 @@
 // CableYarding sheet: II. Cable Yarding, Partial Cut, Unbunched (CYPCU)
-import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from 'methods/frcs.model';
+import { AssumptionMod, InputVarMod, IntermediateVarMod, MachineCostMod } from 'methods/frcs.model';
 
-function CYPCU(input: InputVarMod, intermediate: IntermediateVarMod,
-               CostMachine: CostMachineMod, assumption: Assumption) {
+function CYPCU(assumption: AssumptionMod, input: InputVarMod, intermediate: IntermediateVarMod,
+               machineCost: MachineCostMod) {
     // Cable Yarding Inputs
     const LatDist = 35;
     const TurnArea = 800;
     // Yarding Calculated Values
     const AreaLimitedTurnVol = intermediate.VolPerAcre * TurnArea / 43560;
-    const YarderHourlyCost = CostMachine.PMH_YarderS * (1 - intermediate.ManualMachineSize)
-        + CostMachine.PMH_YarderI * intermediate.ManualMachineSize;
+    const YarderHourlyCost = machineCost.PMH_YarderS * (1 - intermediate.ManualMachineSize)
+        + machineCost.PMH_YarderI * intermediate.ManualMachineSize;
     const YarderCapacity = (6000 + intermediate.ManualMachineSize * 3000) / intermediate.WoodDensity;
 
     // Corridor and Landing Change Costs`

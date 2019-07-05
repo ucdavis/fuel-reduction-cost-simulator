@@ -1,6 +1,6 @@
-// Outputs sheet: Ground-Based Mech WT column
+// Outputs sheet: Cable Manual WT/Log column
 import { Chipping } from '../chipping';
-import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from '../frcs.model';
+import { AssumptionMod, InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
 import { InLimits } from '../inlimits';
 import { Loading } from '../loading';
 import { MachineCosts } from '../machinecosts';
@@ -9,7 +9,7 @@ import { CYCCU } from './cyccu';
 import { CYPCU } from './cypcu';
 import { FellwtChipLogOther } from './fellwtchiplogother';
 
-function CableManualWTLog(input: InputVarMod, intermediate: IntermediateVarMod, assumption: Assumption) {
+function CableManualWTLog(input: InputVarMod, intermediate: IntermediateVarMod, assumption: AssumptionMod) {
 // ----System Product Summary--------------
     // Amounts Recovered Per Acre
     const BoleVolCCF = intermediate.VolPerAcre / 100;
@@ -27,29 +27,20 @@ function CableManualWTLog(input: InputVarMod, intermediate: IntermediateVarMod, 
     const TotalResidues = ResidueRecoveredPrimary + ResidueRecoveredOptional
         + ResidueUncutTrees + GroundFuel + PiledFuel;
 // Limits
-    const InLimits1
-    = InLimits(input, intermediate);
+    const InLimits1 = InLimits(input, intermediate);
 // Machine costs
-    const CostMachine: CostMachineMod = MachineCosts();
+    const machineCost: MachineCostMod = MachineCosts();
 // System Cost Elements-------
-    const FellwtChipLogOtherResults = FellwtChipLogOther(input, intermediate, CostMachine);
+    const FellwtChipLogOtherResults = FellwtChipLogOther(input, intermediate, machineCost);
     const CostManFLBALT2 = FellwtChipLogOtherResults.CostManFLBALT2;
     const CostManFellCT2 = FellwtChipLogOtherResults.CostManFellCT2;
-    const CostYardPCUB = CYPCU(input, intermediate, CostMachine, assumption);
-    const CostYardCCUB = CYCCU(input, intermediate, CostMachine, assumption);
-    const LoadingResults = Loading(assumption.LoadWeightLog, intermediate.WoodDensityALT, intermediate.WoodDensitySLT,
-                                   intermediate.CTLLogVol, intermediate.LogVolALT, intermediate.DBHALT,
-                                   intermediate.DBHSLT, intermediate.ManualMachineSizeALT, CostMachine,
-                                   input.load_cost, intermediate.TreeVolALT, intermediate.CHardwoodALT,
-                                   input.TreeVolSLT, intermediate.CHardwoodSLT);
+    const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
+    const CostYardCCUB = CYCCU(input, intermediate, machineCost);
+    const LoadingResults = Loading(assumption, input, intermediate, machineCost);
     const CostLoad = LoadingResults.CostLoad;
-    const ChippingResults = Chipping(input.TreeVolCT, intermediate.WoodDensityCT, assumption.LoadWeightChip,
-                                     assumption.MoistureContent, intermediate.CHardwoodCT, CostMachine,
-                                     intermediate.CTLLogVolCT, intermediate.ChipperSize);
+    const ChippingResults = Chipping(assumption, input, intermediate, machineCost);
     const CostChipWT = ChippingResults.CostChipWT;
-    const MoveInCostsResults
-        = MoveInCosts(input.Area, input.MoveInDist, intermediate.TreeVol, intermediate.TreeVolST, intermediate.Removals,
-                      intermediate.RemovalsST, intermediate.VolPerAcreCT, CostMachine);
+    const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
     const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
     // C. For All Products, $/ac
@@ -69,8 +60,8 @@ function CableManualWTLog(input: InputVarMod, intermediate: IntermediateVarMod, 
     const Movein4PrimaryProduct = input.CalcMoveIn ?
         MoveInCostsResults.CostPerCCFcableManualWTLog * BoleVolCCF * InLimits1 : 0;
 
-    const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ? CostChipLooseRes
-        * ResidueRecoveredOptional * InLimits1 : 0;
+    const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ?
+        CostChipLooseRes * ResidueRecoveredOptional * InLimits1 : 0;
     const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
     const  Movein4Residues = (input.CalcMoveIn && input.CalcResidues) ?
         0 * ResidueRecoveredOptional * InLimits1 : 0;

@@ -1,24 +1,23 @@
 // Forwarding sheet
-import { CostMachineMod } from '../frcs.model';
+import { AssumptionMod, InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
 
-function Forwarding(Slope: number, WoodDensityST: number, TreeVolST: number, CTLTrailSpacing: number,
-                    DBHST: number, CSlopeSkidForwLoadSize: number, VolPerAcreST: number,
-                    MechMachineSize: number, YardDist: number, CTLLogVol: number,
-                    CostMachine: CostMachineMod, CHardwoodST: number) {
+function Forwarding(assumption: AssumptionMod, input: InputVarMod,
+                    intermediate: IntermediateVarMod, machineCost: MachineCostMod) {
 
     // Forwarding Inputs
     const BoomReachF = 20;
     const LoadFraction = 0.95;
     // Forwarding Calculated Values
     const DistPerMoveF = 1.5 * BoomReachF;
-    const ForwarderHourlyCost = CostMachine.PMH_ForwarderS
-        * (1 - MechMachineSize) + CostMachine.PMH_ForwarderB * MechMachineSize;
+    const ForwarderHourlyCost = machineCost.PMH_ForwarderS
+        * (1 - intermediate.MechMachineSize) + machineCost.PMH_ForwarderB * intermediate.MechMachineSize;
     // A) Timberjack 230A 8-ton (Schroder&Johnson, 97)
     const MaxLoadWeightA = 8;
-    const LoadVolA = LoadFraction * MaxLoadWeightA * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const DistIntermA = (LoadVolA / VolPerAcreST) * 43560 / CTLTrailSpacing;
-    const DistOutA = YardDist + DistIntermA / 2;
-    const DistInA = Math.max(0, YardDist - DistIntermA / 2);
+    const LoadVolA = LoadFraction * MaxLoadWeightA * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const DistIntermA = (LoadVolA / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
+    const DistOutA = input.deliver_dist + DistIntermA / 2;
+    const DistInA = Math.max(0, input.deliver_dist - DistIntermA / 2);
     const MovesA = DistIntermA / DistPerMoveF;
     const Paint = 1;
     const TravelOutA = 1.75519 + 0.00433 * DistOutA;
@@ -32,13 +31,15 @@ function Forwarding(Slope: number, WoodDensityST: number, TreeVolST: number, CTL
     const TurnTimeA = TravelOutA + LoadA + TravelIntermA + TravelLoadedA + UnloadA;
     const VolPerPMHAforward = LoadVolA / (TurnTimeA / 60);
     const CostPerCCFAforward = 100 * ForwarderHourlyCost / VolPerPMHAforward;
-    const RelevanceAforward = TreeVolST < 25 ? 1 : (TreeVolST < 50 ? 2 - TreeVolST / 25 : 0);
+    const RelevanceAforward = intermediate.TreeVolST < 25 ?
+        1 : (intermediate.TreeVolST < 50 ? 2 - intermediate.TreeVolST / 25 : 0);
     // B) Rottne 10-ton (McNeel&Rutherford, 94)
     const MaxLoadWeightB = 1.1 * 10;
-    const LoadVolB = LoadFraction * MaxLoadWeightB * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const DistIntermB = (LoadVolB / VolPerAcreST) * 43560 / CTLTrailSpacing;
-    const DistOutB = YardDist + DistIntermB / 2;
-    const DistInB = Math.max(0, YardDist - DistIntermB / 2);
+    const LoadVolB = LoadFraction * MaxLoadWeightB * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const DistIntermB = (LoadVolB / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
+    const DistOutB = input.deliver_dist + DistIntermB / 2;
+    const DistInB = Math.max(0, input.deliver_dist - DistIntermB / 2);
     const MovesB = DistIntermB / DistPerMoveF;
     const LandingMovesB = 0.5;
     const LandingMoveDistPerMoveB = 100;
@@ -54,32 +55,36 @@ function Forwarding(Slope: number, WoodDensityST: number, TreeVolST: number, CTL
         + TravelLoadedB + UnloadB + SortLandingB + MoveLandingB;
     const VolPerPMHBforward = LoadVolB / (TurnTimeB / 60);
     const CostPerCCFBforward = 100 * ForwarderHourlyCost / VolPerPMHBforward;
-    const RelevanceBforward = DBHST < 16 ? 1 : (DBHST < 20 ? 5 - DBHST / 4 : 0);
+    const RelevanceBforward = intermediate.DBHST < 16 ? 1 : (intermediate.DBHST < 20 ? 5 - intermediate.DBHST / 4 : 0);
     // C) FMG 910 (Kellogg&Bettinger, 94)
     const MaxLoadWeightC = 1.1 * 9;
-    const LoadVolC = LoadFraction * MaxLoadWeightC * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const DistIntermC = (LoadVolC / VolPerAcreST) * 43560 / CTLTrailSpacing;
-    const DistOutC = YardDist + DistIntermC / 2;
-    const DistInC = Math.max(0, YardDist - DistIntermC / 2);
+    const LoadVolC = LoadFraction * MaxLoadWeightC * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const DistIntermC = (LoadVolC / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
+    const DistOutC = input.deliver_dist + DistIntermC / 2;
+    const DistInC = Math.max(0, input.deliver_dist - DistIntermC / 2);
     const MixedDummyC = 0.8;
     const PulpDummyC = 0.1;
     const VolPerPMHCforward = Math.max(100, 573.7 - 59.7 * MixedDummyC - 122.8 * PulpDummyC
         + 0.2707 * LoadVolC - 0.086 * DistOutC - 0.062 * DistIntermC - 0.042 * DistInC);
     const CostPerCCFCforward = 100 * ForwarderHourlyCost / VolPerPMHCforward;
-    const RelevanceCforward = TreeVolST < 40 ? 1 : (TreeVolST < 80 ? 2 - TreeVolST / 40 : 0);
+    const RelevanceCforward = intermediate.TreeVolST < 40 ?
+        1 : (intermediate.TreeVolST < 80 ? 2 - intermediate.TreeVolST / 40 : 0);
     // D) Valmet 646 12-ton (Drews et al, 00)
     const MaxLoadWeightD = 1.1 * 12;
-    const LoadVolD = LoadFraction * MaxLoadWeightD * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const DistIntermD = (LoadVolD / VolPerAcreST) * 43560 / CTLTrailSpacing;
-    const DistOutD = YardDist + DistIntermD / 2;
-    const DistInD = Math.max(0, YardDist - DistIntermD / 2);
+    const LoadVolD = LoadFraction * MaxLoadWeightD * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const DistIntermD = (LoadVolD / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
+    const DistOutD = input.deliver_dist + DistIntermD / 2;
+    const DistInD = Math.max(0, input.deliver_dist - DistIntermD / 2);
     const RoadDistD = 50;
     const MultipleCorridorDummyD = 0.08;
     const ColdDummyD = 0.83;
     const SawlogFractionD = 0.02;
     const TravelEmptyOnRoadD = (11.25 + 0.26 * RoadDistD) / 100;
-    const TravelOutAndTravelLoadedD = (103.36 + 0.8114 * YardDist + 0.0117 * YardDist * Slope) / 100;
-    const LoadD = (235.81 + Math.max(0, 1549.6 * LoadFraction - 128.48 * LoadFraction * CTLLogVol)) / 100;
+    const TravelOutAndTravelLoadedD = (103.36 + 0.8114 * input.deliver_dist
+        + 0.0117 * input.deliver_dist * input.Slope) / 100;
+    const LoadD = (235.81 + Math.max(0, 1549.6 * LoadFraction - 128.48 * LoadFraction * intermediate.CTLLogVol)) / 100;
     const TravelIntermD = (51.21 + 0.7519 * DistIntermD + 90.84 * MultipleCorridorDummyD) / 100;
     const TravelLoadedOnRoadD = (36.82 + 0.198 * RoadDistD) / 100;
     const UnloadD = (-162 + 852.2 * LoadFraction + 5105 * ColdDummyD * SawlogFractionD) / 100;
@@ -87,47 +92,53 @@ function Forwarding(Slope: number, WoodDensityST: number, TreeVolST: number, CTL
         + LoadD + TravelIntermD + TravelLoadedOnRoadD + UnloadD;
     const VolPerPMHDforward = LoadVolD / (TurnTimeD / 60);
     const CostPerCCFDforward = 100 * ForwarderHourlyCost / VolPerPMHDforward;
-    const RelevanceDforward = DBHST < 12 ? 1 : (DBHST < 20 ? 2.5 - DBHST / 8 : 0);
+    const RelevanceDforward = intermediate.DBHST < 12 ?
+        1 : (intermediate.DBHST < 20 ? 2.5 - intermediate.DBHST / 8 : 0);
     // E) TJ 1010 (Sambo, S. 99. Reduction of trail density in a partial cut with a cut-to-length system.
     // FERIC Technical Note TN 293)
     const MaxLoadWeightE = 1.1 * 12;
-    const LoadVolE = LoadFraction * MaxLoadWeightE * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const PiecesE = LoadVolE / CTLLogVol;
-    const TurnTimeE = 10.7 + 0.14 * PiecesE + 0.01 * (YardDist / 3.28);
+    const LoadVolE = LoadFraction * MaxLoadWeightE * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const PiecesE = LoadVolE / intermediate.CTLLogVol;
+    const TurnTimeE = 10.7 + 0.14 * PiecesE + 0.01 * (input.deliver_dist / 3.28);
     const VolPerPMHEforward = LoadVolB / (TurnTimeE / 60);
     const CostPerCCFEforward = 100 * ForwarderHourlyCost / VolPerPMHEforward;
-    const RelevanceEforward = TreeVolST < 10 ? 1 : (TreeVolST < 20 ? 2 - TreeVolST / 10 : 0);
+    const RelevanceEforward = intermediate.TreeVolST < 10 ?
+        1 : (intermediate.TreeVolST < 20 ? 2 - intermediate.TreeVolST / 10 : 0);
     // F) Fabtek 546B (Bolding, M.C. 03. Forest fuel reduction and energywood production
     // using a CTL/small chipper harvesting system,  M.S. Thesis, Auburn Univ)
     const MaxLoadWeightF = 15;
-    const LoadVolF = LoadFraction * MaxLoadWeightF * 2000 / WoodDensityST * CSlopeSkidForwLoadSize;
-    const DistIntermF = (LoadVolF / VolPerAcreST) * 43560 / CTLTrailSpacing;
-    const DistOutF = YardDist + DistIntermF / 2;
-    const DistInF = Math.max(0, YardDist - DistIntermF / 2);
+    const LoadVolF = LoadFraction * MaxLoadWeightF * 2000
+        / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
+    const DistIntermF = (LoadVolF / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
+    const DistOutF = input.deliver_dist + DistIntermF / 2;
+    const DistInF = Math.max(0, input.deliver_dist - DistIntermF / 2);
     const LoadingStopsF = DistIntermF / DistPerMoveF;
     const TravelEmptyF = 0.0028 * DistOutF;
     const TravelWhileLoadingF = 0.0087 * DistIntermF;
     const LoadF = 5.32 + 0.732 * LoadingStopsF;
     const TravelLoadedF = 0.0028 * DistInF;
-    const UnloadF = (0.001 * LoadVolF * WoodDensityST) / 3;
+    const UnloadF = (0.001 * LoadVolF * intermediate.WoodDensityST) / 3;
     const WaitF = 0;
     const TurnTimeF = TravelEmptyF + TravelWhileLoadingF + LoadF + TravelLoadedF + UnloadF + WaitF;
     const VolPerPMHFforward = LoadVolD / (TurnTimeF / 60);
     const CostPerCCFFforward = 100 * ForwarderHourlyCost / VolPerPMHFforward;
-    const RelevanceFforward = TreeVolST < 20 ? 1 : (TreeVolST < 40 ? 2 - TreeVolST / 20 : 0);
+    const RelevanceFforward = intermediate.TreeVolST < 20 ?
+        1 : (intermediate.TreeVolST < 40 ? 2 - intermediate.TreeVolST / 20 : 0);
     // G) User-Defined
     const VolPerPMHGforward = 0.001;
     const CostPerCCFGforward = 100 * ForwarderHourlyCost / VolPerPMHGforward;
     const RelevanceGforward = 0;
     // Summary
-    const CostForward = TreeVolST > 0 ?
-        CHardwoodST * 100 * (ForwarderHourlyCost * RelevanceAforward + ForwarderHourlyCost * RelevanceBforward
-        + ForwarderHourlyCost * RelevanceCforward + ForwarderHourlyCost * RelevanceDforward
-            + ForwarderHourlyCost * RelevanceEforward + ForwarderHourlyCost * RelevanceFforward
-            + ForwarderHourlyCost * RelevanceGforward) / (RelevanceAforward * VolPerPMHAforward
-                + RelevanceBforward * VolPerPMHBforward + RelevanceCforward * VolPerPMHCforward
-                + RelevanceDforward * VolPerPMHDforward + RelevanceEforward * VolPerPMHEforward
-                + RelevanceFforward * VolPerPMHFforward + RelevanceGforward * VolPerPMHGforward) : 0;
+    const CostForward = intermediate.TreeVolST > 0 ?
+        intermediate.CHardwoodST * 100 * (ForwarderHourlyCost * RelevanceAforward
+        + ForwarderHourlyCost * RelevanceBforward + ForwarderHourlyCost * RelevanceCforward
+        + ForwarderHourlyCost * RelevanceDforward + ForwarderHourlyCost * RelevanceEforward
+        + ForwarderHourlyCost * RelevanceFforward + ForwarderHourlyCost * RelevanceGforward)
+        / (RelevanceAforward * VolPerPMHAforward + RelevanceBforward * VolPerPMHBforward
+            + RelevanceCforward * VolPerPMHCforward + RelevanceDforward * VolPerPMHDforward
+            + RelevanceEforward * VolPerPMHEforward + RelevanceFforward * VolPerPMHFforward
+            + RelevanceGforward * VolPerPMHGforward) : 0;
 
     return CostForward;
 }

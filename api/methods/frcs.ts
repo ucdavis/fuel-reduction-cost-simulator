@@ -1,5 +1,6 @@
 // Inputs sheet
-import { Assumption, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
+import { CableManualWTLog } from './cable/cable-manual-wt-log';
+import { AssumptionMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
 import { GroundCTL } from './ground/ground-ctl';
 import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
@@ -26,9 +27,9 @@ export function calculate(input: InputVarMod) {
                                                CRemovalsFB_Harv: 0, CSlopeSkidForwLoadSize: 0, CHardwoodCT: 0,
                                                CHardwoodSLT: 0, CHardwoodLLT: 0, CHardwoodST: 0, CHardwoodALT: 0,
                                                CHardwood: 0};
-    const assumption: Assumption = { MaxManualTreeVol: 0, MaxMechTreeVol: 0, MoistureContent: 0, LogLength: 0,
-                                     LoadWeightLog: 0, LoadWeightChip: 0, CTLTrailSpacing: 0, HdwdCostPremium: 0,
-                                     ResidueRecovFracWT: 0, ResidueRecovFracCTL: 0 };
+    const assumption: AssumptionMod = { MaxManualTreeVol: 0, MaxMechTreeVol: 0, MoistureContent: 0, LogLength: 0,
+                                        LoadWeightLog: 0, LoadWeightChip: 0, CTLTrailSpacing: 0, HdwdCostPremium: 0,
+                                        ResidueRecovFracWT: 0, ResidueRecovFracCTL: 0 };
     let output: OutputVarMod = { TotalPerBoleCCF: 0, TotalPerGT: 0, TotalPerAcre: 0 };
 
 // Other Assumptions
@@ -181,6 +182,8 @@ export function calculate(input: InputVarMod) {
         case 'Ground-Based CTL':
             output = GroundCTL(input, intermediate, assumption);
             break;
+        case 'Cable Manual WT/Log':
+            output = CableManualWTLog(input, intermediate, assumption);
     }
 
     return output;

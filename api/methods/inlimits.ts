@@ -1,11 +1,11 @@
 // Outputs sheet - Limits part
-import { InputVarMod, IntermediateVarMod, Limit } from './frcs.model';
+import { InputVarMod, IntermediateVarMod, LimitMod } from './frcs.model';
 
 function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
-    const limit: Limit = { MaxLLTperAcre: 0, MaxLLTasPercentALT: 0, AvgTreeSizeLimit4Chipping: 0,
-                           AvgTreeSizeLimit4Processing: 0, AvgTreeSizeLimit4ManualFellLimbBuck: 0,
-                           AvgTreeSizeLimit4loading: 0, AvgTreeSize4GrappleSkidding: 0, SlopeLimit: 0,
-                           YardingDistLimit: 0 };
+    const limit: LimitMod = { MaxLLTperAcre: 0, MaxLLTasPercentALT: 0, AvgTreeSizeLimit4Chipping: 0,
+                              AvgTreeSizeLimit4Processing: 0, AvgTreeSizeLimit4ManualFellLimbBuck: 0,
+                              AvgTreeSizeLimit4loading: 0, AvgTreeSize4GrappleSkidding: 0, SlopeLimit: 0,
+                              YardingDistLimit: 0 };
     switch (input.system) {
         case 'Ground-Based Mech WT':
             limit.MaxLLTperAcre = 0;

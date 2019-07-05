@@ -119,7 +119,7 @@ export interface OutputVarMod {
     TotalPerAcre: number;
 }
 
-export interface Assumption {
+export interface AssumptionMod {
     MaxManualTreeVol: number;
     MaxMechTreeVol: number;
     MoistureContent: number;
@@ -132,7 +132,7 @@ export interface Assumption {
     ResidueRecovFracCTL: number;
 }
 
-export interface Limit {
+export interface LimitMod {
     MaxLLTperAcre: number;
     MaxLLTasPercentALT: number;
     AvgTreeSizeLimit4Chipping: number; // average tree size limit for chipping
@@ -144,7 +144,7 @@ export interface Limit {
     YardingDistLimit: number; // Yarding distance, ft
 }
 
-export interface CostMachineMod {
+export interface MachineCostMod {
     PMH_Chainsaw: number;
     PMH_DriveToTree: number;
     PMH_SwingBoom: number;

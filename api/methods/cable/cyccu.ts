@@ -1,14 +1,14 @@
 // CableYarding sheet: I. Cable Yarding, Clearcut, Unbunched (CYCCU)
-import { Assumption, CostMachineMod, InputVarMod, IntermediateVarMod } from 'methods/frcs.model';
+import { InputVarMod, IntermediateVarMod, MachineCostMod } from 'methods/frcs.model';
 
 function CYCCU(input: InputVarMod, intermediate: IntermediateVarMod,
-               CostMachine: CostMachineMod, assumption: Assumption) {
+               machineCost: MachineCostMod) {
     // Cable Yarding Inputs
     const TurnArea = 800;
     // Yarding Calculated Values
     const AreaLimitedTurnVol = intermediate.VolPerAcre * TurnArea / 43560;
-    const YarderHourlyCost = CostMachine.PMH_YarderS * (1 - intermediate.ManualMachineSize)
-        + CostMachine.PMH_YarderI * intermediate.ManualMachineSize;
+    const YarderHourlyCost = machineCost.PMH_YarderS * (1 - intermediate.ManualMachineSize)
+        + machineCost.PMH_YarderI * intermediate.ManualMachineSize;
     const YarderCapacity = (6000 + intermediate.ManualMachineSize * 3000) / intermediate.WoodDensity;
 
     // Corridor and Landing Change Costs`
@@ -17,7 +17,7 @@ function CYCCU(input: InputVarMod, intermediate: IntermediateVarMod,
     const TailblockSpacingJammer = 50;
     const AreaLineShiftJammer = TailblockSpacingJammer * 2 * input.deliver_dist / 43560;
     const LineShiftTimeJammer = 0.5;
-    const LineShiftCostJammer = 100 * (CostMachine.PMH_YarderS * LineShiftTimeJammer)
+    const LineShiftCostJammer = 100 * (machineCost.PMH_YarderS * LineShiftTimeJammer)
         / (intermediate.VolPerAcre * AreaLineShiftJammer);
     const LandingShiftCostJammer = 0;
     const CCJammerChangeCost = LineShiftCostJammer + LandingShiftCostJammer;
@@ -43,7 +43,7 @@ function CYCCU(input: InputVarMod, intermediate: IntermediateVarMod,
         return TurnVol1 / (TurnTimeCable / 60);
     }
     function YardingPerCCF1(VolPerPMHarg: number) {
-        return 100 * CostMachine.PMH_YarderS / VolPerPMHarg;
+        return 100 * machineCost.PMH_YarderS / VolPerPMHarg;
     }
     const TurnVol2 = Math.min(YarderCapacity, Math.max(AreaLimitedTurnVol, intermediate.TreeVol));
     const LogsII = Math.max(1, TurnVol2 / intermediate.LogVol);
