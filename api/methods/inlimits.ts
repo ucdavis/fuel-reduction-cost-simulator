@@ -62,6 +62,17 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
             limit.SlopeLimit = 100;
             limit.YardingDistLimit = 1300;
             break;
+        case 'Cable Manual WT':
+            limit.MaxLLTperAcre = 0;
+            limit.MaxLLTasPercentALT = 0;
+            limit.AvgTreeSizeLimit4Chipping = 80;
+            limit.AvgTreeSizeLimit4Processing = 80;
+            limit.AvgTreeSizeLimit4ManualFellLimbBuck = 500;
+            limit.AvgTreeSizeLimit4loading = 500;
+            limit.AvgTreeSize4GrappleSkidding = 500;
+            limit.SlopeLimit = 100;
+            limit.YardingDistLimit = 1300;
+            break;
     }
     const ExceededMaxLLT = (limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0) ? 0
         : ((input.RemovalsLLT > limit.MaxLLTperAcre
