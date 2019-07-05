@@ -149,8 +149,8 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const LowboyLoadsCableManualWTlog = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
     const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
     const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
-    const totalVariableCableManualWTlog = yarderVariable + loaderVariable
-        + chipperVariable + BackhaulVariableCableManualWTlog;
+    const totalVariableCableManualWTlog = yarderVariable + loaderVariable + chipperVariable
+        + BackhaulVariableCableManualWTlog;
     // Total
     const totalCableManualWTlog = totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.MoveInDist;
     const CostPerCCFcableManualWTLog = totalCableManualWTlog * 100
@@ -160,11 +160,22 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const LowboyLoadsCableManualWT = 4 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
     const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
     const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
-    const totalVariableCableManualWT = yarderVariable + processorVariable + loaderVariable
-        + chipperVariable + BackhaulVariableCableManualWT;
+    const totalVariableCableManualWT = yarderVariable + processorVariable + loaderVariable + chipperVariable
+        + BackhaulVariableCableManualWT;
     // Total
     const totalCableManualWT = totalFixedCableManualWT + totalVariableCableManualWT * input.MoveInDist;
     const CostPerCCFcableManualWT = totalCableManualWT * 100
+        / (input.Area * intermediate.TreeVol * intermediate.Removals);
+
+    // Cable Manual Log
+    const LowboyLoadsCableManualLog = 2 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+    const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
+    const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
+    const totalVariableCableManualLog = yarderVariable + loaderVariable + chipperVariable
+        + BackhaulVariableCableManualLog;
+    // Total
+    const totalCableManualLog = totalFixedCableManualLog + totalVariableCableManualLog * input.MoveInDist;
+    const CostPerCCFcableManualLog = totalCableManualLog * 100
         / (input.Area * intermediate.TreeVol * intermediate.Removals);
 
     // Bundling Residues
@@ -179,7 +190,8 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     return { 'CostPerCCFmechWT': CostPerCCFmechWT, 'CostPerCCFmanualWT': CostPerCCFmanualWT,
              'CostPerCCFmanualLog': CostPerCCFmanualLog, 'CostPerCCFgroundCTL': CostPerCCFgroundCTL,
              'CostPerCCFcableManualWTLog': CostPerCCFcableManualWTLog,
-             'CostPerCCFcableManualWT': CostPerCCFcableManualWT, 'CostPerCCFbundleResidues': CostPerCCFbundleResidues };
+             'CostPerCCFcableManualWT': CostPerCCFcableManualWT, 'CostPerCCFbundleResidues': CostPerCCFbundleResidues,
+             'CostPerCCFcableManualLog': CostPerCCFcableManualLog };
 }
 
 export { MoveInCosts };
