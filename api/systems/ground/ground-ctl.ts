@@ -67,12 +67,16 @@ function GroundCTL(input: InputVarMod, intermediate: IntermediateVarMod, assumpt
         MoveInCostsResults.CostPerCCFbundleResidues * ResidueRecoveredOptional * InLimits1 : 0;
 
 // III. System Cost Summaries
-    const TotalPerAcre = Math.round(Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
-        + OntoTruck4ResiduesWoMovein + Movein4Residues);
-    const TotalPerBoleCCF = Math.round(TotalPerAcre / BoleVolCCF);
-    const TotalPerGT = Math.round(TotalPerAcre / TotalPrimaryProductsAndOptionalResidues);
+    const TotalPerAcre = Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct
+        + OntoTruck4ResiduesWoMovein + Movein4Residues;
+    const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
+    const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
 
-    return { 'TotalPerBoleCCF': TotalPerBoleCCF, 'TotalPerGT': TotalPerGT, 'TotalPerAcre': TotalPerAcre };
+    const TotalPerAcreOut = Math.round(TotalPerAcre);
+    const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
+    const TotalPerGTout = Math.round(TotalPerGT);
+
+    return { 'TotalPerBoleCCF': TotalPerBoleCCFout, 'TotalPerGT': TotalPerGTout, 'TotalPerAcre': TotalPerAcreOut };
 }
 
 export { GroundCTL };
