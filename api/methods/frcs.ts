@@ -8,6 +8,7 @@ import { GroundCTL } from './ground/ground-ctl';
 import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
+import { HelicopterCTL } from './helicopter/helicopter-ctl';
 import { HelicopterManualWT } from './helicopter/helicopter-manual-wt';
 
 export function calculate(input: InputVarMod) {
@@ -200,6 +201,9 @@ export function calculate(input: InputVarMod) {
             break;
         case 'Helicopter Manual WT':
             output = HelicopterManualWT(input, intermediate, assumption);
+            break;
+        case 'Helicopter CTL':
+            output = HelicopterCTL(input, intermediate, assumption);
             break;
     }
 
