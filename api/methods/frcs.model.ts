@@ -3,7 +3,7 @@ export interface InputVarMod {
     cut_type: boolean; // if clear_cut, cut_type = 0; otherwise 1.
     deliver_dist: number;
     Slope: number;
-    elevation: number;
+    Elevation: number;
     load_cost: boolean; // if include loading costs, load_cost=1; otherwise 0.
     CalcMoveIn: boolean; // if include move-in costs
     Area: number;
