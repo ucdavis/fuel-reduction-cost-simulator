@@ -53,6 +53,10 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     function bundlerFixedfunc() {
         return (LowboyCost + Bundler_OwnCost + MoveInLabor) * LoadHrs;
     }
+    const HeliMoveInCostPerHr = (3700 / 6 + 340 + 7580 / 6.76 + 1052 + 6750 / 8.5 + 840) / 3;
+    function helicopterFixedfunc() {
+        return 1 * HeliMoveInCostPerHr;
+    }
 
     const fellerbuncherFixed = fellerbuncherFixedfunc();
     const skidderFixed = skidderFixedfunc();
@@ -63,6 +67,7 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const forwarderFixed = forwarderFixedfunc();
     const yarderFixed = yarderFixedfunc();
     const bundlerFixed = bundlerFixedfunc();
+    const helicopterFixed = helicopterFixedfunc();
 
     // Variable
     function fellerbuncherVariablefunc() {
@@ -95,6 +100,10 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     function bundlerVariablefunc() {
         return (LowboyCost + Bundler_OwnCost) / SpeedLoaded;
     }
+    const HeliCruiseSpeed = 120;
+    function helicopterVariablefunc() {
+        return 2 * HeliMoveInCostPerHr / HeliCruiseSpeed;
+    }
 
     const fellerbuncherVariable = fellerbuncherVariablefunc();
     const skidderVariable = skidderVariablefunc();
@@ -105,6 +114,7 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const forwarderVariable = forwarderVariablefunc();
     const yarderVariable = yarderVariablefunc();
     const bundlerVariable = bundlerVariablefunc();
+    const helicopterVariable = helicopterVariablefunc();
 
     // Mech WT
     const LowboyLoadsMechWT = 4 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
@@ -189,6 +199,17 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
     const CostPerCCFcableCTL = totalCableCTL * 100
         / (input.Area * intermediate.TreeVolST * intermediate.RemovalsST);
 
+    // Helicopter Manual Log
+    const LowboyLoadsHManualLog = 2 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+    const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
+    const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
+    const totalVariableHManualLog = helicopterVariable + 2 * loaderVariable + chipperVariable
+        + BackhaulVariableHManualLog;
+    // Total
+    const totalHManualLog = totalFixedHManualLog + totalVariableHManualLog * input.MoveInDist;
+    const CostPerCCFhManualLog = totalHManualLog * 100
+        / (input.Area * intermediate.TreeVol * intermediate.Removals);
+
     // Bundling Residues
     const LowboyLoadsBundleResidues = 2;
     const totalFixedBundleResidues = bundlerFixed + forwarderFixed;
@@ -202,7 +223,8 @@ function MoveInCosts(input: InputVarMod, intermediate: IntermediateVarMod, machi
              'CostPerCCFmanualLog': CostPerCCFmanualLog, 'CostPerCCFgroundCTL': CostPerCCFgroundCTL,
              'CostPerCCFcableManualWTLog': CostPerCCFcableManualWTLog,
              'CostPerCCFcableManualWT': CostPerCCFcableManualWT, 'CostPerCCFbundleResidues': CostPerCCFbundleResidues,
-             'CostPerCCFcableManualLog': CostPerCCFcableManualLog, 'CostPerCCFcableCTL': CostPerCCFcableCTL };
+             'CostPerCCFcableManualLog': CostPerCCFcableManualLog, 'CostPerCCFcableCTL': CostPerCCFcableCTL,
+             'CostPerCCFhManualLog': CostPerCCFhManualLog };
 }
 
 export { MoveInCosts };

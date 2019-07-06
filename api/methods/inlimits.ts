@@ -95,6 +95,17 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
             limit.SlopeLimit = 40;
             limit.YardingDistLimit = 1300;
             break;
+        case 'Helicopter Manual WT':
+            limit.MaxLLTperAcre = 0;
+            limit.MaxLLTasPercentALT = 0;
+            limit.AvgTreeSizeLimit4Chipping = 80;
+            limit.AvgTreeSizeLimit4Processing = 9999; // assign a large number to indicate it has no upper limit
+            limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large number to indicate it has no upper limit
+            limit.AvgTreeSizeLimit4loading = 250;
+            limit.AvgTreeSize4GrappleSkidding = 250;
+            limit.SlopeLimit = 100;
+            limit.YardingDistLimit = 10000;
+            break;
     }
     const ExceededMaxLLT = (limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0) ? 0
         : ((input.RemovalsLLT > limit.MaxLLTperAcre

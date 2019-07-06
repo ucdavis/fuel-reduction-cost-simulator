@@ -1,10 +1,14 @@
 // Inputs sheet
+import { CableCTL } from './cable/cable-ctl';
+import { CableManualLog } from './cable/cable-manual-log';
+import { CableManualWT } from './cable/cable-manual-wt';
 import { CableManualWTLog } from './cable/cable-manual-wt-log';
 import { AssumptionMod, InputVarMod, IntermediateVarMod, OutputVarMod } from './frcs.model';
 import { GroundCTL } from './ground/ground-ctl';
 import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
+import { HelicopterManualWT } from './helicopter/helicopter-manual-wt';
 
 export function calculate(input: InputVarMod) {
     const intermediate: IntermediateVarMod = { RemovalsST: 0, RemovalsALT: 0, Removals: 0, TreeVolST: 0,
@@ -184,6 +188,19 @@ export function calculate(input: InputVarMod) {
             break;
         case 'Cable Manual WT/Log':
             output = CableManualWTLog(input, intermediate, assumption);
+            break;
+        case 'Cable Manual WT':
+            output = CableManualWT(input, intermediate, assumption);
+            break;
+        case 'Cable Manual Log':
+            output = CableManualLog(input, intermediate, assumption);
+            break;
+        case 'Cable CTL':
+            output = CableCTL(input, intermediate, assumption);
+            break;
+        case 'Helicopter Manual WT':
+            output = HelicopterManualWT(input, intermediate, assumption);
+            break;
     }
 
     return output;
