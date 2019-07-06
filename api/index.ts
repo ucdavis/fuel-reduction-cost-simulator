@@ -2,8 +2,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import { calculate } from './methods/frcs';
-import { InputVarMod } from './methods/frcs.model';
+import { InputVarMod } from './systems/frcs.model';
+import { calculate } from './systems/frcsrun';
 
 dotenv.config();
 

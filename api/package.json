@@ -1,10 +1,10 @@
 {
-  "name": "fvsrunner",
+  "name": "frcs",
   "version": "1.0.0",
-  "description": "Run FVS Simulations",
-  "main": "index.js",
-  "repository": "https://github.com/ucdavis/FVSRunner.git",
-  "author": "Scott Kirkland <srkirkland@gmail.com>",
+  "description": "Fuel Reduction Cost Simulator",
+  "main": "./out/index.js",
+  "repository": "https://github.com/ucdavis/fuel-reduction-cost-simulator.git",
+  "author": "Kaiyan Li <kkyli@ucdavis.edu>",
   "license": "MIT",
   "private": false,
   "scripts": {
