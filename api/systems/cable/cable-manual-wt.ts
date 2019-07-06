@@ -52,7 +52,6 @@ function CableManualWT(input: InputVarMod, intermediate: IntermediateVarMod, ass
         + ManualFellTreesLess80cf + YardUnbunchedAllTrees + ProcessLogTreesLess80cf + LoadLogTrees + ChipWholeTrees;
     const Movein4PrimaryProduct = input.CalcMoveIn ?
         MoveInCostsResults.CostPerCCFcableManualWT * BoleVolCCF * InLimits1 : 0;
-
     const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues ?
         CostChipLooseRes * ResidueRecoveredOptional * InLimits1 : 0;
     const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;

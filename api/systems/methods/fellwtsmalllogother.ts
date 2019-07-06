@@ -72,7 +72,7 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     const CorridorIIBllt = 0.21;
     const NotBetweenOpeningsIIBllt = 1;
     const OpeningsIIBllt = 0;
-    const HeavyThinIIBllt = 0;
+    const HeavyThinIIBllt = input.cut_type ? 0 : 1;
     const DelayFracIIBllt = 0.25;
     const TimePerTreeIIBllt = (-0.465 + 0.102 * intermediate.DBHLLT + 0.016 * LimbsIIBllt
         + 0.562 * LogsIIBllt + 0.009 * input.Slope + 0.734 * WedgeIIBllt + 0.137 * CorridorIIBllt
@@ -80,6 +80,7 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     const VolPerPMHIIBllt = input.TreeVolLLT / (TimePerTreeIIBllt / 60);
     const CostPerCCFIIBllt = 100 * machineCost.PMH_Chainsaw / VolPerPMHIIBllt;
     const RelevanceIIBllt = 1;
+
     // RelevanceIIBllt =IF(input.TreeVolLLT<1,0,IF(input.TreeVolLLT<2,-1+input.TreeVolLLT/1,
     // IF(input.TreeVolLLT<70,1,1.2-input.TreeVolLLT/350)))
     // Weight relaxed at upper end to allow extrapolation to larger trees. Original was
@@ -92,12 +93,14 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     const VolPerPMHIICllt = input.TreeVolLLT / (TimePerTreeIICllt / 60);
     const CostPerCCFIICllt = 100 * machineCost.PMH_Chainsaw / VolPerPMHIICllt;
     const RelevanceIICllt = input.TreeVolLLT < 5 ? 0 : (input.TreeVolLLT < 15 ? -0.5 + input.TreeVolLLT / 10 : 1);
+
     // Weight relaxed at upper end to allow extrapolation to larger trees. Original was
     // IF(treevol<5,0,IF(treevol<15,-0.5+treevol/10,IF(treevol<90,1,IF(treevol<180,2-treevol/90,0))))
     // D) User-Defined Felling, Limbing & Bucking
     const VolPerPMHIIDllt = 0.001;
     const CostPerCCFIIDllt = 100 * machineCost.PMH_Chainsaw / VolPerPMHIIDllt;
     const RelevanceIIDllt = 0;
+
     // Summary;
     const CostManFLBLLT2 = input.TreeVolLLT > 0 ?
         intermediate.CHardwoodLLT * 100 * (machineCost.PMH_Chainsaw * RelevanceIIAllt
