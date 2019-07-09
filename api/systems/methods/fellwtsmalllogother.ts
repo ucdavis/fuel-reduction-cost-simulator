@@ -9,7 +9,7 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     // A) (McNeel, 94)
     const SelectionTimePerTreeIAst = 0.568 + 0.0193 * 0.305 * WalkDistAT + 0.0294 * 2.54 * intermediate.DBHST;
     const ClearcutTimePerTreeIAst = 0.163 + 0.0444 * 0.305 * WalkDistAT + 0.0323 * 2.54 * intermediate.DBHST;
-    const TimePerTreeIAst = input.cut_type === true ? SelectionTimePerTreeIAst
+    const TimePerTreeIAst = input.PartialCut === true ? SelectionTimePerTreeIAst
         : Math.min(SelectionTimePerTreeIAst, ClearcutTimePerTreeIAst);
     const VolPerPMHIAst = intermediate.TreeVolST / (TimePerTreeIAst / 60);
     const CostPerCCFIAst = 100 * machineCost.PMH_Chainsaw / VolPerPMHIAst;
@@ -54,8 +54,8 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     // A)  (Kellogg&Olsen, 86)
     const EastsideAdjustmentIIAllt = 1.2;
     const ClearcutAdjustmentIIAllt = 0.9;
-    const TimePerTreeIIAllt = EastsideAdjustmentIIAllt * (input.cut_type === true ?
-        1 : (input.cut_type === false ? ClearcutAdjustmentIIAllt : 0))
+    const TimePerTreeIIAllt = EastsideAdjustmentIIAllt * (input.PartialCut === true ?
+        1 : (input.PartialCut === false ? ClearcutAdjustmentIIAllt : 0))
         * (1.33 + 0.0187 * WalkDistAT2 + 0.0143 * input.Slope + 0.0987 * input.TreeVolLLT + 0.14);
     const VolPerPMHIIAllt = input.TreeVolLLT / (TimePerTreeIIAllt / 60);
     const CostPerCCFIIAllt = 100 * machineCost.PMH_Chainsaw / VolPerPMHIIAllt;
@@ -72,7 +72,7 @@ function FellwtSmallLogOther(input: InputVarMod, intermediate: IntermediateVarMo
     const CorridorIIBllt = 0.21;
     const NotBetweenOpeningsIIBllt = 1;
     const OpeningsIIBllt = 0;
-    const HeavyThinIIBllt = input.cut_type ? 0 : 1;
+    const HeavyThinIIBllt = input.PartialCut ? 0 : 1;
     const DelayFracIIBllt = 0.25;
     const TimePerTreeIIBllt = (-0.465 + 0.102 * intermediate.DBHLLT + 0.016 * LimbsIIBllt
         + 0.562 * LogsIIBllt + 0.009 * input.Slope + 0.734 * WedgeIIBllt + 0.137 * CorridorIIBllt

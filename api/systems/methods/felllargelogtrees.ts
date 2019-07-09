@@ -9,7 +9,7 @@ const PMH_Chainsaw = machineCost.PMH_Chainsaw;
 // IA (McNeel, 94)
 const SelectionTimePerTreelltA = 0.568 + 0.0193 * 0.305 * WalkDistLLT + 0.0294 * 2.54 * intermediate.DBHLLT;
 const ClearcutTimePerTreelltA = 0.163 + 0.0444 * 0.305 * WalkDistLLT + 0.0323 * 2.54 * intermediate.DBHLLT;
-const TimePerTreelltA = (input.cut_type ?
+const TimePerTreelltA = (input.PartialCut ?
     SelectionTimePerTreelltA : Math.min(SelectionTimePerTreelltA, ClearcutTimePerTreelltA));
 const VolPerPMHlltA = input.TreeVolLLT / (TimePerTreelltA / 60);
 const CostPerCCFlltA = 100 * PMH_Chainsaw / VolPerPMHlltA;
@@ -47,8 +47,8 @@ const CostManFellLLT = (input.TreeVolLLT > 0 ? intermediate.CHardwoodLLT * 100 *
 // IIA (Kellogg&Olsen, 86)
 const EastsideAdjustment = 1.2;
 const ClearcutAdjustment = 0.9;
-const TimePerTreelltIIA = EastsideAdjustment * (input.cut_type ?
-1 : (!input.cut_type ? ClearcutAdjustment : 0))
+const TimePerTreelltIIA = EastsideAdjustment * (input.PartialCut ?
+1 : (!input.PartialCut ? ClearcutAdjustment : 0))
 * (1.33 + 0.0187 * WalkDistLLT + 0.0143 * input.Slope + 0.0987 * input.TreeVolLLT + 0.14);
 const VolPerPMHlltIIA = input.TreeVolLLT / (TimePerTreelltIIA / 60);
 const CostPerCCFlltIIA = 100 * PMH_Chainsaw / VolPerPMHlltIIA;
@@ -62,7 +62,7 @@ const WedgelltIIB = 0.02;
 const CorridorlltIIB = 0.21;
 const NotBetweenOpeningslltIIB = 1;
 const OpeningslltIIB = 0;
-const HeavyThinlltIIB = (input.cut_type ? 0 : 1);
+const HeavyThinlltIIB = (input.PartialCut ? 0 : 1);
 const DelayFraclltIIB = 0.25;
 const TimePerTreelltIIB = (-0.465 + 0.102 * intermediate.DBHLLT + 0.016 * LimbslltIIB
 + 0.562 * LogslltIIB + 0.009 * input.Slope + 0.734 * WedgelltIIB + 0.137 * CorridorlltIIB

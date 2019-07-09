@@ -6,7 +6,7 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
                               AvgTreeSizeLimit4Processing: 0, AvgTreeSizeLimit4ManualFellLimbBuck: 0,
                               AvgTreeSizeLimit4loading: 0, AvgTreeSize4GrappleSkidding: 0, SlopeLimit: 0,
                               YardingDistLimit: 0 };
-    switch (input.system) {
+    switch (input.System) {
         case 'Ground-Based Mech WT':
             limit.MaxLLTperAcre = 0;
             limit.MaxLLTasPercentALT = 0;
@@ -132,7 +132,7 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
     const ExceededMaxSkidLimit = input.Slope > limit.SlopeLimit ? 1 : 0;
     // Yarding distance, ft
     const ExceededMaxYardingDist = limit.YardingDistLimit === 0 ?
-        0 : (input.deliver_dist > limit.YardingDistLimit ? 1 : 0);
+        0 : (input.DeliverDist > limit.YardingDistLimit ? 1 : 0);
     const InLimits1 = (ExceededMaxLLT === 1 || ExceededMaxTreeVol === 1
     || ExceededMaxSkidLimit === 1 || ExceededMaxYardingDist === 1) ? 0 : 1;
 

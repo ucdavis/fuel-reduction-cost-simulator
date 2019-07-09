@@ -1,10 +1,10 @@
 export interface InputVarMod {
-    system: string;
-    cut_type: boolean; // if clear_cut, cut_type = 0; otherwise 1.
-    deliver_dist: number;
+    System: string;
+    PartialCut: boolean; // if true, partial-cut; otherwise clear-cut.
+    DeliverDist: number;
     Slope: number;
     Elevation: number;
-    load_cost: boolean; // if include loading costs, load_cost=1; otherwise 0.
+    CalcLoad: boolean; // if include loading costs.
     CalcMoveIn: boolean; // if include move-in costs
     Area: number;
     MoveInDist: number; // area treated and one-way move-in distance are needed when movein_cost is checked.

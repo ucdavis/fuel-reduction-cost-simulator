@@ -16,8 +16,8 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolA = LoadFraction * MaxLoadWeightA * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermA = (LoadVolA / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOutA = input.deliver_dist + DistIntermA / 2;
-    const DistInA = Math.max(0, input.deliver_dist - DistIntermA / 2);
+    const DistOutA = input.DeliverDist + DistIntermA / 2;
+    const DistInA = Math.max(0, input.DeliverDist - DistIntermA / 2);
     const MovesA = DistIntermA / DistPerMoveF;
     const Paint = 1;
     const TravelOutA = 1.75519 + 0.00433 * DistOutA;
@@ -38,8 +38,8 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolB = LoadFraction * MaxLoadWeightB * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermB = (LoadVolB / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOutB = input.deliver_dist + DistIntermB / 2;
-    const DistInB = Math.max(0, input.deliver_dist - DistIntermB / 2);
+    const DistOutB = input.DeliverDist + DistIntermB / 2;
+    const DistInB = Math.max(0, input.DeliverDist - DistIntermB / 2);
     const MovesB = DistIntermB / DistPerMoveF;
     const LandingMovesB = 0.5;
     const LandingMoveDistPerMoveB = 100;
@@ -61,8 +61,8 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolC = LoadFraction * MaxLoadWeightC * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermC = (LoadVolC / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOutC = input.deliver_dist + DistIntermC / 2;
-    const DistInC = Math.max(0, input.deliver_dist - DistIntermC / 2);
+    const DistOutC = input.DeliverDist + DistIntermC / 2;
+    const DistInC = Math.max(0, input.DeliverDist - DistIntermC / 2);
     const MixedDummyC = 0.8;
     const PulpDummyC = 0.1;
     const VolPerPMHCforward = Math.max(100, 573.7 - 59.7 * MixedDummyC - 122.8 * PulpDummyC
@@ -75,15 +75,15 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolD = LoadFraction * MaxLoadWeightD * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermD = (LoadVolD / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOutD = input.deliver_dist + DistIntermD / 2;
-    const DistInD = Math.max(0, input.deliver_dist - DistIntermD / 2);
+    const DistOutD = input.DeliverDist + DistIntermD / 2;
+    const DistInD = Math.max(0, input.DeliverDist - DistIntermD / 2);
     const RoadDistD = 50;
     const MultipleCorridorDummyD = 0.08;
     const ColdDummyD = 0.83;
     const SawlogFractionD = 0.02;
     const TravelEmptyOnRoadD = (11.25 + 0.26 * RoadDistD) / 100;
-    const TravelOutAndTravelLoadedD = (103.36 + 0.8114 * input.deliver_dist
-        + 0.0117 * input.deliver_dist * input.Slope) / 100;
+    const TravelOutAndTravelLoadedD = (103.36 + 0.8114 * input.DeliverDist
+        + 0.0117 * input.DeliverDist * input.Slope) / 100;
     const LoadD = (235.81 + Math.max(0, 1549.6 * LoadFraction - 128.48 * LoadFraction * intermediate.CTLLogVol)) / 100;
     const TravelIntermD = (51.21 + 0.7519 * DistIntermD + 90.84 * MultipleCorridorDummyD) / 100;
     const TravelLoadedOnRoadD = (36.82 + 0.198 * RoadDistD) / 100;
@@ -100,7 +100,7 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolE = LoadFraction * MaxLoadWeightE * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const PiecesE = LoadVolE / intermediate.CTLLogVol;
-    const TurnTimeE = 10.7 + 0.14 * PiecesE + 0.01 * (input.deliver_dist / 3.28);
+    const TurnTimeE = 10.7 + 0.14 * PiecesE + 0.01 * (input.DeliverDist / 3.28);
     const VolPerPMHEforward = LoadVolB / (TurnTimeE / 60);
     const CostPerCCFEforward = 100 * ForwarderHourlyCost / VolPerPMHEforward;
     const RelevanceEforward = intermediate.TreeVolST < 10 ?
@@ -111,8 +111,8 @@ function Forwarding(assumption: AssumptionMod, input: InputVarMod,
     const LoadVolF = LoadFraction * MaxLoadWeightF * 2000
         / intermediate.WoodDensityST * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermF = (LoadVolF / intermediate.VolPerAcreST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOutF = input.deliver_dist + DistIntermF / 2;
-    const DistInF = Math.max(0, input.deliver_dist - DistIntermF / 2);
+    const DistOutF = input.DeliverDist + DistIntermF / 2;
+    const DistInF = Math.max(0, input.DeliverDist - DistIntermF / 2);
     const LoadingStopsF = DistIntermF / DistPerMoveF;
     const TravelEmptyF = 0.0028 * DistOutF;
     const TravelWhileLoadingF = 0.0087 * DistIntermF;

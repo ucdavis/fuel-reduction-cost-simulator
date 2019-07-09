@@ -16,7 +16,7 @@ function CYCTL(assumption: AssumptionMod, input: InputVarMod, intermediate: Inte
     // Partial cut corridor changes
     function PCSLChangeCost(CorridorChangeTime: number) {
         const CorriderSpacingRunning = 150;
-        const AreaChangeRunning = input.deliver_dist * 2 * CorriderSpacingRunning / 43560;
+        const AreaChangeRunning = input.DeliverDist * 2 * CorriderSpacingRunning / 43560;
         return 100 * (YarderHourlyCost * CorridorChangeTime) / (intermediate.VolPerAcre * AreaChangeRunning);
     }
     // Running & Live
@@ -30,7 +30,7 @@ function CYCTL(assumption: AssumptionMod, input: InputVarMod, intermediate: Inte
     const Hotset = 0;
     const Chokersetters = 2;
     const TurnTime = (145.5 + 43.77 * Chokers + 45.88 * Hotset + 0.639 * LatDist - 26.1 * Chokersetters
-        + 0.0004806 * Math.pow(input.deliver_dist, 2) + 0.007775 * Math.pow(LatDist, 2)) / 100;
+        + 0.0004806 * Math.pow(input.DeliverDist, 2) + 0.007775 * Math.pow(LatDist, 2)) / 100;
     const VolPerPMH = TurnVol / (TurnTime / 60);
     const Yarding = 100 * YarderHourlyCost / VolPerPMH;
     const ChangePerShift = PCLiveStandSLChangeCost;

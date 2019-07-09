@@ -36,8 +36,8 @@ function CableManualLog(input: InputVarMod, intermediate: IntermediateVarMod, as
 
     // C. For All Products, $/ac
     const ManualFellLimbBuckAllTrees = CostManFLB * intermediate.VolPerAcre / 100 * InLimits1;
-    const YardUnbunchedAllTrees = (input.cut_type === true ?
-        CostYardPCUB : (input.cut_type === false ? CostYardCCUB : 0)) * intermediate.VolPerAcre / 100 * InLimits1;
+    const YardUnbunchedAllTrees = (input.PartialCut === true ?
+        CostYardPCUB : (input.PartialCut === false ? CostYardCCUB : 0)) * intermediate.VolPerAcre / 100 * InLimits1;
     const LoadLogTrees = CostLoad * intermediate.VolPerAcreALT / 100 * InLimits1;
     const ChipWholeTrees = CostChipWT * intermediate.VolPerAcreCT / 100 * InLimits1;
 

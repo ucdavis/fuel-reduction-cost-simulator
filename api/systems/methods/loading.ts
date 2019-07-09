@@ -64,7 +64,7 @@ function Loading(assumption: AssumptionMod, input: InputVarMod,
 
     // Loading Summary
     // I. Loading Full-Length Logs
-    const CostLoad = input.load_cost ?
+    const CostLoad = input.CalcLoad ?
     (intermediate.TreeVolALT > 0 ? intermediate.CHardwoodALT * 100 * (LoaderHourlyCost * RelevanceLoadingIA
     + LoaderHourlyCost * RelevanceLoadingIB + LoaderHourlyCost * RelevanceLoadingIC
     + LoaderHourlyCost * RelevanceLoadingID + LoaderHourlyCost * RelevanceLoadingIE)
@@ -72,7 +72,7 @@ function Loading(assumption: AssumptionMod, input: InputVarMod,
     + RelevanceLoadingIC * VolPerPMHloadingIC + RelevanceLoadingID * VolPerPMHloadingID
     + RelevanceLoadingIE * VolPerPMHloadingIE) : 0) : 0;
     // II. Loading CTL Logs
-    const CostLoadCTL = input.load_cost ?
+    const CostLoadCTL = input.CalcLoad ?
     (input.TreeVolSLT > 0 ? intermediate.CHardwoodSLT * 100 * (LoaderHourlyCost * RelevanceLoadingIIA
     + LoaderHourlyCost * RelevanceLoadingIIB + LoaderHourlyCost * RelevanceLoadingIIC)
     / (RelevanceLoadingIIA * VolPerPMHloadingIIA + RelevanceLoadingIIB * VolPerPMHloadingIIB

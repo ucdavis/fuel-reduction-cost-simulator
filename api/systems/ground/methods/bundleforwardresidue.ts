@@ -40,8 +40,8 @@ function BundleForwardResidue(assumption: AssumptionMod, input: InputVarMod,
     const MaxLoadWeightIIAbfr = 1.1 * 10;
     const LoadWeightIIAbfr = LoadFractionForBundles * MaxLoadWeightIIAbfr * intermediate.CSlopeSkidForwLoadSize;
     const DistIntermIIAbrf = (LoadWeightIIAbfr / intermediate.ResidueST) * 43560 / assumption.CTLTrailSpacing;
-    const DistOut = Math.min(2 * input.deliver_dist, input.deliver_dist + DistIntermIIAbrf / 2);
-    const DistIn = Math.max(0, input.deliver_dist - DistIntermIIAbrf / 2);
+    const DistOut = Math.min(2 * input.DeliverDist, input.DeliverDist + DistIntermIIAbrf / 2);
+    const DistIn = Math.max(0, input.DeliverDist - DistIntermIIAbrf / 2);
     const BundlesPerLoad = LoadWeightIIAbfr / BundleWeight;
     const DistPerMove = Math.max(DistPerMoveF, DistIntermIIAbrf / BundlesPerLoad);
     const MovesIIAbfr = DistIntermIIAbrf / DistPerMove;

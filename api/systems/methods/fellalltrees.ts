@@ -8,7 +8,7 @@ function FellAllTrees(input: InputVarMod, intermediate: IntermediateVarMod, mach
     // A) (McNeel, 94)
     const SelectionTimePerTreeIAat = 0.568 + 0.0193 * 0.305 * WalkDistAT + 0.0294 * 2.54 * intermediate.DBH;
     const ClearcutTimePerTreeIAat = 0.163 + 0.0444 * 0.305 * WalkDistAT + 0.0323 * 2.54 * intermediate.DBH;
-    const TimePerTreeIAat = input.cut_type === true ? SelectionTimePerTreeIAat
+    const TimePerTreeIAat = input.PartialCut === true ? SelectionTimePerTreeIAat
         : Math.min(SelectionTimePerTreeIAat, ClearcutTimePerTreeIAat);
     const VolPerPMHIAat = intermediate.TreeVol / (TimePerTreeIAat / 60);
     const CostPerCCFIAat = 100 * machineCost.PMH_Chainsaw / VolPerPMHIAat;
@@ -47,8 +47,8 @@ function FellAllTrees(input: InputVarMod, intermediate: IntermediateVarMod, mach
     // A)  (Kellogg&Olsen, 86)
     const EastsideAdjustmentIIAat = 1.2;
     const ClearcutAdjustmentIIAat = 0.9;
-    const TimePerTreeIIAat = EastsideAdjustmentIIAat * (input.cut_type === true ?
-        1 : (input.cut_type === false ? ClearcutAdjustmentIIAat : 0))
+    const TimePerTreeIIAat = EastsideAdjustmentIIAat * (input.PartialCut === true ?
+        1 : (input.PartialCut === false ? ClearcutAdjustmentIIAat : 0))
         * (1.33 + 0.0187 * WalkDistAT + 0.0143 * input.Slope + 0.0987 * intermediate.TreeVol + 0.14);
     const VolPerPMHIIAat = intermediate.TreeVol / (TimePerTreeIIAat / 60);
     const CostPerCCFIIAat = 100 * machineCost.PMH_Chainsaw / VolPerPMHIIAat;

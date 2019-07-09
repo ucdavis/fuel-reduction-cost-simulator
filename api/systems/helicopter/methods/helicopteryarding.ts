@@ -137,7 +137,7 @@ function HelicopterYarding(input: InputVarMod, intermediate: IntermediateVarMod)
         const AfterAdjustment = LoadAdjustFactor * ObservedAvgAtElev;
         const AfterOneLogMinCheck = Math.max(AfterAdjustment, Math.min(LogWt, ObservedAvgAtElev));
         const After10LogMaxCheck = Math.min(10 * LogWt, AfterOneLogMinCheck);
-        const TravEmptyLoaded = 2 * 60 * input.deliver_dist / (YardingSpeed * 5280);
+        const TravEmptyLoaded = 2 * 60 * input.DeliverDist / (YardingSpeed * 5280);
         const TotalCycleTime = LoadUnload + TravEmptyLoaded;
         const ServiceFlightTime = ServiceCycles * 2 * 60 * ExtraServiceFlightDist / (YardingSpeed * 5280);
         const TurnsPerDay = (60 * FlightTime - ServiceFlightTime) / TotalCycleTime;
@@ -158,7 +158,7 @@ function HelicopterYarding(input: InputVarMod, intermediate: IntermediateVarMod)
         const AfterAdjustment = LoadAdjustFactor * ObservedAvgAtElev;
         const AfterOneLogMinCheck = Math.max(AfterAdjustment, Math.min(LogWtST, ObservedAvgAtElev));
         const After10LogMaxCheck = Math.min(10 * LogWtST, AfterOneLogMinCheck);
-        const TravEmptyLoaded = 2 * 60 * input.deliver_dist / (YardingSpeed * 5280);
+        const TravEmptyLoaded = 2 * 60 * input.DeliverDist / (YardingSpeed * 5280);
         const TotalCycleTime = LoadUnload + TravEmptyLoaded;
         const ServiceFlightTime = ServiceCycles * 2 * 60 * ExtraServiceFlightDist / (YardingSpeed * 5280);
         const TurnsPerDay = (60 * FlightTime - ServiceFlightTime) / TotalCycleTime;

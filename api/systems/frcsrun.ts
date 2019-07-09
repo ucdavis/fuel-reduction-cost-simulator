@@ -174,7 +174,7 @@ export function calculate(input: InputVarMod) {
     intermediate.CHardwoodALT = 1 + assumption.HdwdCostPremium * intermediate.HdwdFractionALT;
     intermediate.CHardwood = 1 + assumption.HdwdCostPremium * intermediate.HdwdFraction;
 
-    switch (input.system) {
+    switch (input.System) {
         case 'Ground-Based Mech WT':
             output = GroundMechWT(input, intermediate, assumption);
             break;

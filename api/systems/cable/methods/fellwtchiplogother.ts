@@ -9,7 +9,7 @@ function FellwtChipLogOther(input: InputVarMod, intermediate: IntermediateVarMod
     // A) (McNeel, 94)
     const SelectionTimePerTreeIA = 0.568 + 0.0193 * 0.305 * WalkDistAT + 0.0294 * 2.54 * intermediate.DBHCT;
     const ClearcutTimePerTreeIA = 0.163 + 0.0444 * 0.305 * WalkDistAT + 0.0323 * 2.54 * intermediate.DBHCT;
-    const TimePerTreeIA = input.cut_type === true ? SelectionTimePerTreeIA
+    const TimePerTreeIA = input.PartialCut === true ? SelectionTimePerTreeIA
         : Math.min(SelectionTimePerTreeIA, ClearcutTimePerTreeIA);
     const VolPerPMHIA = input.TreeVolCT / (TimePerTreeIA / 60);
     const CostPerCCFIA = 100 * machineCost.PMH_Chainsaw / VolPerPMHIA;
@@ -54,8 +54,8 @@ function FellwtChipLogOther(input: InputVarMod, intermediate: IntermediateVarMod
     // A)  (Kellogg&Olsen, 86)
     const EastsideAdjustmentIIA = 1.2;
     const ClearcutAdjustmentIIA = 0.9;
-    const TimePerTreeIIA = EastsideAdjustmentIIA * (input.cut_type === true ?
-        1 : (input.cut_type === false ? ClearcutAdjustmentIIA : 0))
+    const TimePerTreeIIA = EastsideAdjustmentIIA * (input.PartialCut === true ?
+        1 : (input.PartialCut === false ? ClearcutAdjustmentIIA : 0))
         * (1.33 + 0.0187 * WalkDistAT2 + 0.0143 * input.Slope + 0.0987 * intermediate.TreeVolALT + 0.14);
     const VolPerPMHIIA = intermediate.TreeVolALT / (TimePerTreeIIA / 60);
     const CostPerCCFIIA = 100 * machineCost.PMH_Chainsaw / VolPerPMHIIA;

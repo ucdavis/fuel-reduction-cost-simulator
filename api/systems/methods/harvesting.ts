@@ -183,7 +183,7 @@ function Harvesting(assumption: AssumptionMod, input: InputVarMod,
         1 : (intermediate.TreeVolST < 80 ? 2 - intermediate.TreeVolST / 40 : 0);
     // O) FMG 1870 w/TJ 762B (Eliasson, L., J. Bengtsson, J. Cedergren and H. Lageson. 99.
     // Comparison of single grip harvester productivity in clear and shelterwood cutting. J. For. Engr. 10(1):43-48)
-    const TimePerTreeIOharvest = input.cut_type ?
+    const TimePerTreeIOharvest = input.PartialCut ?
         (0.35 + 0.012 * intermediate.TreeVolST + (0.04 + 0.003 * intermediate.TreeVolST)
         - 0.00006 * intermediate.RemovalsST) * (1 + intermediate.CSlopeFB_Harv)
         : (0.35 + 0.012 * intermediate.TreeVolST - 0.00006 * intermediate.RemovalsST)
@@ -198,7 +198,7 @@ function Harvesting(assumption: AssumptionMod, input: InputVarMod,
         * (1 + intermediate.CSlopeFB_Harv + intermediate.CRemovalsFB_Harv);
     const VolPerPMHIPharvest = VolPerPMHfunc(TimePerTreeIPharvest);
     const CostPerCCFIPharvest = CostPerCCFfunc(VolPerPMHIPharvest);
-    const RelevanceIPharvest = input.cut_type ? (intermediate.TreeVolST < 20 ?
+    const RelevanceIPharvest = input.PartialCut ? (intermediate.TreeVolST < 20 ?
         1 : (intermediate.TreeVolST < 40 ? 2 - intermediate.TreeVolST / 20 : 0)) : 0;
     // Q) Ponsse Ergo (Bolding, M.C. and B. Lanford. 02. Productivity of a Ponsse Ergo harvester working on
     // steep terrain. In: Council on Forest Engineering Proceedings, Auburn, Alabama)
@@ -234,7 +234,7 @@ function Harvesting(assumption: AssumptionMod, input: InputVarMod,
         + HarvesterHourlyCost * RelevanceIRharvest + HarvesterHourlyCost * RelevanceIJharvest;
     const WeightAverageHarvesting = intermediate.TreeVolST > 0 ?
         intermediate.CHardwoodST * 100 * IntermediateCalcs2 / IntermediateCalcs1 : 0;
-    const CostHarvest = WeightAverageHarvesting * (input.cut_type ? 1 : 0.9);
+    const CostHarvest = WeightAverageHarvesting * (input.PartialCut ? 1 : 0.9);
 
     return CostHarvest;
 }

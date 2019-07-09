@@ -49,8 +49,8 @@ function CableManualWTLog(input: InputVarMod, intermediate: IntermediateVarMod, 
     // const YardUnbunchedAllTrees = 0;
     const ManualFellLimbBuckAllLogTrees = CostManFLBALT2 * intermediate.VolPerAcreALT / 100 * InLimits1;
     const ManualFellChipTrees = CostManFellCT2 * intermediate.VolPerAcreCT / 100 * InLimits1;
-    const YardUnbunchedAllTrees = (input.cut_type === true ?
-        CostYardPCUB : (input.cut_type === false ? CostYardCCUB : 0)) * intermediate.VolPerAcre / 100 * InLimits1;
+    const YardUnbunchedAllTrees = (input.PartialCut === true ?
+        CostYardPCUB : (input.PartialCut === false ? CostYardCCUB : 0)) * intermediate.VolPerAcre / 100 * InLimits1;
     const LoadLogTrees = CostLoad * intermediate.VolPerAcreALT / 100 * InLimits1;
     const ChipWholeTrees = CostChipWT * intermediate.VolPerAcreCT / 100 * InLimits1;
 
