@@ -17,15 +17,15 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
-app.get('/frcsrun', async (req, res) => {
+app.post('/frcsrun', async (req, res) => {
   const params: InputVarMod = req.body;
   console.log(req.body);
   const result = await calculate(params);
   console.log(result);
   res.status(200).json(result);
-  res.status(400).send('Invalid parameters supplied');
 });
 
+// put swagger.json in out dir after compiling.
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
