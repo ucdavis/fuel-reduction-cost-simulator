@@ -1,0 +1,219 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "version": "1.0.0",
+    "title": "Fuel Reduction Cost Simulator",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "FRCS",
+      "description": "Fuel Reduction Cost Simulator"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/frcsrun": {
+      "get": {
+        "tags": [
+          "frcs"
+        ],
+        "summary": "Runs FRCS from given input",
+        "description": "",
+        "operationId": "runFRCS",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "schema": {
+              "$ref": "#/definitions/InputVarMod"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OutputVarMod"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters supplied"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "InputVarMod": {
+      "type": "object",
+      "properties": {
+        "System": {
+          "type": "string",
+          "example": "Cable Manual WT"
+        },
+        "PartialCut": {
+          "type": "boolean",
+          "example": true
+        },
+        "DeliverDist": {
+          "type": "number",
+          "format": "float",
+          "example": 400
+        },
+        "Slope": {
+          "type": "number",
+          "format": "float",
+          "example": 30
+        },
+        "Elevation": {
+          "type": "number",
+          "format": "float",
+          "example": 5000
+        },
+        "CalcLoad": {
+          "type": "boolean",
+          "example": true
+        },
+        "CalcMoveIn": {
+          "type": "boolean",
+          "example": true
+        },
+        "Area": {
+          "type": "number",
+          "format": "float",
+          "example": 1
+        },
+        "MoveInDist": {
+          "type": "number",
+          "format": "float",
+          "example": 2
+        },
+        "CalcResidues": {
+          "type": "boolean",
+          "example": true
+        },
+        "UserSpecWDCT": {
+          "type": "number",
+          "format": "float",
+          "example": 60
+        },
+        "UserSpecWDSLT": {
+          "type": "number",
+          "format": "float",
+          "example": 58.6235
+        },
+        "UserSpecWDLLT": {
+          "type": "number",
+          "format": "float",
+          "example": 62.1225
+        },
+        "UserSpecRFCT": {
+          "type": "number",
+          "format": "float",
+          "example": 0
+        },
+        "UserSpecRFSLT": {
+          "type": "number",
+          "format": "float",
+          "example": 0.25
+        },
+        "UserSpecRFLLT": {
+          "type": "number",
+          "format": "float",
+          "example": 0.38
+        },
+        "UserSpecHFCT": {
+          "type": "number",
+          "format": "float",
+          "example": 0.2
+        },
+        "UserSpecHFSLT": {
+          "type": "number",
+          "format": "float",
+          "example": 0
+        },
+        "UserSpecHFLLT": {
+          "type": "number",
+          "format": "float",
+          "example": 0
+        },
+        "RemovalsCT": {
+          "type": "number",
+          "format": "float",
+          "example": 20
+        },
+        "TreeVolCT": {
+          "type": "number",
+          "format": "float",
+          "example": 50
+        },
+        "RemovalsSLT": {
+          "type": "number",
+          "format": "float",
+          "example": 50
+        },
+        "TreeVolSLT": {
+          "type": "number",
+          "format": "float",
+          "example": 70
+        },
+        "RemovalsLLT": {
+          "type": "number",
+          "format": "float",
+          "example": 5
+        },
+        "TreeVolLLT": {
+          "type": "number",
+          "format": "float",
+          "example": 100
+        }
+      },
+      "xml": {
+        "name": "InputVarMod"
+      }
+    },
+    "OutputVarMod": {
+      "type": "object",
+      "properties": {
+        "TotalPerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "description": "Logging Cost per Hundred Cubic Feet"
+        },
+        "TotalPerGT": {
+          "type": "number",
+          "format": "float",
+          "description": "Logging Cost per Green Ton"
+        },
+        "TotalPerAcre": {
+          "type": "number",
+          "format": "float",
+          "description": "Logging Cost per Acre"
+        }
+      },
+      "xml": {
+        "name": "OutputVarMod"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
