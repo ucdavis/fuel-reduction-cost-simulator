@@ -1,0 +1,147 @@
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: montserrat, sans-serif;
+    padding: 2% 1%;
+}
+
+header {
+    /*height: 2vw;*/
+    font-weight: bold;
+    font-size: xx-large;
+    color: blue;
+    margin-bottom: 2%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    /*height: 90%;*/
+}
+
+.upper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+.config {
+    display: flex;
+    flex-direction: column;
+    border: 2px aquamarine solid;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    margin-right: 1%;
+    margin-bottom: 1%;
+}
+
+.check {
+    display: flex;
+    flex-direction: column;
+    border: 2px aquamarine solid;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    margin-right: 1%;
+    margin-bottom: 1%;
+}
+
+.charact{
+    border: 2px aquamarine solid;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    margin-bottom: 1%;
+}
+
+.elemConfig {
+    display: flex;
+    flex-direction: row;
+}
+
+.subtitle {
+    font-size: x-large;
+    font-weight: bold;
+    border-bottom: 2px aquamarine solid;
+}
+
+input {
+    /*-webkit-appearance: none;*/
+    opacity: 1;
+    width: 7em;
+}
+
+th {
+    text-align: right;
+}
+
+th.checkbox {
+    text-align: left;
+}
+
+.CHARACTERISTICS .t1 {text-align:center;vertical-align:top}
+
+.t  {
+    border-collapse:collapse;
+    border-spacing:0;
+    /*table-layout: auto;*/
+}
+.t td{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    padding:10px 5px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:black;
+}
+.t th{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    font-weight:normal;
+    padding:10px 5px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:black;}
+.t .t1{text-align:center;vertical-align:top;font-weight: bold}
+.t .t2{text-align:left;vertical-align:top}
+
+.results {
+    width: 500px;
+    height: 150px;
+}
+
+table th td {
+    border: 1px solid black;
+}
+
+.lower  {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1%;
+}
+
+.input_table{
+    margin-right: 1%;
+}
+
+@media screen and (max-width: 900px){
+    .upper{
+        flex-direction: column;
+    }
+
+    .lower {
+        flex-direction: column;
+    }
+    .input_table{
+        margin-bottom: 1%;
+    }
+}
+
