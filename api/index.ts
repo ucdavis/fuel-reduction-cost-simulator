@@ -7,7 +7,7 @@ import { InputVarMod } from './systems/frcs.model';
 import { calculate } from './systems/frcsrun';
 
 // tslint:disable-next-line: no-var-requires
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('../swagger.json');
 
 dotenv.config();
 
@@ -25,7 +25,6 @@ app.post('/frcsrun', async (req, res) => {
   res.status(200).json(result);
 });
 
-// put swagger.json in out dir after compiling.
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
