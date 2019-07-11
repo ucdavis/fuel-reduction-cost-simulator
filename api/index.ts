@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 const port = 3000;
 
