@@ -13,10 +13,11 @@ dotenv.config();
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 const port = 3000;
 
+// api endpoint for running frcs
 app.post('/frcsrun', async (req, res) => {
   const params: InputVarMod = req.body;
   console.log(req.body);
@@ -25,6 +26,14 @@ app.post('/frcsrun', async (req, res) => {
   res.status(200).json(result);
 });
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// serve public static files
+app.use(express.static('public'));
+
+// serve swagger docs
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.get('/', (req, res) => {
+  res.redirect('/docs');
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
