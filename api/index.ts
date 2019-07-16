@@ -32,4 +32,8 @@ app.use(express.static('public'));
 // serve swagger docs
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get('/', (req, res) => {
+  res.redirect('/docs');
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));
