@@ -136,6 +136,9 @@ function InLimits(input: InputVarMod, intermediate: IntermediateVarMod) {
     const InLimits1 = (ExceededMaxLLT === 1 || ExceededMaxTreeVol === 1
     || ExceededMaxSkidLimit === 1 || ExceededMaxYardingDist === 1) ? 0 : 1;
 
+  if (!InLimits1) {
+    throw new Error('Invalid parameters supplied');
+  }
     return InLimits1;
 }
 
