@@ -25,11 +25,8 @@ app.post('/frcsrun', async (req, res) => {
     res.status(400).send(message);
     return;
   }
-  console.log(req.body);
-  console.log(params);
   try {
     const result = await calculate(params);
-    console.log(result);
     res.status(200).json(result);
   } catch (e) {
     res.status(400).send('ERROR: Invalid parameters supplied');
