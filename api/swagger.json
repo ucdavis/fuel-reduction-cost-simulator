@@ -19,7 +19,6 @@
       "description": "Fuel Reduction Cost Simulator"
     }
   ],
-  "schemes": ["http"],
   "paths": {
     "/frcsrun": {
       "post": {
