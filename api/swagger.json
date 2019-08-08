@@ -17,7 +17,7 @@
   "tags": [
     {
       "name": "FRCS",
-      "description": "Fuel Reduction Cost Simulator"
+      "description": "Fuel Reduction Cost Simulator (FRCS). Find out more about it in [Users Guide](https://www.fs.fed.us/pnw/pubs/pnw_gtr668.pdf)"
     }
   ],
   "schemes": [
