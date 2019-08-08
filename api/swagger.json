@@ -20,21 +20,15 @@
       "description": "Fuel Reduction Cost Simulator"
     }
   ],
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/frcsrun": {
       "post": {
-        "tags": [
-          "frcs"
-        ],
+        "tags": ["frcs"],
         "summary": "Runs FRCS from given input",
         "description": "",
         "operationId": "runFRCS",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -64,21 +58,25 @@
       "properties": {
         "System": {
           "type": "string",
-          "example": "Cable Manual WT"
+          "example": "Cable Manual WT",
+          "required": true
         },
         "PartialCut": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "required": true
         },
         "DeliverDist": {
           "type": "number",
           "format": "float",
-          "example": 400
+          "example": 400,
+          "required": true
         },
         "Slope": {
           "type": "number",
           "format": "float",
-          "example": 30
+          "example": 30,
+          "required": true
         },
         "Elevation": {
           "type": "number",
@@ -87,25 +85,30 @@
         },
         "CalcLoad": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "required": true
         },
         "CalcMoveIn": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "required": true
         },
         "Area": {
           "type": "number",
           "format": "float",
-          "example": 1
+          "example": 1,
+          "required": true
         },
         "MoveInDist": {
           "type": "number",
           "format": "float",
-          "example": 2
+          "example": 2,
+          "required": true
         },
         "CalcResidues": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "required": true
         },
         "UserSpecWDCT": {
           "type": "number",
@@ -155,32 +158,38 @@
         "RemovalsCT": {
           "type": "number",
           "format": "float",
-          "example": 20
+          "example": 20,
+          "required": true
         },
         "TreeVolCT": {
           "type": "number",
           "format": "float",
-          "example": 50
+          "example": 50,
+          "required": true
         },
         "RemovalsSLT": {
           "type": "number",
           "format": "float",
-          "example": 50
+          "example": 50,
+          "required": true
         },
         "TreeVolSLT": {
           "type": "number",
           "format": "float",
-          "example": 70
+          "example": 70,
+          "required": true
         },
         "RemovalsLLT": {
           "type": "number",
           "format": "float",
-          "example": 5
+          "example": 5,
+          "required": true
         },
         "TreeVolLLT": {
           "type": "number",
           "format": "float",
-          "example": 100
+          "example": 100,
+          "required": true
         }
       },
       "xml": {

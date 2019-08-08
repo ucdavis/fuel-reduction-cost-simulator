@@ -53,9 +53,12 @@ function createErrorMessages(params: InputVarMod) {
 
   // check that each param that exists has the correct type
   for (const key in paramDesc) {
-    if (typeof paramDesc[key].value !== typeof exampleDesc[key].value) {
+    if (
+      !key.includes('User') &&
+      typeof paramDesc[key].value !== typeof exampleDesc[key].value
+    ) {
       message += `wrong type for ${key} (should be ${typeof exampleDesc[key]
-        .value}) \n`;
+        .value}, was ${typeof paramDesc[key].value}) \n`;
     }
   }
 
@@ -68,7 +71,7 @@ function createErrorMessages(params: InputVarMod) {
     params.Elevation < 0
   ) {
     message +=
-      'elevation is required to be a valid number for the system you have selected';
+      'elevation is required to be a valid number for the system you have selected\n';
   }
 
   return message;
