@@ -15,7 +15,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // api endpoint for running frcs
 app.post('/frcsrun', async (req, res) => {

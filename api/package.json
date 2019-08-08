@@ -12,7 +12,7 @@
     "build": "tsc",
     "dev": "yarn build && node .",
     "watch": "nodemon --watch . -e ts --exec yarn dev",
-    "start": "node ./index.js",
+    "start": "npm run-script build && node ./out/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
