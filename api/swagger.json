@@ -13,28 +13,20 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "localhost:3000",
   "tags": [
     {
       "name": "FRCS",
       "description": "Fuel Reduction Cost Simulator (FRCS). Find out more about it in [Users Guide](https://www.fs.fed.us/pnw/pubs/pnw_gtr668.pdf)"
     }
   ],
-  "schemes": [
-    "http"
-  ],
   "paths": {
     "/frcsrun": {
       "post": {
-        "tags": [
-          "frcs"
-        ],
+        "tags": ["frcs"],
         "summary": "Runs FRCS from given input",
         "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual WT | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 |  |  | 80 |  | 80 |  | 80 |\n| TreeVol Max LLT, ft3 | 250 | 100 | 500 |  |  | 500 |  | 100 |  | 100 |\n| TreeVol Max ALT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| TreeVol Max AT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max Slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
         "operationId": "runFRCS",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
