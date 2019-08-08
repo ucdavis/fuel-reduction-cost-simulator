@@ -64,123 +64,169 @@
       "properties": {
         "System": {
           "type": "string",
-          "example": "Cable Manual WT"
+          "example": "Cable Manual WT",
+          "description": "Select from a list of 10 types of harvesting systems.",
+          "enum": [
+            "Ground-Based Mech WT",
+            "Ground-Based Manual WT",
+            "Ground-Based Manual Log",
+            "Ground-Based CTL",
+            "Cable Manual WT/Log",
+            "Cable Manual WT",
+            "Cable Manual Log",
+            "Cable CTL",
+            "Helicopter Manual WT",
+            "Helicopter CTL"
+          ]
         },
         "PartialCut": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "description": "Type of harvest: clearcut or partial cut? If true, partial-cut; otherwise clear-cut."
         },
         "DeliverDist": {
           "type": "number",
           "format": "float",
-          "example": 400
+          "example": 400,
+          "description": "Average distance in feet that logs or trees are delivered to the landing. For ground-based and cable systems this is measured along the slope."
         },
         "Slope": {
           "type": "number",
           "format": "float",
-          "example": 30
+          "example": 30,
+          "description": "Average slope for the harvest unit in percent."
         },
         "Elevation": {
           "type": "number",
           "format": "float",
-          "example": 5000
+          "example": 5000,
+          "description": "Elevation is required for helicopter systems."
         },
         "CalcLoad": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "description": "Include the costs of fuel loading?"
         },
         "CalcMoveIn": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "description": "Include the costs of moving equipment to the harvesting unit?"
         },
         "Area": {
           "type": "number",
           "format": "float",
-          "example": 1
+          "example": 1,
+          "description": "Area in acres of one harvest unit if this is the only unit in a treatment contract or timber; Area in acres of the combined harvest units if multiple units that would likely be harvested together are close enough to drive equipment between them."
         },
         "MoveInDist": {
           "type": "number",
           "format": "float",
-          "example": 2
+          "example": 2,
+          "description": "One-way move-in distance in miles."
         },
         "CalcResidues": {
           "type": "boolean",
-          "example": true
+          "example": true,
+          "description": "Include the costs of collecting and chipping residues? This option is only available for the three WT systems and the ground-based CTL system."
         },
         "UserSpecWDCT": {
           "type": "number",
           "format": "float",
-          "example": 60
+          "default": 60,
+          "example": 60,
+          "description": "User specified green wood density of chip trees in pounds per cubic foot."
         },
         "UserSpecWDSLT": {
           "type": "number",
           "format": "float",
-          "example": 58.6235
+          "default": 60,
+          "example": 58.6235,
+          "description": "User specified green wood density of small log trees in pounds per cubic foot."
         },
         "UserSpecWDLLT": {
           "type": "number",
           "format": "float",
-          "example": 62.1225
+          "default": 60,
+          "example": 62.1225,
+          "description": "User specified green wood density of large log trees in pounds per cubic foot."
         },
         "UserSpecRFCT": {
           "type": "number",
           "format": "float",
-          "example": 0
+          "default": 0,
+          "example": 0,
+          "description": "User specified residue fraction of chip trees."
         },
         "UserSpecRFSLT": {
           "type": "number",
           "format": "float",
-          "example": 0.25
+          "default": 0,
+          "example": 0.25,
+          "description": "User specified residue fraction of small log trees."
         },
         "UserSpecRFLLT": {
           "type": "number",
           "format": "float",
-          "example": 0.38
+          "default": 0,
+          "example": 0.38,
+          "description": "User specified residue fraction of large log trees."
         },
         "UserSpecHFCT": {
           "type": "number",
           "format": "float",
-          "example": 0.2
+          "default": 0,
+          "example": 0.2,
+          "description": "User specified hardwood fraction of chip trees."
         },
         "UserSpecHFSLT": {
           "type": "number",
           "format": "float",
-          "example": 0
+          "default": 0,
+          "example": 0,
+          "description": "User specified hardwood fraction of small log trees."
         },
         "UserSpecHFLLT": {
           "type": "number",
           "format": "float",
-          "example": 0
+          "default": 0,
+          "example": 0,
+          "description": "User specified hardwood fraction of large log trees."
         },
         "RemovalsCT": {
           "type": "number",
           "format": "float",
-          "example": 20
+          "example": 20,
+          "description": "Removals of chip trees per acre."
         },
         "TreeVolCT": {
           "type": "number",
           "format": "float",
-          "example": 50
+          "example": 50,
+          "description": "Tree volume of chip trees in cubic feet per tree."
         },
         "RemovalsSLT": {
           "type": "number",
           "format": "float",
-          "example": 50
+          "example": 50,
+          "description": "Removals of small log trees per acre."
         },
         "TreeVolSLT": {
           "type": "number",
           "format": "float",
-          "example": 70
+          "example": 70,
+          "description": "Tree volume of small log trees in cubic feet per tree."
         },
         "RemovalsLLT": {
           "type": "number",
           "format": "float",
-          "example": 5
+          "example": 5,
+          "description": "Removals of large log trees per acre."
         },
         "TreeVolLLT": {
           "type": "number",
           "format": "float",
-          "example": 100
+          "example": 100,
+          "description": "Tree volume of large log trees in cubic feet per tree."
         }
       },
       "required": [
