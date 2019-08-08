@@ -13,28 +13,21 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "localhost:3000",
   "tags": [
     {
       "name": "FRCS",
       "description": "Fuel Reduction Cost Simulator"
     }
   ],
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/frcsrun": {
       "post": {
-        "tags": [
-          "frcs"
-        ],
+        "tags": ["frcs"],
         "summary": "Runs FRCS from given input",
         "description": "",
         "operationId": "runFRCS",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
