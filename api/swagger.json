@@ -1,16 +1,15 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "description": "This is a service for running FRCS on a single stand of trees in California, funded by California Energy Commission.",
     "version": "1.0.0",
     "title": "Fuel Reduction Cost Simulator",
-    "termsOfService": "http://swagger.io/terms/",
     "contact": {
-      "email": "apiteam@swagger.io"
+      "email": "kkyli@ucdavis.edu"
     },
     "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      "name": "MIT License",
+      "url": "https://github.com/ucdavis/fuel-reduction-cost-simulator/blob/master/LICENSE"
     }
   },
   "tags": [
@@ -22,11 +21,15 @@
   "paths": {
     "/frcsrun": {
       "post": {
-        "tags": ["frcs"],
+        "tags": [
+          "frcs"
+        ],
         "summary": "Runs FRCS from given input",
         "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual WT | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 |  |  | 80 |  | 80 |  | 80 |\n| TreeVol Max LLT, ft3 | 250 | 100 | 500 |  |  | 500 |  | 100 |  | 100 |\n| TreeVol Max ALT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| TreeVol Max AT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max Slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
         "operationId": "runFRCS",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -248,16 +251,19 @@
         "TotalPerBoleCCF": {
           "type": "number",
           "format": "float",
+          "example": 72,
           "description": "Logging Cost per Hundred Cubic Feet"
         },
         "TotalPerGT": {
           "type": "number",
           "format": "float",
+          "example": 21,
           "description": "Logging Cost per Green Ton"
         },
         "TotalPerAcre": {
           "type": "number",
           "format": "float",
+          "example": 3624,
           "description": "Logging Cost per Acre"
         }
       },
@@ -267,7 +273,7 @@
     }
   },
   "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
+    "description": "Source code",
+    "url": "https://github.com/ucdavis/fuel-reduction-cost-simulator"
   }
 }
