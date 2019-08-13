@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import { InputVar, InputVarMod, SystemTypes } from './systems/frcs.model';
 import { calculate } from './systems/frcsrun';
+import { InLimits } from './systems/methods/inlimits';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
@@ -25,12 +26,8 @@ app.post('/frcsrun', async (req, res) => {
     res.status(400).send(message);
     return;
   }
-  try {
-    const result = await calculate(params);
-    res.status(200).json(result);
-  } catch (e) {
-    res.status(400).send('ERROR: Invalid parameters supplied');
-  }
+  const result = await calculate(params);
+  res.status(200).json(result);
 });
 
 // serve swagger docs
@@ -72,6 +69,12 @@ function createErrorMessages(params: InputVarMod) {
   ) {
     message +=
       'elevation is required to be a valid number for the system you have selected\n';
+  }
+
+  // check that the values of some params do not exceed the limits
+  const err = InLimits(params);
+  if (err !== '') {
+    message += err;
   }
 
   return message;

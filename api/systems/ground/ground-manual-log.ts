@@ -7,7 +7,6 @@ import {
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellAllTrees } from '../methods/fellalltrees';
-import { InLimits } from '../methods/inlimits';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
@@ -28,8 +27,6 @@ function GroundManualLog(
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
 
-  // Limits
-  const InLimits1 = InLimits(input, intermediate);
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -59,18 +56,13 @@ function GroundManualLog(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
-    ((CostManFLB * intermediate.VolPerAcre) / 100) * InLimits1;
-  console.log('InLimits1: ' + InLimits1);
-  console.log('ManualFellLimbBuckAllTrees: ' + ManualFellLimbBuckAllTrees);
+    ((CostManFLB * intermediate.VolPerAcre) / 100);
   const SkidUnbunchedAllTrees =
-    ((CostSkidUB * intermediate.VolPerAcre) / 100) * InLimits1;
-  console.log('SkidUnbunchedAllTrees: ' + SkidUnbunchedAllTrees);
+    ((CostSkidUB * intermediate.VolPerAcre) / 100);
   const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100) * InLimits1;
-  console.log('LoadLogTrees: ' + LoadLogTrees);
+    ((CostLoad * intermediate.VolPerAcreALT) / 100);
   const ChipTreeBoles =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
-  console.log('ChipTreeBoles: ' + ChipTreeBoles);
+    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -78,7 +70,7 @@ function GroundManualLog(
     LoadLogTrees +
     ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
     : 0;
 
   // III. System Cost Summaries

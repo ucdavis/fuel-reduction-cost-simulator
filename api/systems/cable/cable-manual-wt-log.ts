@@ -6,7 +6,6 @@ import {
   MachineCostMod
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
-import { InLimits } from '../methods/inlimits';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
@@ -43,8 +42,6 @@ function CableManualWTLog(
     ResidueUncutTrees +
     GroundFuel +
     PiledFuel;
-  // Limits
-  const InLimits1 = InLimits(input, intermediate);
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -74,9 +71,9 @@ function CableManualWTLog(
   // const ManualFellChipTrees = 0;
   // const YardUnbunchedAllTrees = 0;
   const ManualFellLimbBuckAllLogTrees =
-    ((CostManFLBALT2 * intermediate.VolPerAcreALT) / 100) * InLimits1;
+    ((CostManFLBALT2 * intermediate.VolPerAcreALT) / 100);
   const ManualFellChipTrees =
-    ((CostManFellCT2 * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostManFellCT2 * intermediate.VolPerAcreCT) / 100);
   const YardUnbunchedAllTrees =
     (((input.PartialCut === true
       ? CostYardPCUB
@@ -84,12 +81,11 @@ function CableManualWTLog(
       ? CostYardCCUB
       : 0) *
       intermediate.VolPerAcre) /
-      100) *
-    InLimits1;
+      100);
   const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100) * InLimits1;
+    ((CostLoad * intermediate.VolPerAcreALT) / 100);
   const ChipWholeTrees =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllLogTrees +
@@ -99,16 +95,16 @@ function CableManualWTLog(
     ChipWholeTrees;
   // const Movein4PrimaryProduct = 0;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFcableManualWTLog * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFcableManualWTLog * BoleVolCCF
     : 0;
 
   const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues
-    ? CostChipLooseRes * ResidueRecoveredOptional * InLimits1
+    ? CostChipLooseRes * ResidueRecoveredOptional
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues
-      ? 0 * ResidueRecoveredOptional * InLimits1
+      ? 0 * ResidueRecoveredOptional
       : 0;
 
   // III. System Cost Summaries
