@@ -7,7 +7,6 @@ import {
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellwtSmallLogOther } from '../methods/fellwtsmalllogother';
-import { InLimits } from '../methods/inlimits';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
@@ -34,7 +33,7 @@ function CableManualWT(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Limits
-  const InLimits1 = InLimits(input, intermediate);
+  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------

@@ -427,7 +427,6 @@ function MachineCosts() {
     PMH_Bundler: PMH_Bundler,
     Bundler_OwnCost: Bundler_OwnCost
   };
-  // console.log(resultObj);
   return resultObj;
 
   function CostCalc(

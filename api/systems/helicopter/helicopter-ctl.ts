@@ -7,7 +7,6 @@ import {
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { Harvesting } from '../methods/harvesting';
-import { InLimits } from '../methods/inlimits';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
 import { HelicopterYarding } from './methods/helicopteryarding';
@@ -27,7 +26,7 @@ function HelicopterCTL(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Limits
-  const InLimits1 = InLimits(input, intermediate);
+  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------

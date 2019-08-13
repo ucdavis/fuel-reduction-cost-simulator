@@ -6,7 +6,6 @@ import {
   MachineCostMod
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
-import { InLimits } from '../methods/inlimits';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
@@ -44,7 +43,7 @@ function CableManualWTLog(
     GroundFuel +
     PiledFuel;
   // Limits
-  const InLimits1 = InLimits(input, intermediate);
+  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------

@@ -7,7 +7,6 @@ import {
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellAllTrees } from '../methods/fellalltrees';
-import { InLimits } from '../methods/inlimits';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
@@ -29,7 +28,7 @@ function GroundManualLog(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Limits
-  const InLimits1 = InLimits(input, intermediate);
+  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -60,17 +59,12 @@ function GroundManualLog(
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
     ((CostManFLB * intermediate.VolPerAcre) / 100) * InLimits1;
-  console.log('InLimits1: ' + InLimits1);
-  console.log('ManualFellLimbBuckAllTrees: ' + ManualFellLimbBuckAllTrees);
   const SkidUnbunchedAllTrees =
     ((CostSkidUB * intermediate.VolPerAcre) / 100) * InLimits1;
-  console.log('SkidUnbunchedAllTrees: ' + SkidUnbunchedAllTrees);
   const LoadLogTrees =
     ((CostLoad * intermediate.VolPerAcreALT) / 100) * InLimits1;
-  console.log('LoadLogTrees: ' + LoadLogTrees);
   const ChipTreeBoles =
     ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
-  console.log('ChipTreeBoles: ' + ChipTreeBoles);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
