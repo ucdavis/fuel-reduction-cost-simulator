@@ -45,8 +45,6 @@ function GroundCTL(
     ResidueUncutTrees +
     GroundFuel +
     PiledFuel;
-  // Limits
-  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -75,13 +73,13 @@ function GroundCTL(
 
   // C. For All Products, $/ac
   const HarvestTreesLess80cf =
-    ((CostHarvest * intermediate.VolPerAcreST) / 100) * InLimits1;
+    ((CostHarvest * intermediate.VolPerAcreST) / 100);
   const ForwardTreesLess80cf =
-    ((CostForward * intermediate.VolPerAcreST) / 100) * InLimits1;
+    ((CostForward * intermediate.VolPerAcreST) / 100);
   const LoadCTLlogTreesLess80cf =
-    ((CostLoadCTL * intermediate.VolPerAcreSLT) / 100) * InLimits1;
+    ((CostLoadCTL * intermediate.VolPerAcreSLT) / 100);
   const ChipCTLChipTreeBoles =
-    ((CostChipCTL * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostChipCTL * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
@@ -89,16 +87,16 @@ function GroundCTL(
     LoadCTLlogTreesLess80cf +
     ChipCTLChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF
     : 0;
   const BundleCTLResidues = input.CalcResidues
-    ? CostBundleResidue * ResidueRecoveredOptional * InLimits1
+    ? CostBundleResidue * ResidueRecoveredOptional
     : 0;
   const ForwardCTLResidues = input.CalcResidues
-    ? CostForwardResidueBundles * ResidueRecoveredOptional * InLimits1
+    ? CostForwardResidueBundles * ResidueRecoveredOptional
     : 0;
   const ChipBundledResiduesFromTreesLess80cf = input.CalcResidues
-    ? CostChipBundledRes * ResidueRecoveredOptional * InLimits1
+    ? CostChipBundledRes * ResidueRecoveredOptional
     : 0;
   const OntoTruck4ResiduesWoMovein =
     ChipBundledResiduesFromTreesLess80cf +
@@ -107,8 +105,7 @@ function GroundCTL(
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues
       ? MoveInCostsResults.CostPerCCFbundleResidues *
-        ResidueRecoveredOptional *
-        InLimits1
+        ResidueRecoveredOptional
       : 0;
 
   // III. System Cost Summaries

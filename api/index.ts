@@ -72,9 +72,7 @@ function createErrorMessages(params: InputVarMod) {
   }
 
   // check that the values of some params do not exceed the limits
-  console.log(message);
   const err = InLimits(params);
-  console.log(err);
   if (err !== '') {
     message += err;
   }

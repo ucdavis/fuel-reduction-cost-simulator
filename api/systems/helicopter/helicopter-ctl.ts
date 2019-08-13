@@ -25,8 +25,6 @@ function HelicopterCTL(
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
 
-  // Limits
-  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -46,13 +44,13 @@ function HelicopterCTL(
 
   // C. For All Products, $/ac
   const HarvestTreesLess80cf =
-    ((CostHarvest * intermediate.VolPerAcreST) / 100) * InLimits1;
+    ((CostHarvest * intermediate.VolPerAcreST) / 100);
   const YardCTLtreesLess80cf =
-    ((CostHeliYardCTL * intermediate.VolPerAcreST) / 100) * InLimits1;
+    ((CostHeliYardCTL * intermediate.VolPerAcreST) / 100);
   const LoadCTLlogTreesLess80cf =
-    ((CostHeliLoadCTL * intermediate.VolPerAcreSLT) / 100) * InLimits1;
+    ((CostHeliLoadCTL * intermediate.VolPerAcreSLT) / 100);
   const ChipTreeBoles =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
@@ -60,17 +58,16 @@ function HelicopterCTL(
     LoadCTLlogTreesLess80cf +
     ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFheliCTL * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFheliCTL * BoleVolCCF
     : 0;
   const ChipBundledResiduesFromTreesLess80cf = input.CalcResidues
-    ? CostChipBundledRes * ResidueRecoveredOptional * InLimits1
+    ? CostChipBundledRes * ResidueRecoveredOptional
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipBundledResiduesFromTreesLess80cf;
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues
       ? MoveInCostsResults.CostPerCCFheliCTL *
-        ResidueRecoveredOptional *
-        InLimits1
+        ResidueRecoveredOptional
       : 0;
 
   // III. System Cost Summaries

@@ -25,8 +25,6 @@ function HelicopterManualWT(
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
 
-  // Limits
-  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -47,13 +45,13 @@ function HelicopterManualWT(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
-    ((CostManFLB * intermediate.VolPerAcre) / 100) * InLimits1;
+    ((CostManFLB * intermediate.VolPerAcre) / 100);
   const YardUnbunchedAllTrees =
-    ((CostHeliYardML * intermediate.VolPerAcre) / 100) * InLimits1;
+    ((CostHeliYardML * intermediate.VolPerAcre) / 100);
   const LoadLogTrees =
-    ((CostHeliLoadML * intermediate.VolPerAcreALT) / 100) * InLimits1;
+    ((CostHeliLoadML * intermediate.VolPerAcreALT) / 100);
   const ChipWholeTrees =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -61,15 +59,15 @@ function HelicopterManualWT(
     LoadLogTrees +
     ChipWholeTrees;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFhManualLog * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFhManualLog * BoleVolCCF
     : 0;
   const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues
-    ? CostChipLooseRes * ResidueRecoveredOptional * InLimits1
+    ? CostChipLooseRes * ResidueRecoveredOptional
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues
-      ? 0 * ResidueRecoveredOptional * InLimits1
+      ? 0 * ResidueRecoveredOptional
       : 0;
 
   // III. System Cost Summaries
