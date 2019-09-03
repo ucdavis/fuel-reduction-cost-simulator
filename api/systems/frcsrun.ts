@@ -5,9 +5,11 @@ import { CableManualWT } from './cable/cable-manual-wt';
 import { CableManualWTLog } from './cable/cable-manual-wt-log';
 import {
   AssumptionMod,
+  InputVar,
   InputVarMod,
   IntermediateVarMod,
-  OutputVarMod
+  OutputVarMod,
+  SystemTypes
 } from './frcs.model';
 import { GroundCTL } from './ground/ground-ctl';
 import { GroundManualLog } from './ground/ground-manual-log';
@@ -15,8 +17,13 @@ import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
 import { HelicopterCTL } from './helicopter/helicopter-ctl';
 import { HelicopterManualWT } from './helicopter/helicopter-manual-wt';
+import { InLimits } from './methods/inlimits';
 
 export function calculate(input: InputVarMod) {
+  const message = createErrorMessages(input);
+  if (message) {
+    throw new Error(message);
+  }
   const intermediate: IntermediateVarMod = {
     RemovalsST: 0,
     RemovalsALT: 0,
@@ -400,4 +407,49 @@ export function calculate(input: InputVarMod) {
   }
 
   return output;
+}
+
+function createErrorMessages(params: InputVarMod) {
+  const exampleObj = new InputVar();
+  let message = '';
+  const exampleDesc = Object.getOwnPropertyDescriptors(exampleObj);
+  const paramDesc = Object.getOwnPropertyDescriptors(params);
+
+  // check that each param exists (even if it is null)
+  for (const key in exampleDesc) {
+    if (!params.hasOwnProperty(key)) {
+      message += 'missing param ' + key + '\n';
+    }
+  }
+
+  // check that each param that exists has the correct type
+  for (const key in paramDesc) {
+    if (
+      !key.includes('User') &&
+      typeof paramDesc[key].value !== typeof exampleDesc[key].value
+    ) {
+      message += `wrong type for ${key} (should be ${typeof exampleDesc[key]
+        .value}, was ${typeof paramDesc[key].value}) \n`;
+    }
+  }
+
+  // check specific requirements
+  if (params.System && !Object.values(SystemTypes).includes(params.System)) {
+    message += 'unidentified System type\n';
+  } else if (
+    (params.System === SystemTypes.helicopterCtl ||
+      params.System === SystemTypes.helicopterManualWt) &&
+    params.Elevation < 0
+  ) {
+    message +=
+      'elevation is required to be a valid number for the system you have selected\n';
+  }
+
+  // check that the values of some params do not exceed the limits
+  const err = InLimits(params);
+  if (err !== '') {
+    message += err;
+  }
+
+  return message;
 }

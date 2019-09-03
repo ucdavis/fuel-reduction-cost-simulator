@@ -1,9 +1,13 @@
 {
-  "name": "frcs",
+  "name": "@ucdavis/frcs",
   "version": "1.0.0",
   "description": "Fuel Reduction Cost Simulator",
   "main": "./out/index.js",
-  "repository": "https://github.com/ucdavis/fuel-reduction-cost-simulator.git",
+  "types": "./out/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ucdavis/fuel-reduction-cost-simulator.git"
+  },
   "author": "Kaiyan Li <kkyli@ucdavis.edu>",
   "license": "MIT",
   "private": false,
@@ -12,7 +16,7 @@
     "build": "tsc",
     "dev": "yarn build && node .",
     "watch": "nodemon --watch . -e ts --exec yarn dev",
-    "start": "node ./out/index.js",
+    "start": "node ./out/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -34,5 +38,18 @@
     "tslint": "^5.12.1",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.3.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/ucdavis/fuel-reduction-cost-simulator/issues"
+  },
+  "homepage": "https://github.com/ucdavis/fuel-reduction-cost-simulator#readme",
+  "keywords": [
+    "forestry",
+    "fuel",
+    "reduction",
+    "cost",
+    "simulator",
+    "trees",
+    "biomass"
+  ]
 }

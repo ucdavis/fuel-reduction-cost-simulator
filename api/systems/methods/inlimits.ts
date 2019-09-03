@@ -132,21 +132,14 @@ function InLimits(input: InputVarMod) {
   const VolPerAcreLLT = input.RemovalsLLT * input.TreeVolLLT;
   const VolPerAcreALT = VolPerAcreSLT + VolPerAcreLLT;
   const VolPerAcre = VolPerAcreCT + VolPerAcreSLT + VolPerAcreLLT;
-  const TreeVolALT =
-    RemovalsALT > 0
-      ? VolPerAcreALT / RemovalsALT
-      : 0;
-  const TreeVol =
-    Removals > 0
-      ? VolPerAcre / Removals
-      : 0;
+  const TreeVolALT = RemovalsALT > 0 ? VolPerAcreALT / RemovalsALT : 0;
+  const TreeVol = Removals > 0 ? VolPerAcre / Removals : 0;
 
   const ExceededMaxLLT =
     limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0
       ? 0
       : input.RemovalsLLT > limit.MaxLLTperAcre ||
-        (100 * input.RemovalsLLT) /
-          (RemovalsALT > 0 ? RemovalsALT : 1) >
+        (100 * input.RemovalsLLT) / (RemovalsALT > 0 ? RemovalsALT : 1) >
           limit.MaxLLTasPercentALT
       ? 1
       : 0;
@@ -180,11 +173,15 @@ function InLimits(input: InputVarMod) {
     if (ExceededMaxLLT === 1) {
       if (input.RemovalsLLT > limit.MaxLLTperAcre) {
         err += `RemovalsLLT should not be greater than ${limit.MaxLLTperAcre}\n`;
-      } else if (100 * input.RemovalsLLT / RemovalsALT > limit.MaxLLTasPercentALT) {
-        err += `The ratio of RemovalsLLT and RemovalsALT should not be greater than ${limit.MaxLLTperAcre}%.\n
+      } else if (
+        (100 * input.RemovalsLLT) / RemovalsALT >
+        limit.MaxLLTasPercentALT
+      ) {
+        err +=
+          `The ratio of RemovalsLLT and RemovalsALT should not be greater than ${limit.MaxLLTperAcre}%.\n
         Explanation:
         RemovalsLLT / RemovalsALT = ${input.RemovalsLLT} / ${RemovalsALT} = ` +
-        `${Math.floor(input.RemovalsLLT / RemovalsALT * 100)}%
+          `${Math.floor((input.RemovalsLLT / RemovalsALT) * 100)}%
         RemovalsALT = RemovalsSLT + RemovalsLLT = ${RemovalsALT}
         `;
       }
@@ -197,9 +194,12 @@ function InLimits(input: InputVarMod) {
       } else if (input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck) {
         err += `TreeVolLLT should not be greater than ${limit.AvgTreeSizeLimit4ManualFellLimbBuck}\n`;
       } else if (TreeVolALT > limit.AvgTreeSizeLimit4loading) {
-        err += `TreeVolALT should not be greater than ${limit.AvgTreeSizeLimit4loading}.\n
+        err += `TreeVolALT should not be greater than ${
+          limit.AvgTreeSizeLimit4loading
+        }.\n
         Explanation:
-        TreeVolALT = VolPerAcreALT / RemovalsALT = ${VolPerAcreALT} / ${RemovalsALT} = ${VolPerAcreALT / RemovalsALT}
+        TreeVolALT = VolPerAcreALT / RemovalsALT = ${VolPerAcreALT} / ${RemovalsALT} = ${VolPerAcreALT /
+          RemovalsALT}
         VolPerAcreALT = RemovalsSLT * TreeVolSLT + RemovalsLLT * TreeVolLLT = ${VolPerAcreALT}
         RemovalsALT = RemovalsSLT + RemovalsLLT = ${RemovalsALT}
         `;
