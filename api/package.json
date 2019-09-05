@@ -14,8 +14,8 @@
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json",
     "build": "tsc",
-    "dev": "yarn build && node .",
-    "watch": "nodemon --watch . -e ts --exec yarn dev",
+    "dev": "npm run build && node ./out/server.js",
+    "watch": "nodemon --watch . -i out -e ts --exec npm run dev",
     "start": "node ./out/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

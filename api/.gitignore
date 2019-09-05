@@ -63,3 +63,6 @@ typings/
 # compiled JS
 *.js
 *.map
+
+# ignore output folder
+out/
