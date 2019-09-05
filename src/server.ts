@@ -3,9 +3,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { InputVar, InputVarMod, SystemTypes } from './systems/frcs.model';
+import { InputVarMod } from './systems/frcs.model';
 import { calculate } from './systems/frcsrun';
-import { InLimits } from './systems/methods/inlimits';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
