@@ -27,8 +27,6 @@ function GroundManualLog(
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
 
-  // Limits
-  const InLimits1 = 1;
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts();
   // System Cost Elements-------
@@ -58,13 +56,13 @@ function GroundManualLog(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
-    ((CostManFLB * intermediate.VolPerAcre) / 100) * InLimits1;
+    ((CostManFLB * intermediate.VolPerAcre) / 100);
   const SkidUnbunchedAllTrees =
-    ((CostSkidUB * intermediate.VolPerAcre) / 100) * InLimits1;
+    ((CostSkidUB * intermediate.VolPerAcre) / 100);
   const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100) * InLimits1;
+    ((CostLoad * intermediate.VolPerAcreALT) / 100);
   const ChipTreeBoles =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100) * InLimits1;
+    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -72,7 +70,7 @@ function GroundManualLog(
     LoadLogTrees +
     ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF * InLimits1
+    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
     : 0;
 
   // III. System Cost Summaries
