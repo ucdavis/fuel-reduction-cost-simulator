@@ -222,6 +222,12 @@
           "format": "float",
           "example": 100,
           "description": "Tree volume of large log trees in cubic feet per tree."
+        },
+        "DieselFuelPrice": {
+          "type": "number",
+          "format": "float",
+          "example": 3.882,
+          "description": "California On-Highway Diesel Fuel Price in dollars per gallon"
         }
       },
       "required": [
@@ -239,7 +245,8 @@
         "RemovalsSLT",
         "TreeVolSLT",
         "RemovalsLLT",
-        "TreeVolLLT"
+        "TreeVolLLT",
+        "DieselFuelPrice"
       ],
       "xml": {
         "name": "InputVarMod"
