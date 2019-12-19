@@ -1,14 +1,16 @@
 // MachineCosts sheet
-function MachineCosts() {
-  const WageAndBenRateF = 44.44814821; // =FallBuckWage // hardcoded
-  const WageAndBenRate = 35.25197962; // =OtherWage // hardcoded
-  const interest = 0.08;
-  const insuranceAtax = 0.07;
-  const Diesel_fuel_price = 3.327; // hardcoded
-  const smh = 1600;
+import { InputVarMod } from '../frcs.model';
+
+function MachineCosts(input: InputVarMod) {
+  const WageAndBenRateF = 27.27 * 1.35; // = CA FallBuckWage 2018
+  const WageAndBenRate = 23.20 * 1.35; // = CA OtherWage 2018
+  const interest = 0.08; // Interest rate, percent of avg yearly investment (in%)
+  const insuranceAtax = 0.07; // Insurance and tax rate, percent of avg yearly investment (it%)
+  const Diesel_fuel_price = input.DieselFuelPrice;
+  const smh = 1600; // Scheduled machine hours (SMH, sh/year)
 
   // Chainsaw
-  const PurchasePriceChainsaw = 824.4620612; // hardcoded
+  const PurchasePriceChainsaw = 994.3091733; // hardcoded
   const HorsepowerChainsaw = 0;
   const LifeChainsaw = 1;
   const svChainsaw = 0.2;
@@ -38,7 +40,7 @@ function MachineCosts() {
   const personsFBuncher = 1;
   const wbFBuncher = personsFBuncher * WageAndBenRate;
   // DriveToTree
-  const PurchasePriceFBuncherDTT = 176670.4417; // hardcoded
+  const PurchasePriceFBuncherDTT = 213066.2514; // hardcoded
   const HorsepowerFBuncherDTT = 150;
   const LifeFBuncherDTT = 3;
   const svFBuncherDTT = 0.2;
@@ -57,7 +59,7 @@ function MachineCosts() {
   );
   const PMH_DriveToTree = DriveToTree[1];
   // SwingBoom
-  const PurchasePriceFBuncherSB = 365118.9128; // hardcoded
+  const PurchasePriceFBuncherSB = 440336.9196; // hardcoded
   const HorsepowerFBuncherSB = 200;
   const LifeFBuncherSB = 5;
   const svFBuncherSB = 0.15;
@@ -102,7 +104,7 @@ function MachineCosts() {
   const personsHarvester = 1;
   const wbHarvester = personsHarvester * WageAndBenRate;
   // Small
-  const PurchasePriceHarvesterS = 412231.0306; // hardcoded
+  const PurchasePriceHarvesterS = 497154.5866; // hardcoded
   const HorsepowerHarvesterS = 120;
   const HarvesterS = CostCalc(
     PurchasePriceHarvesterS,
@@ -117,7 +119,7 @@ function MachineCosts() {
   );
   const PMH_HarvS = HarvesterS[1];
   // Big
-  const PurchasePriceHarvesterB = 530011.325; // hardcoded
+  const PurchasePriceHarvesterB = 639198.7542; // hardcoded
   const HorsepowerHarvesterB = 200;
   const HarvesterB = CostCalc(
     PurchasePriceHarvesterB,
@@ -143,7 +145,7 @@ function MachineCosts() {
   const personsSkidder = 1;
   const wbSkidder = personsSkidder * WageAndBenRate;
   // Small
-  const PurchasePriceSkidderS = 164892.4122; // hardcoded
+  const PurchasePriceSkidderS = 198861.8347; // hardcoded
   const HorsepowerSkidderS = 120;
   const LifeSkidderS = 5;
   const SkidderS = CostCalc(
@@ -159,7 +161,7 @@ function MachineCosts() {
   );
   const PMH_SkidderS = SkidderS[1];
   // Big
-  const PurchasePriceSkidderB = 235560.5889; // hardcoded
+  const PurchasePriceSkidderB = 284088.3352; // hardcoded
   const HorsepowerSkidderB = 200;
   const LifeSkidderB = 4;
   const SkidderB = CostCalc(
@@ -181,7 +183,7 @@ function MachineCosts() {
   const fcrForwarder = 0.025;
   const rmForwarder = 1;
   // Small
-  const PurchasePriceForwarderS = 282672.7067; // hardcoded
+  const PurchasePriceForwarderS = 340906.0023; // hardcoded
   const HorsepowerForwarderS = 110;
   const svForwarderS = 0.25;
   // some vars have the same value as in Skidder, therefore keep those Skidder vars in the function below
@@ -198,7 +200,7 @@ function MachineCosts() {
   );
   const PMH_ForwarderS = ForwarderS[1];
   // Big
-  const PurchasePriceForwarderB = 365118.9128; // hardcoded
+  const PurchasePriceForwarderB = 440336.9196; // hardcoded
   const HorsepowerForwarderB = 200;
   const svForwarderB = 0.2;
   const ForwarderB = CostCalc(
@@ -216,7 +218,7 @@ function MachineCosts() {
   const Forwarder_OwnCost = (ForwarderS[0] + ForwarderB[0]) / 2;
 
   // Yarder small
-  const PurchasePriceYarderS = 188448.4711; // hardcoded
+  const PurchasePriceYarderS = 227270.6682; // hardcoded
   const HorsepowerYarderS = 100;
   const LifeYarder = 10;
   const svYarder = 0.1;
@@ -239,7 +241,7 @@ function MachineCosts() {
   );
   const PMH_YarderS = YarderS[1];
   // Yarder intermediate
-  const PurchasePriceYarderI = 388674.9717; // hardcoded
+  const PurchasePriceYarderI = 468745.7531; // hardcoded
   const HorsepowerYarderI = 200;
   const YarderI = CostCalc(
     PurchasePriceYarderI,
@@ -265,7 +267,7 @@ function MachineCosts() {
   const personsProcessor = 1;
   const wbProcessor = personsProcessor * WageAndBenRate;
   // Small
-  const PurchasePriceProcessorS = 353340.8834; // hardcoded
+  const PurchasePriceProcessorS = 426132.5028; // hardcoded
   const HorsepowerProcessorS = 120;
   const ProcessorS = CostCalc(
     PurchasePriceProcessorS,
@@ -280,7 +282,7 @@ function MachineCosts() {
   );
   const PMH_ProcessorS = ProcessorS[1];
   // Big
-  const PurchasePriceProcessorB = 471121.1778; // hardcoded
+  const PurchasePriceProcessorB = 568176.6704; // hardcoded
   const HorsepowerProcessorB = 200;
   const ProcessorB = CostCalc(
     PurchasePriceProcessorB,
@@ -306,7 +308,7 @@ function MachineCosts() {
   const personsLoader = 1;
   const wbLoader = personsLoader * WageAndBenRate;
   // Small
-  const PurchasePriceLoaderS = 223782.5595; // hardcoded
+  const PurchasePriceLoaderS = 269883.9185; // hardcoded
   const HorsepowerLoaderS = 120;
   const LoaderS = CostCalc(
     PurchasePriceLoaderS,
@@ -321,7 +323,7 @@ function MachineCosts() {
   );
   const PMH_LoaderS = LoaderS[1];
   // Big
-  const PurchasePriceLoaderB = 294450.7361; // hardcoded
+  const PurchasePriceLoaderB = 355110.419; // hardcoded
   const HorsepowerLoaderB = 200;
   const LoaderB = CostCalc(
     PurchasePriceLoaderB,
@@ -347,7 +349,7 @@ function MachineCosts() {
   const personsChipper = 1;
   const wbChipper = personsChipper * WageAndBenRate;
   // Small
-  const PurchasePriceChipperS = 235560.5889; // hardcoded
+  const PurchasePriceChipperS = 284088.3352; // hardcoded
   const HorsepowerChipperS = 350;
   const ChipperS = CostCalc(
     PurchasePriceChipperS,
@@ -362,7 +364,7 @@ function MachineCosts() {
   );
   const PMH_ChipperS = ChipperS[1];
   // Big
-  const PurchasePriceChipperB = 353340.8834; // hardcoded
+  const PurchasePriceChipperB = 426132.5028; // hardcoded
   const HorsepowerChipperB = 700;
   const ChipperB = CostCalc(
     PurchasePriceChipperB,
@@ -379,7 +381,7 @@ function MachineCosts() {
   const Chipper_OwnCost = (ChipperS[0] + ChipperB[0]) / 2;
 
   // Bundler
-  const PurchasePriceBundler = 530011.325; // hardcoded
+  const PurchasePriceBundler = 639198.7542; // hardcoded
   const HorsepowerBundler = 180;
   const fcrBundler = 0.025;
   // the other vars are the same as Chipper's, therefore pass chipper vars in the function below
