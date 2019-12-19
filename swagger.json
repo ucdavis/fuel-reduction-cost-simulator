@@ -77,7 +77,7 @@
         "PartialCut": {
           "type": "boolean",
           "example": true,
-          "description": "Type of harvest: clearcut or partial cut? If true, partial-cut; otherwise clear-cut."
+          "description": "Indicate the type of harvest: if true, partial-cut; otherwise clear-cut."
         },
         "DeliverDist": {
           "type": "number",
@@ -85,27 +85,27 @@
           "example": 400,
           "description": "Average distance in feet that logs or trees are delivered to the landing. For ground-based and cable systems this is measured along the slope."
         },
-        "Slope": {
+        "PercentSlope": {
           "type": "number",
           "format": "float",
           "example": 30,
-          "description": "Average slope for the harvest unit in percent."
+          "description": "The average fall-line slope for the harvest unit, measured as a percentage."
         },
         "Elevation": {
           "type": "number",
           "format": "float",
           "example": 5000,
-          "description": "Elevation is required for helicopter systems."
+          "description": "Elevation in feet is required for helicopter systems."
         },
         "CalcLoad": {
           "type": "boolean",
           "example": true,
-          "description": "Include the costs of fuel loading?"
+          "description": "Indicate whether the costs of fuel loading needs to be included."
         },
         "CalcMoveIn": {
           "type": "boolean",
           "example": true,
-          "description": "Include the costs of moving equipment to the harvesting unit?"
+          "description": "Indicate whether the costs of moving equipment to the harvesting unit needs to be included."
         },
         "Area": {
           "type": "number",
@@ -117,33 +117,33 @@
           "type": "number",
           "format": "float",
           "example": 2,
-          "description": "One-way move-in distance in miles."
+          "description": "One-way move-in distance in miles that equipment is transported to reach the harvest unit."
         },
         "CalcResidues": {
           "type": "boolean",
           "example": true,
-          "description": "Include the costs of collecting and chipping residues? This option is only available for the three WT systems and the ground-based CTL system."
+          "description": "Indicate whether the costs of collecting and chipping residues needs to be included. This option is only available for the three WT systems and the ground-based CTL system."
         },
         "UserSpecWDCT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 60,
-          "description": "User specified green wood density of chip trees in pounds per cubic foot."
+          "description": "User specified green wood density of chip trees in pounds per cubic feet."
         },
         "UserSpecWDSLT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 58.6235,
-          "description": "User specified green wood density of small log trees in pounds per cubic foot."
+          "description": "User specified green wood density of small log trees in pounds per cubic feet."
         },
         "UserSpecWDLLT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 62.1225,
-          "description": "User specified green wood density of large log trees in pounds per cubic foot."
+          "description": "User specified green wood density of large log trees in pounds per cubic feet."
         },
         "UserSpecRFCT": {
           "type": "number",
@@ -191,37 +191,37 @@
           "type": "number",
           "format": "float",
           "example": 20,
-          "description": "Removals of chip trees per acre."
+          "description": "Number of harvested chip trees per acre."
         },
         "TreeVolCT": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Tree volume of chip trees in cubic feet per tree."
+          "description": "Tree volume of harvested chip trees in cubic feet per tree."
         },
         "RemovalsSLT": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Removals of small log trees per acre."
+          "description": "Number of harvested small log trees per acre."
         },
         "TreeVolSLT": {
           "type": "number",
           "format": "float",
           "example": 70,
-          "description": "Tree volume of small log trees in cubic feet per tree."
+          "description": "Tree volume of harvested small log trees in cubic feet per tree."
         },
         "RemovalsLLT": {
           "type": "number",
           "format": "float",
           "example": 5,
-          "description": "Removals of large log trees per acre."
+          "description": "Number of harvested large log trees per acre."
         },
         "TreeVolLLT": {
           "type": "number",
           "format": "float",
           "example": 100,
-          "description": "Tree volume of large log trees in cubic feet per tree."
+          "description": "Tree volume of harvested large log trees in cubic feet per tree."
         }
       },
       "required": [
@@ -252,19 +252,19 @@
           "type": "number",
           "format": "float",
           "example": 72,
-          "description": "Logging Cost per Hundred Cubic Feet"
+          "description": "Logging Cost per Hundred Cubic Feet."
         },
         "TotalPerGT": {
           "type": "number",
           "format": "float",
           "example": 21,
-          "description": "Logging Cost per Green Ton"
+          "description": "Logging Cost per Green Ton."
         },
         "TotalPerAcre": {
           "type": "number",
           "format": "float",
           "example": 3624,
-          "description": "Logging Cost per Acre"
+          "description": "Logging Cost per Acre."
         }
       },
       "xml": {
