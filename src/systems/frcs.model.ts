@@ -43,6 +43,8 @@ export interface InputVarMod {
   TreeVolSLT: number; // tree volume of small log trees
   RemovalsLLT: number;
   TreeVolLLT: number;
+
+  DieselFuelPrice: number;
 }
 
 export class InputVar implements InputVar {
@@ -71,6 +73,7 @@ export class InputVar implements InputVar {
   TreeVolSLT = 70;
   RemovalsLLT = 5;
   TreeVolLLT = 100;
+  DieselFuelPrice = 3.882;
   constructor() {}
 }
 
