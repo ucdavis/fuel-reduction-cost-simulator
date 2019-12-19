@@ -85,7 +85,7 @@
           "example": 400,
           "description": "Average distance in feet that logs or trees are delivered to the landing. For ground-based and cable systems this is measured along the slope."
         },
-        "PercentSlope": {
+        "Slope": {
           "type": "number",
           "format": "float",
           "example": 30,
