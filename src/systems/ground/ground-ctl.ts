@@ -46,7 +46,7 @@ function GroundCTL(
     GroundFuel +
     PiledFuel;
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts();
+  const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
   const CostForward = Forwarding(assumption, input, intermediate, machineCost);

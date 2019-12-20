@@ -33,7 +33,7 @@ function CableManualWT(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts();
+  const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const FellwtSmallLogOtherResults = FellwtSmallLogOther(
     input,

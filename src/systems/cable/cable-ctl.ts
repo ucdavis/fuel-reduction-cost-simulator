@@ -27,7 +27,7 @@ function CableCTL(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts();
+  const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
   const CostYardCTL = CYCTL(assumption, input, intermediate, machineCost);

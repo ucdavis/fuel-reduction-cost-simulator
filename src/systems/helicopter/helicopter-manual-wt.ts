@@ -26,7 +26,7 @@ function HelicopterManualWT(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts();
+  const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
   const CostManFLB = FellAllTreesResults.CostManFLB;

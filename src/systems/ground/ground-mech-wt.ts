@@ -49,7 +49,7 @@ function GroundMechWT(
     GroundFuel +
     PiledFuel;
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts();
+  const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const FellBunchResults = FellBunch(input, intermediate, machineCost);
   const CostFellBunch = FellBunchResults.CostFellBunch;
