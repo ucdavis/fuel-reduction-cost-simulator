@@ -131,10 +131,10 @@ function FellLargeLogTrees(
   const VolPerPMHlltIIC = input.TreeVolLLT / (TimePerTreelltIIC / 60);
   const CostPerCCFlltIIC = (100 * PMH_Chainsaw) / VolPerPMHlltIIC;
   const RelevancelltIIC =
-    input.TreeVolLLT < 5
+      intermediate.TreeVol < 5
       ? 0
-      : input.TreeVolLLT < 15
-      ? -0.5 + input.TreeVolLLT / 10
+      : intermediate.TreeVol < 15
+      ? -0.5 + intermediate.TreeVol / 10
       : 1;
   // IID User-Defined Felling, Limbing & Bucking
   const VolPerPMHlltIID = 0.001;
