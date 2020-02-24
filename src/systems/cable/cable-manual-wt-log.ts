@@ -69,12 +69,12 @@ function CableManualWTLog(
   // C. For All Products, $/ac
   // const ManualFellLimbBuckAllLogTrees = 0;
   // const ManualFellChipTrees = 0;
-  // const YardUnbunchedAllTrees = 0;
+  // const CableYardUnbunchedAllTrees = 0;
   const ManualFellLimbBuckAllLogTrees =
     ((CostManFLBALT2 * intermediate.VolPerAcreALT) / 100);
   const ManualFellChipTrees =
     ((CostManFellCT2 * intermediate.VolPerAcreCT) / 100);
-  const YardUnbunchedAllTrees =
+  const CableYardUnbunchedAllTrees =
     (((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
@@ -90,7 +90,7 @@ function CableManualWTLog(
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllLogTrees +
     ManualFellChipTrees +
-    YardUnbunchedAllTrees +
+    CableYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipWholeTrees;
   // const Movein4PrimaryProduct = 0;

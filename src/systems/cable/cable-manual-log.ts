@@ -49,7 +49,7 @@ function CableManualLog(
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
     ((CostManFLB * intermediate.VolPerAcre) / 100);
-  const YardUnbunchedAllTrees =
+  const CableYardUnbunchedAllTrees =
     (((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
@@ -64,7 +64,7 @@ function CableManualLog(
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
-    YardUnbunchedAllTrees +
+    CableYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipWholeTrees;
   const Movein4PrimaryProduct = input.CalcMoveIn

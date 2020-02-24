@@ -46,7 +46,7 @@ function HelicopterManualWT(
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
     ((CostManFLB * intermediate.VolPerAcre) / 100);
-  const YardUnbunchedAllTrees =
+  const HeliYardUnbunchedAllTrees =
     ((CostHeliYardML * intermediate.VolPerAcre) / 100);
   const LoadLogTrees =
     ((CostHeliLoadML * intermediate.VolPerAcreALT) / 100);
@@ -55,7 +55,7 @@ function HelicopterManualWT(
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
-    YardUnbunchedAllTrees +
+    HeliYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipWholeTrees;
   const Movein4PrimaryProduct = input.CalcMoveIn

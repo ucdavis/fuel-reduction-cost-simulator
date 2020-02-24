@@ -62,7 +62,7 @@ function CableManualWT(
     ((CostManFLBLLT2 * intermediate.VolPerAcreLLT) / 100);
   const ManualFellTreesLess80cf =
     ((CostManFellST2 * intermediate.VolPerAcreST) / 100);
-  const YardUnbunchedAllTrees =
+  const CableYardUnbunchedAllTrees =
     (((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
@@ -80,7 +80,7 @@ function CableManualWT(
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf +
     ManualFellTreesLess80cf +
-    YardUnbunchedAllTrees +
+    CableYardUnbunchedAllTrees +
     ProcessLogTreesLess80cf +
     LoadLogTrees +
     ChipWholeTrees;

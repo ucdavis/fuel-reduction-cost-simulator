@@ -45,7 +45,7 @@ function HelicopterCTL(
   // C. For All Products, $/ac
   const HarvestTreesLess80cf =
     ((CostHarvest * intermediate.VolPerAcreST) / 100);
-  const YardCTLtreesLess80cf =
+  const HeliYardCTLtreesLess80cf =
     ((CostHeliYardCTL * intermediate.VolPerAcreST) / 100);
   const LoadCTLlogTreesLess80cf =
     ((CostHeliLoadCTL * intermediate.VolPerAcreSLT) / 100);
@@ -54,7 +54,7 @@ function HelicopterCTL(
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
-    YardCTLtreesLess80cf +
+    HeliYardCTLtreesLess80cf +
     LoadCTLlogTreesLess80cf +
     ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn

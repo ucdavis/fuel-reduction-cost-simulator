@@ -46,7 +46,7 @@ function CableCTL(
   // C. For All Products, $/ac
   const HarvestTreesLess80cf =
     ((CostHarvest * intermediate.VolPerAcreST) / 100);
-  const YardCTLtreesLess80cf =
+  const CableYardCTLtreesLess80cf =
     ((CostYardCTL * intermediate.VolPerAcreST) / 100);
   const LoadCTLlogTreesLess80cf =
     ((CostLoadCTL * intermediate.VolPerAcreSLT) / 100);
@@ -55,7 +55,7 @@ function CableCTL(
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
-    YardCTLtreesLess80cf +
+    CableYardCTLtreesLess80cf +
     LoadCTLlogTreesLess80cf +
     ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
