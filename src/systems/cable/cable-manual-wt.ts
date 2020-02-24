@@ -26,8 +26,7 @@ function CableManualWT(
     assumption.ResidueRecovFracWT * intermediate.ResidueCT;
   const PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
   const ResidueRecoveredOptional = input.CalcResidues
-    ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT +
-      assumption.ResidueRecovFracWT * intermediate.ResidueLLT
+    ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
     : 0;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
