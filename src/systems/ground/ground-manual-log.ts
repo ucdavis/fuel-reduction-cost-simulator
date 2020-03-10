@@ -96,7 +96,8 @@ function GroundManualLog(
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
     TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut
+    TotalPerAcre: TotalPerAcreOut,
+    Residue
   };
 }
 
