@@ -65,17 +65,14 @@ function GroundManualWT(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckTreesLarger80cf =
-    ((CostManFLBLLT2 * intermediate.VolPerAcreLLT) / 100);
+    (CostManFLBLLT2 * intermediate.VolPerAcreLLT) / 100;
   const ManualFellTreesLess80cf =
-    ((CostManFellST2 * intermediate.VolPerAcreST) / 100);
-  const SkidUnbunchedAllTrees =
-    ((CostSkidUB * intermediate.VolPerAcre) / 100);
+    (CostManFellST2 * intermediate.VolPerAcreST) / 100;
+  const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.VolPerAcre) / 100;
   const ProcessLogTreesLess80cf =
-    ((CostProcess * intermediate.VolPerAcreSLT) / 100);
-  const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100);
-  const ChipWholeTrees =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
+    (CostProcess * intermediate.VolPerAcreSLT) / 100;
+  const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
+  const ChipWholeTrees = (CostChipWT * intermediate.VolPerAcreCT) / 100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf +
@@ -93,9 +90,22 @@ function GroundManualWT(
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf; // for Mech WT sys;
   const Movein4Residues =
-    input.CalcMoveIn && input.CalcResidues
-      ? 0 * ResidueRecoveredOptional
-      : 0;
+    input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
+
+  // III.0 Residue Cost Summaries
+  const Residue = {
+    ResidueWt: 0,
+    ResiduePerAcre: 0,
+    ResiduePerGT: 0
+  };
+  Residue.ResidueWt =
+    ResidueRecoveredOptional + intermediate.BoleWtCT + intermediate.ResidueCT;
+  Residue.ResiduePerAcre =
+    OntoTruck4ResiduesWoMovein +
+    ChipWholeTrees +
+    ManualFellTreesLess80cf * (intermediate.BoleWtCT / intermediate.BoleWtST) +
+    SkidUnbunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
   // III. System Cost Summaries
   const TotalPerAcre =
@@ -113,7 +123,8 @@ function GroundManualWT(
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
     TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut
+    TotalPerAcre: TotalPerAcreOut,
+    Residue
   };
 }
 

@@ -120,7 +120,12 @@ export function calculate(input: InputVarMod) {
   let output: OutputVarMod = {
     TotalPerBoleCCF: 0,
     TotalPerGT: 0,
-    TotalPerAcre: 0
+    TotalPerAcre: 0,
+    Residue: {
+      ResidueWt: 0,
+      ResiduePerAcre: 0,
+      ResiduePerGT: 0,
+    }
   };
 
   // Other Assumptions
