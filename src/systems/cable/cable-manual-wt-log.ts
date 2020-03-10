@@ -69,28 +69,26 @@ function CableManualWTLog(
   // C. For All Products, $/ac
   // const ManualFellLimbBuckAllLogTrees = 0;
   // const ManualFellChipTrees = 0;
-  // const YardUnbunchedAllTrees = 0;
+  // const CableYardUnbunchedAllTrees = 0;
   const ManualFellLimbBuckAllLogTrees =
-    ((CostManFLBALT2 * intermediate.VolPerAcreALT) / 100);
+    (CostManFLBALT2 * intermediate.VolPerAcreALT) / 100;
   const ManualFellChipTrees =
-    ((CostManFellCT2 * intermediate.VolPerAcreCT) / 100);
-  const YardUnbunchedAllTrees =
-    (((input.PartialCut === true
+    (CostManFellCT2 * intermediate.VolPerAcreCT) / 100;
+  const CableYardUnbunchedAllTrees =
+    ((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
       ? CostYardCCUB
       : 0) *
       intermediate.VolPerAcre) /
-      100);
-  const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100);
-  const ChipWholeTrees =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
+    100;
+  const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
+  const ChipWholeTrees = (CostChipWT * intermediate.VolPerAcreCT) / 100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllLogTrees +
     ManualFellChipTrees +
-    YardUnbunchedAllTrees +
+    CableYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipWholeTrees;
   // const Movein4PrimaryProduct = 0;
@@ -103,9 +101,20 @@ function CableManualWTLog(
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
   const Movein4Residues =
-    input.CalcMoveIn && input.CalcResidues
-      ? 0 * ResidueRecoveredOptional
-      : 0;
+    input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
+
+  // III.0 Residue Cost Summaries
+  const Residue = {
+    ResidueWt: 0,
+    ResiduePerAcre: 0,
+    ResiduePerGT: 0
+  };
+  Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
+  Residue.ResiduePerAcre =
+    ChipWholeTrees +
+    ManualFellChipTrees +
+    CableYardUnbunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
   // III. System Cost Summaries
   const TotalPerAcre =
@@ -123,7 +132,8 @@ function CableManualWTLog(
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
     TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut
+    TotalPerAcre: TotalPerAcreOut,
+    Residue
   };
 }
 

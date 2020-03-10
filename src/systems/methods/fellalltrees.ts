@@ -102,7 +102,7 @@ function FellAllTrees(
   const CorridorIIBat = 0.21;
   const NotBetweenOpeningsIIBat = 1;
   const OpeningsIIBat = 0;
-  const HeavyThinIIBat = 0;
+  const HeavyThinIIBat = input.PartialCut ? 0 : 1;
   const DelayFracIIBat = 0.25;
   const TimePerTreeIIBat =
     (-0.465 +

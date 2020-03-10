@@ -56,13 +56,10 @@ function GroundManualLog(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
-    ((CostManFLB * intermediate.VolPerAcre) / 100);
-  const SkidUnbunchedAllTrees =
-    ((CostSkidUB * intermediate.VolPerAcre) / 100);
-  const LoadLogTrees =
-    ((CostLoad * intermediate.VolPerAcreALT) / 100);
-  const ChipTreeBoles =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
+    (CostManFLB * intermediate.VolPerAcre) / 100;
+  const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.VolPerAcre) / 100;
+  const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
+  const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -72,6 +69,19 @@ function GroundManualLog(
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
     : 0;
+
+  // III.0 Residue Cost Summaries
+  const Residue = {
+    ResidueWt: 0,
+    ResiduePerAcre: 0,
+    ResiduePerGT: 0
+  };
+  Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
+  Residue.ResiduePerAcre =
+    ChipTreeBoles +
+    (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
+      (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
   // III. System Cost Summaries
   const TotalPerAcre =
@@ -86,7 +96,8 @@ function GroundManualLog(
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
     TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut
+    TotalPerAcre: TotalPerAcreOut,
+    Residue
   };
 }
 

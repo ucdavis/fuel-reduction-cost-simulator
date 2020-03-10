@@ -45,19 +45,17 @@ function HelicopterManualWT(
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
-    ((CostManFLB * intermediate.VolPerAcre) / 100);
-  const YardUnbunchedAllTrees =
-    ((CostHeliYardML * intermediate.VolPerAcre) / 100);
-  const LoadLogTrees =
-    ((CostHeliLoadML * intermediate.VolPerAcreALT) / 100);
-  const ChipWholeTrees =
-    ((CostChipWT * intermediate.VolPerAcreCT) / 100);
+    (CostManFLB * intermediate.VolPerAcre) / 100;
+  const HeliYardUnbunchedAllTrees =
+    (CostHeliYardML * intermediate.VolPerAcre) / 100;
+  const LoadLogTrees = (CostHeliLoadML * intermediate.VolPerAcreALT) / 100;
+  const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
-    YardUnbunchedAllTrees +
+    HeliYardUnbunchedAllTrees +
     LoadLogTrees +
-    ChipWholeTrees;
+    ChipTreeBoles;
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFhManualLog * BoleVolCCF
     : 0;
@@ -66,9 +64,20 @@ function HelicopterManualWT(
     : 0;
   const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
   const Movein4Residues =
-    input.CalcMoveIn && input.CalcResidues
-      ? 0 * ResidueRecoveredOptional
-      : 0;
+    input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
+
+  // III.0 Residue Cost Summaries
+  const Residue = {
+    ResidueWt: 0,
+    ResiduePerAcre: 0,
+    ResiduePerGT: 0
+  };
+  Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
+  Residue.ResiduePerAcre =
+    ChipTreeBoles +
+    (ManualFellLimbBuckAllTrees + HeliYardUnbunchedAllTrees) *
+      (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
   // III. System Cost Summaries
   const TotalPerAcre =
@@ -86,7 +95,8 @@ function HelicopterManualWT(
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
     TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut
+    TotalPerAcre: TotalPerAcreOut,
+    Residue
   };
 }
 

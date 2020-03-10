@@ -163,6 +163,11 @@ export interface OutputVarMod {
   TotalPerBoleCCF: number;
   TotalPerGT: number;
   TotalPerAcre: number;
+  Residue: {
+    ResidueWt: number;
+    ResiduePerAcre: number;
+    ResiduePerGT: number;
+  };
 }
 
 export interface AssumptionMod {
