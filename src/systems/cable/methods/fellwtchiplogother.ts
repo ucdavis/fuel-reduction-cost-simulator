@@ -114,7 +114,7 @@ function FellwtChipLogOther(
   const CorridorIIB = 0.21;
   const NotBetweenOpeningsIIB = 1;
   const OpeningsIIB = 0;
-  const HeavyThinIIB = 0;
+  const HeavyThinIIB = input.PartialCut ? 0 : 1;
   const DelayFracIIB = 0.25;
   const TimePerTreeIIB =
     (-0.465 +
@@ -181,7 +181,10 @@ function FellwtChipLogOther(
           RelevanceIIC * VolPerPMHIIC +
           RelevanceIID * VolPerPMHIID)
       : 0;
-
+  console.log(VolPerPMHIIA);
+  console.log(VolPerPMHIIB);
+  console.log(VolPerPMHIIC);
+  console.log(VolPerPMHIID);
   return {
     CostManFellCT2: CostManFellCT2,
     CostManFLBALT2: CostManFLBALT2
