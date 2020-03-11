@@ -272,6 +272,29 @@
           "format": "float",
           "example": 3624,
           "description": "Logging Cost per Acre."
+        },
+        "Residue": {
+          "type": "object",
+          "properties": {
+            "ResidueWt": {
+              "type": "number",
+              "format": "float",
+              "example": 50.518225,
+              "description": "Weight of Residues in Green Tons per Acre."
+            }, 
+            "ResiduePerAcre": {
+              "type": "number",
+              "format": "float",
+              "example": 593.2918894437706,
+              "description": "Harvesting Cost of Residues per Acre."
+            }, 
+            "ResiduePerGT": {
+              "type": "number",
+              "format": "float",
+              "example": 11.744115899633659,
+              "description": "Harvesting Cost of Residues per Green Ton."
+            }
+         }
         }
       },
       "xml": {
