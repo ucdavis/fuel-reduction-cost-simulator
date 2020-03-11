@@ -73,8 +73,8 @@ function GroundManualLog(
   // III.0 Residue Cost Summaries
   const Residue = {
     ResidueWt: 0,
-    ResiduePerAcre: 0,
-    ResiduePerGT: 0
+    ResiduePerGT: 0,
+    ResiduePerAcre: 0
   };
   Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
   Residue.ResiduePerAcre =
@@ -82,6 +82,10 @@ function GroundManualLog(
     (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
       (intermediate.BoleWtCT / intermediate.BoleWt);
   Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
+
+  Residue.ResidueWt = Math.round(Residue.ResidueWt);
+  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
+  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
 
   // III. System Cost Summaries
   const TotalPerAcre =

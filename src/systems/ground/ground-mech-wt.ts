@@ -106,8 +106,8 @@ function GroundMechWT(
   // III.0 Residue Cost Summaries
   const Residue = {
     ResidueWt: 0,
-    ResiduePerAcre: 0,
-    ResiduePerGT: 0
+    ResiduePerGT: 0,
+    ResiduePerAcre: 0
   };
   Residue.ResidueWt =
     ResidueRecoveredOptional + intermediate.BoleWtCT + intermediate.ResidueCT;
@@ -118,6 +118,10 @@ function GroundMechWT(
       (intermediate.BoleWtCT / intermediate.BoleWtST) +
     SkidBunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
   Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
+
+  Residue.ResidueWt = Math.round(Residue.ResidueWt);
+  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
+  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
 
   // III. System Cost Summaries
   const TotalPerAcre =
