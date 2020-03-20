@@ -254,37 +254,114 @@ function FellBunch(
   const UserDefinedRelevance = 0;
 
   // Summary
+  const RelevanceSum =
+    RelevanceIA +
+    RelevanceIB +
+    RelevanceIC +
+    RelevanceID +
+    RelevanceIIA +
+    RelevanceIIB +
+    RelevanceIIC +
+    RelevanceIID +
+    RelevanceIIE +
+    RelevanceIIF +
+    RelevanceIIG +
+    UserDefinedRelevance;
+  const WeightedCostPerPMH =
+    (CostPerPMHIA * RelevanceIA +
+      CostPerPMHIB * RelevanceIB +
+      CostPerPMHIC * RelevanceIC +
+      CostPerPMHID * RelevanceID +
+      CostPerPMHIIA * RelevanceIIA +
+      CostPerPMHIIB * RelevanceIIB +
+      CostPerPMHIIC * RelevanceIIC +
+      CostPerPMHIID * RelevanceIID +
+      CostPerPMHIIE * RelevanceIIE +
+      CostPerPMHIIF * RelevanceIIF +
+      CostPerPMHIIG * RelevanceIIG +
+      UserDefinedCostPerPMH * UserDefinedRelevance) /
+    RelevanceSum;
+
+  const WeightedVolPerPMH =
+    (VolPerPMHIA * RelevanceIA +
+      VolPerPMHIB * RelevanceIB +
+      VolPerPMHIC * RelevanceIC +
+      VolPerPMHID * RelevanceID +
+      VolPerPMHIIA * RelevanceIIA +
+      VolPerPMHIIB * RelevanceIIB +
+      VolPerPMHIIC * RelevanceIIC +
+      VolPerPMHIID * RelevanceIID +
+      VolPerPMHIIE * RelevanceIIE +
+      VolPerPMHIIF * RelevanceIIF +
+      VolPerPMHIIG * RelevanceIIG +
+      UserDefinedVolPerPMH * UserDefinedRelevance) /
+    RelevanceSum;
+
   const CostFellBunch =
     intermediate.TreeVolST > 0
-      ? (intermediate.CHardwoodST *
-          100 *
-          (CostPerPMHIA * RelevanceIA +
-            CostPerPMHIB * RelevanceIB +
-            CostPerPMHIC * RelevanceIC +
-            CostPerPMHID * RelevanceID +
-            CostPerPMHIIA * RelevanceIIA +
-            CostPerPMHIIB * RelevanceIIB +
-            CostPerPMHIIC * RelevanceIIC +
-            CostPerPMHIID * RelevanceIID +
-            CostPerPMHIIE * RelevanceIIE +
-            CostPerPMHIIF * RelevanceIIF +
-            CostPerPMHIIG * RelevanceIIG +
-            UserDefinedCostPerPMH * UserDefinedRelevance)) /
-        (VolPerPMHIA * RelevanceIA +
-          VolPerPMHIB * RelevanceIB +
-          VolPerPMHIC * RelevanceIC +
-          VolPerPMHID * RelevanceID +
-          VolPerPMHIIA * RelevanceIIA +
-          VolPerPMHIIB * RelevanceIIB +
-          VolPerPMHIIC * RelevanceIIC +
-          VolPerPMHIID * RelevanceIID +
-          VolPerPMHIIE * RelevanceIIE +
-          VolPerPMHIIF * RelevanceIIF +
-          VolPerPMHIIG * RelevanceIIG +
-          UserDefinedVolPerPMH * UserDefinedRelevance)
+      ? (intermediate.CHardwoodST * 100 * WeightedCostPerPMH) /
+        WeightedVolPerPMH
       : 0;
+
+  const HorsepowerFBuncherDTT = 150;
+  const HorsepowerFBuncherSB = 200;
+  const HorsepowerFBuncherSL = 240;
+  const fcrFBuncher = 0.026;
+  const GalPerPMHIA = HorsepowerFBuncherDTT * fcrFBuncher;
+  const GalPerPMHIB = HorsepowerFBuncherDTT * fcrFBuncher;
+  const GalPerPMHIC = HorsepowerFBuncherDTT * fcrFBuncher;
+  const GalPerPMHID = HorsepowerFBuncherDTT * fcrFBuncher;
+  const GalPerPMHIIA = HorsepowerFBuncherDTT * fcrFBuncher;
+  const GalPerPMHIIB =
+    HorsepowerFBuncherSB * fcrFBuncher * intermediate.NonSelfLevelCabDummy +
+    HorsepowerFBuncherSL *
+      fcrFBuncher *
+      (1 - intermediate.NonSelfLevelCabDummy);
+  const GalPerPMHIIC =
+    HorsepowerFBuncherSB * fcrFBuncher * intermediate.NonSelfLevelCabDummy +
+    HorsepowerFBuncherSL *
+      fcrFBuncher *
+      (1 - intermediate.NonSelfLevelCabDummy);
+  const GalPerPMHIID = HorsepowerFBuncherSL * fcrFBuncher;
+  const GalPerPMHIIE =
+    HorsepowerFBuncherSB * fcrFBuncher * intermediate.NonSelfLevelCabDummy +
+    HorsepowerFBuncherSL *
+      fcrFBuncher *
+      (1 - intermediate.NonSelfLevelCabDummy);
+  const GalPerPMHIIF =
+    HorsepowerFBuncherSB * fcrFBuncher * intermediate.NonSelfLevelCabDummy +
+    HorsepowerFBuncherSL *
+      fcrFBuncher *
+      (1 - intermediate.NonSelfLevelCabDummy);
+  const GalPerPMHIIG =
+    HorsepowerFBuncherSB * fcrFBuncher * intermediate.NonSelfLevelCabDummy +
+    HorsepowerFBuncherSL *
+      fcrFBuncher *
+      (1 - intermediate.NonSelfLevelCabDummy);
+  const UserDefinedGalPerPMH = 0;
+  const WeightedGalPerPMH =
+    (GalPerPMHIA * RelevanceIA +
+      GalPerPMHIB * RelevanceIB +
+      GalPerPMHIC * RelevanceIC +
+      GalPerPMHID * RelevanceID +
+      GalPerPMHIIA * RelevanceIIA +
+      GalPerPMHIIB * RelevanceIIB +
+      GalPerPMHIIC * RelevanceIIC +
+      GalPerPMHIID * RelevanceIID +
+      GalPerPMHIIE * RelevanceIIE +
+      GalPerPMHIIF * RelevanceIIF +
+      GalPerPMHIIG * RelevanceIIG +
+      UserDefinedGalPerPMH * UserDefinedRelevance) /
+    RelevanceSum;
+
+  const GalFellBunch = (WeightedGalPerPMH * CostFellBunch) / WeightedCostPerPMH;
+
   /*------------Fell&Bunch END---------------------------*/
-  return { CostFellBunch: CostFellBunch, TreesPerCycleIIB: TreesPerCycleIIB };
+  return {
+    CostFellBunch: CostFellBunch,
+    TreesPerCycleIIB: TreesPerCycleIIB,
+    GalFellBunch: GalFellBunch
+  };
 }
 
 export { FellBunch };

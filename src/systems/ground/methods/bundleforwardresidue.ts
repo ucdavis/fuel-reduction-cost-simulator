@@ -108,16 +108,29 @@ function BundleForwardResidue(
           RelevanceIBbfr * GT1Bbfr +
           RelevanceICbfr * GT1Cbfr)
       : 0;
+  const HorsepowerBundler = 180;
+  const fcrBundler = 0.025;
+  const GalBundleResidue =
+    (HorsepowerBundler * fcrBundler * CostBundleResidue) /
+    machineCost.PMH_Bundler;
+
   const CostForwardResidueBundles =
     intermediate.ResidueST > 0
       ? (machineCost.PMH_ForwarderS * RelevanceIIAbfr +
           machineCost.PMH_ForwarderS * RelevanceIIBbfr) /
         (RelevanceIIAbfr * GTIIAbfr + RelevanceIIBbfr * GTIIBbfr)
       : 0;
+  const HorsepowerForwarderS = 110;
+  const fcrForwarder = 0.025;
+  const GalForwardResidueBundles =
+    (HorsepowerForwarderS * fcrForwarder * CostForwardResidueBundles) /
+    machineCost.PMH_ForwarderS;
 
   return {
     CostBundleResidue: CostBundleResidue,
-    CostForwardResidueBundles: CostForwardResidueBundles
+    CostForwardResidueBundles: CostForwardResidueBundles,
+    GalBundleResidue: GalBundleResidue,
+    GalForwardResidueBundles: GalForwardResidueBundles
   };
 }
 
