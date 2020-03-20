@@ -41,7 +41,7 @@ function CableManualWT(
   );
   const CostManFLBLLT2 = FellwtSmallLogOtherResults.CostManFLBLLT2;
   const CostManFellST2 = FellwtSmallLogOtherResults.CostManFellST2;
-  const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
+  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
   const CYCCUresults = CYCCU(input, intermediate, machineCost);
   const CostProcess = Processing(input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
@@ -63,7 +63,7 @@ function CableManualWT(
     (CostManFellST2 * intermediate.VolPerAcreST) / 100;
   const CableYardUnbunchedAllTrees =
     ((input.PartialCut === true
-      ? CostYardPCUB
+      ? CYPCUresults.CostYardPCUB
       : input.PartialCut === false
       ? CYCCUresults.CostYardCCUB
       : 0) *

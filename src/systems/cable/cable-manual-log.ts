@@ -32,7 +32,7 @@ function CableManualLog(
   // System Cost Elements-------
   const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
   const CostManFLB = FellAllTreesResults.CostManFLB;
-  const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
+  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
   const CYCCUresults = CYCCU(input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
@@ -51,7 +51,7 @@ function CableManualLog(
     (CostManFLB * intermediate.VolPerAcre) / 100;
   const CableYardUnbunchedAllTrees =
     ((input.PartialCut === true
-      ? CostYardPCUB
+      ? CYPCUresults.CostYardPCUB
       : input.PartialCut === false
       ? CYCCUresults.CostYardCCUB
       : 0) *

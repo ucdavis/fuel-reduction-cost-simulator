@@ -52,7 +52,7 @@ function CableManualWTLog(
   );
   const CostManFLBALT2 = FellwtChipLogOtherResults.CostManFLBALT2;
   const CostManFellCT2 = FellwtChipLogOtherResults.CostManFellCT2;
-  const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
+  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
   const CYCCUresults = CYCCU(input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
@@ -76,7 +76,7 @@ function CableManualWTLog(
     (CostManFellCT2 * intermediate.VolPerAcreCT) / 100;
   const CableYardUnbunchedAllTrees =
     ((input.PartialCut === true
-      ? CostYardPCUB
+      ? CYPCUresults.CostYardPCUB
       : input.PartialCut === false
       ? CYCCUresults.CostYardCCUB
       : 0) *
