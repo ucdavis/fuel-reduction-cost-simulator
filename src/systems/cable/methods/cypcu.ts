@@ -347,6 +347,7 @@ function CYPCU(
   const WeightingDivisorIIPcable = VolPerPMHIIPcable * RelevanceIIPcable;
 
   // Results
+  // CostYardPCUB
   const WeightingProductSum =
     WeightingProductIIAcable +
     WeightingProductIIBcable +
@@ -382,7 +383,7 @@ function CYPCU(
     WeightingDivisorIIOcable +
     WeightingDivisorIIPcable;
   const CostYardPCUB = WeightingProductSum / WeightingDivisorSum;
-
+  // GalYardPCUB
   const HorsepowerYarderS = 100;
   const HorsepowerYarderI = 200;
   const fcrYarder = 0.04;
