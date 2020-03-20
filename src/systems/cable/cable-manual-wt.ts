@@ -42,7 +42,7 @@ function CableManualWT(
   const CostManFLBLLT2 = FellwtSmallLogOtherResults.CostManFLBLLT2;
   const CostManFellST2 = FellwtSmallLogOtherResults.CostManFellST2;
   const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
-  const CostYardCCUB = CYCCU(input, intermediate, machineCost);
+  const CYCCUresults = CYCCU(input, intermediate, machineCost);
   const CostProcess = Processing(input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
@@ -65,7 +65,7 @@ function CableManualWT(
     ((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
-      ? CostYardCCUB
+      ? CYCCUresults.CostYardCCUB
       : 0) *
       intermediate.VolPerAcre) /
     100;

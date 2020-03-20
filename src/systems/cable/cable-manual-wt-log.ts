@@ -53,7 +53,7 @@ function CableManualWTLog(
   const CostManFLBALT2 = FellwtChipLogOtherResults.CostManFLBALT2;
   const CostManFellCT2 = FellwtChipLogOtherResults.CostManFellCT2;
   const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
-  const CostYardCCUB = CYCCU(input, intermediate, machineCost);
+  const CYCCUresults = CYCCU(input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(
@@ -78,7 +78,7 @@ function CableManualWTLog(
     ((input.PartialCut === true
       ? CostYardPCUB
       : input.PartialCut === false
-      ? CostYardCCUB
+      ? CYCCUresults.CostYardCCUB
       : 0) *
       intermediate.VolPerAcre) /
     100;
