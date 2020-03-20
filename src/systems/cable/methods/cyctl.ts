@@ -82,12 +82,22 @@ function CYCTL(
   const CostPerCCF2 = Yarding2 + ChangePerShift2;
   const Relevance2 = 0;
   // Summary
+  // CostYardCTL
   const WeightingProduct =
     VolPerPMH * CostPerCCF * Relevance + VolPerPMH2 * CostPerCCF2 * Relevance2;
   const WeightingDivisor = VolPerPMH * Relevance + VolPerPMH2 * Relevance2;
   const CostYardCTL = WeightingProduct / WeightingDivisor;
+  // GalYardCTL
+  const HorsepowerYarderS = 100;
+  const HorsepowerYarderI = 200;
+  const fcrYarder = 0.04;
+  const WeightedCostPMH = YarderHourlyCost;
+  const WeightedGalPMH =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalYardCTL = (WeightedGalPMH * CostYardCTL) / WeightedCostPMH;
 
-  return CostYardCTL;
+  return { CostYardCTL: CostYardCTL, GalYardCTL: GalYardCTL };
 }
 
 export { CYCTL };

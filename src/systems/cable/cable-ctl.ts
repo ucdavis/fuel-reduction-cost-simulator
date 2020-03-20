@@ -30,7 +30,7 @@ function CableCTL(
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
-  const CostYardCTL = CYCTL(assumption, input, intermediate, machineCost);
+  const CYCTLresults = CYCTL(assumption, input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoadCTL = LoadingResults.CostLoadCTL;
   const ChippingResults = Chipping(
@@ -46,7 +46,7 @@ function CableCTL(
   // C. For All Products, $/ac
   const HarvestTreesLess80cf = (CostHarvest * intermediate.VolPerAcreST) / 100;
   const CableYardCTLtreesLess80cf =
-    (CostYardCTL * intermediate.VolPerAcreST) / 100;
+    (CYCTLresults.CostYardCTL * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf =
     (CostLoadCTL * intermediate.VolPerAcreSLT) / 100;
   const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
