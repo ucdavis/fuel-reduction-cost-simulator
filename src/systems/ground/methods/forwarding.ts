@@ -228,27 +228,47 @@ function Forwarding(
   const CostPerCCFGforward = (100 * ForwarderHourlyCost) / VolPerPMHGforward;
   const RelevanceGforward = 0;
   // Summary
+  const RelevanceSum =
+    RelevanceAforward +
+    RelevanceBforward +
+    RelevanceCforward +
+    RelevanceDforward +
+    RelevanceEforward +
+    RelevanceFforward +
+    RelevanceGforward;
+  const WeightedCostPerPMH =
+    (ForwarderHourlyCost * RelevanceAforward +
+      ForwarderHourlyCost * RelevanceBforward +
+      ForwarderHourlyCost * RelevanceCforward +
+      ForwarderHourlyCost * RelevanceDforward +
+      ForwarderHourlyCost * RelevanceEforward +
+      ForwarderHourlyCost * RelevanceFforward +
+      ForwarderHourlyCost * RelevanceGforward) /
+    RelevanceSum;
+  const WeightedVolPerPMH =
+    (RelevanceAforward * VolPerPMHAforward +
+      RelevanceBforward * VolPerPMHBforward +
+      RelevanceCforward * VolPerPMHCforward +
+      RelevanceDforward * VolPerPMHDforward +
+      RelevanceEforward * VolPerPMHEforward +
+      RelevanceFforward * VolPerPMHFforward +
+      RelevanceGforward * VolPerPMHGforward) /
+    RelevanceSum;
   const CostForward =
     intermediate.TreeVolST > 0
-      ? (intermediate.CHardwoodST *
-          100 *
-          (ForwarderHourlyCost * RelevanceAforward +
-            ForwarderHourlyCost * RelevanceBforward +
-            ForwarderHourlyCost * RelevanceCforward +
-            ForwarderHourlyCost * RelevanceDforward +
-            ForwarderHourlyCost * RelevanceEforward +
-            ForwarderHourlyCost * RelevanceFforward +
-            ForwarderHourlyCost * RelevanceGforward)) /
-        (RelevanceAforward * VolPerPMHAforward +
-          RelevanceBforward * VolPerPMHBforward +
-          RelevanceCforward * VolPerPMHCforward +
-          RelevanceDforward * VolPerPMHDforward +
-          RelevanceEforward * VolPerPMHEforward +
-          RelevanceFforward * VolPerPMHFforward +
-          RelevanceGforward * VolPerPMHGforward)
+      ? (intermediate.CHardwoodST * 100 * WeightedCostPerPMH) /
+        WeightedVolPerPMH
       : 0;
 
-  return CostForward;
+  const HorsepowerForwarderS = 110;
+  const HorsepowerForwarderB = 200;
+  const fcrForwarder = 0.025;
+  const WeightedGalPerPMH =
+    HorsepowerForwarderS * fcrForwarder * (1 - intermediate.MechMachineSize) +
+    HorsepowerForwarderB * fcrForwarder * intermediate.MechMachineSize;
+  const GalForward = (WeightedGalPerPMH * CostForward) / WeightedCostPerPMH;
+
+  return { CostForward: CostForward, GalForward: GalForward };
 }
 
 export { Forwarding };

@@ -49,7 +49,12 @@ function GroundCTL(
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
   const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
-  const CostForward = Forwarding(assumption, input, intermediate, machineCost);
+  const ForwardingResults = Forwarding(
+    assumption,
+    input,
+    intermediate,
+    machineCost
+  );
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoadCTL = LoadingResults.CostLoadCTL;
   const ChippingResults = Chipping(
@@ -73,7 +78,8 @@ function GroundCTL(
 
   // C. For All Products, $/ac
   const HarvestTreesLess80cf = (CostHarvest * intermediate.VolPerAcreST) / 100;
-  const ForwardTreesLess80cf = (CostForward * intermediate.VolPerAcreST) / 100;
+  const ForwardTreesLess80cf =
+    (ForwardingResults.CostForward * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf =
     (CostLoadCTL * intermediate.VolPerAcreSLT) / 100;
   const ChipCTLChipTreeBoles = (CostChipCTL * intermediate.VolPerAcreCT) / 100;
