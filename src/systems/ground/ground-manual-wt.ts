@@ -50,7 +50,8 @@ function GroundManualWT(
     TreesPerCycleIIB
   );
   const CostSkidUB = SkiddingResults.CostSkidUB;
-  const CostProcess = Processing(input, intermediate, machineCost);
+  const ProcessingResults = Processing(input, intermediate, machineCost);
+  const CostProcess = ProcessingResults.CostProcess;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(

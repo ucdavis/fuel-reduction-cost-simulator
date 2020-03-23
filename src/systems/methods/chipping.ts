@@ -171,6 +171,14 @@ function Chipping(
           RelevanceChippingIC * VolPerPMHchippingIC +
           RelevanceChippingID * VolPerPMHchippingID)
       : 0;
+  // GalChipWT
+  const HorsepowerChipperS = 350;
+  const HorsepowerChipperB = 700;
+  const fcrChipper = 0.023;
+  const WeightedGalPMH =
+    HorsepowerChipperS * fcrChipper * (1 - intermediate.ChipperSize) +
+    HorsepowerChipperB * fcrChipper * intermediate.ChipperSize;
+  const GalChipWT = (WeightedGalPMH * CostChipWT) / ChipperHourlyCost;
   // II. Chain Flail DDC WT
   // A) adjusted from Chip Whole Trees
   const FlailProdAdjustmentIIA = 0.9;
@@ -196,6 +204,8 @@ function Chipping(
         (RelevanceChippingIIA * VolPerPMHchippingIIA +
           RelevanceChippingIIB * VolPerPMHchippingIIB)
       : 0;
+  // GalDDChipWT
+  const GalDDChipWT = (WeightedGalPMH * CostDDChipWT) / ChipperHourlyCost;
   // III. Chip CTL Logs
   const CostChipCTL =
     input.TreeVolCT > 0
@@ -208,25 +218,48 @@ function Chipping(
           RelevanceChippingIIIB * VolPerPMHchippingIIIB +
           RelevanceChippingIIIC * VolPerPMHchippingIIIC)
       : 0;
+  // GalChipCTL
+  const GalChipCTL = (WeightedGalPMH * CostChipCTL) / ChipperHourlyCost;
   // IV. Chip Piled Loose Residues at Landing
   const CostChipLooseRes =
     (CostPerPMHchippingIVA * RelevanceChippingIVA +
       CostPerPMHchippingIVA * RelevanceChippingIVB) /
     (RelevanceChippingIVA * GTperPMHchippingIVA +
       RelevanceChippingIVB * GTperPMHchippingIVB);
+  // GalChipLooseRes
+  const HorsepowerLoaderS = 120;
+  const fcrLoader = 0.022;
+  const WeightedGalPMH2 =
+    HorsepowerChipperS * fcrChipper * (1 - intermediate.ChipperSize) +
+    HorsepowerChipperB * fcrChipper * intermediate.ChipperSize +
+    HorsepowerLoaderS * fcrLoader;
+  const WeightedCostPMH2 =
+    PMH_ChipperS * (1 - intermediate.ChipperSize) +
+    PMH_ChipperB * intermediate.ChipperSize +
+    PMH_LoaderS;
+  const GalChipLooseRes =
+    (WeightedGalPMH2 * CostChipLooseRes) / WeightedCostPMH2;
   // V. Chip Bundles of Residue at Landing
   const CostChipBundledRes =
     (CostPerPMHchippingIVA * RelevanceChippingVA +
       CostPerPMHchippingIVA * RelevanceChippingVB) /
     (RelevanceChippingVA * GTperPMHchippingVA +
       RelevanceChippingVB * GTperPMHchippingVB);
+  // GalChipBundledRes
+  const GalChipBundledRes =
+    (WeightedGalPMH2 * CostChipBundledRes) / WeightedCostPMH2;
 
   const results = {
     CostChipWT: CostChipWT,
     CostDDChipWT: CostDDChipWT,
     CostChipCTL: CostChipCTL,
     CostChipLooseRes: CostChipLooseRes,
-    CostChipBundledRes: CostChipBundledRes
+    CostChipBundledRes: CostChipBundledRes,
+    GalChipWT: GalChipWT,
+    GalDDChipWT: GalDDChipWT,
+    GalChipCTL: GalChipCTL,
+    GalChipLooseRes: GalChipLooseRes,
+    GalChipBundledRes: GalChipBundledRes
   };
 
   return results;

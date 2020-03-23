@@ -61,7 +61,8 @@ function GroundMechWT(
     TreesPerCycleIIB
   );
   const CostSkidBun = SkiddingResults.CostSkidBun;
-  const CostProcess = Processing(input, intermediate, machineCost);
+  const ProcessingResults = Processing(input, intermediate, machineCost);
+  const CostProcess = ProcessingResults.CostProcess;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(
@@ -73,6 +74,13 @@ function GroundMechWT(
   const CostChipWT = ChippingResults.CostChipWT;
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
+
+  // const GalFellBunch = FellBunchResults.GalFellBunch;
+  // const GalChainsaw = 0.007779726; // gal/CCF
+  // const GalSkidBun = SkiddingResults.GalSkidBun;
+  // const GalProcess = ProcessingResults.GalProcess;
+  // const GalLoad = LoadingResults.GalLoad;
+  // const GalChipWT = ChippingResults.GalChipWT;
 
   // C. For All Products, $/ac
   const FellAndBunchTreesLess80cf =
@@ -135,6 +143,68 @@ function GroundMechWT(
   const TotalPerAcreOut = Math.round(TotalPerAcre);
   const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
   const TotalPerGTout = Math.round(TotalPerGT);
+
+  // // D. For All Products, gal/ac
+  // const FellAndBunchTreesLess80cf_ =
+  //   (GalFellBunch * intermediate.VolPerAcreST) / 100;
+  // const ManualFellLimbBuckTreesLarger80cf_ =
+  //   (GalChainsaw * intermediate.VolPerAcreLLT) / 100;
+  // const SkidBunchedAllTrees_ = (GalSkidBun * intermediate.VolPerAcre) / 100;
+  // const ProcessLogTreesLess80cf_ =
+  //   (GalProcess * intermediate.VolPerAcreSLT) / 100;
+  // const LoadLogTrees_ = (GalLoad * intermediate.VolPerAcreALT) / 100;
+  // const ChipWholeTrees_ = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+
+  // const Stump2Truck4PrimaryProductWithoutMovein =
+  //   FellAndBunchTreesLess80cf +
+  //   ManualFellLimbBuckTreesLarger80cf +
+  //   SkidBunchedAllTrees +
+  //   ProcessLogTreesLess80cf +
+  //   LoadLogTrees +
+  //   ChipWholeTrees;
+  // const Movein4PrimaryProduct = input.CalcMoveIn
+  //   ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF
+  //   : 0;
+
+  // const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues
+  //   ? CostChipLooseRes * ResidueRecoveredOptional
+  //   : 0;
+  // const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
+  // const Movein4Residues =
+  //   input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
+
+  // // IV.0 Residue Fuel Consumption Summaries
+  // const Residue = {
+  //   ResidueWt: 0,
+  //   ResiduePerGT: 0,
+  //   ResiduePerAcre: 0
+  // };
+  // Residue.ResidueWt =
+  //   ResidueRecoveredOptional + intermediate.BoleWtCT + intermediate.ResidueCT;
+  // Residue.ResiduePerAcre =
+  //   OntoTruck4ResiduesWoMovein +
+  //   ChipWholeTrees +
+  //   FellAndBunchTreesLess80cf *
+  //     (intermediate.BoleWtCT / intermediate.BoleWtST) +
+  //   SkidBunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+  // Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
+
+  // Residue.ResidueWt = Math.round(Residue.ResidueWt);
+  // Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
+  // Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
+
+  // // IV. System Fuel Consumption Summaries
+  // const TotalPerAcre =
+  //   Stump2Truck4PrimaryProductWithoutMovein +
+  //   Movein4PrimaryProduct +
+  //   OntoTruck4ResiduesWoMovein +
+  //   Movein4Residues;
+  // const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
+  // const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
+
+  // const TotalPerAcreOut = Math.round(TotalPerAcre);
+  // const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
+  // const TotalPerGTout = Math.round(TotalPerGT);
 
   return {
     TotalPerBoleCCF: TotalPerBoleCCFout,
