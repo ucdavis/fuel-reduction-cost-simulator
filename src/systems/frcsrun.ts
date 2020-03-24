@@ -118,13 +118,23 @@ export function calculate(input: InputVarMod) {
     ResidueRecovFracCTL: 0
   };
   let output: OutputVarMod = {
-    TotalPerBoleCCF: 0,
-    TotalPerGT: 0,
-    TotalPerAcre: 0,
+    Total: {
+      Weight: 0,
+      CostPerAcre: 0,
+      CostPerBoleCCF: 0,
+      CostPerGT: 0,
+      DieselPerAcre: 0,
+      GasolinePerAcre: 0,
+      JetFuelPerAcre: 0
+    },
     Residue: {
-      ResidueWt: 0,
-      ResiduePerAcre: 0,
-      ResiduePerGT: 0,
+      Weight: 0,
+      CostPerAcre: 0,
+      CostPerBoleCCF: 0,
+      CostPerGT: 0,
+      DieselPerAcre: 0,
+      GasolinePerAcre: 0,
+      JetFuelPerAcre: 0
     }
   };
 
@@ -382,33 +392,33 @@ export function calculate(input: InputVarMod) {
     case 'Ground-Based Mech WT':
       output = GroundMechWT(input, intermediate, assumption);
       break;
-    case 'Ground-Based Manual WT':
-      output = GroundManualWT(input, intermediate, assumption);
-      break;
-    case 'Ground-Based Manual Log': // CalcResidues must be 0
-      output = GroundManualLog(input, intermediate, assumption);
-      break;
-    case 'Ground-Based CTL':
-      output = GroundCTL(input, intermediate, assumption);
-      break;
-    case 'Cable Manual WT/Log':
-      output = CableManualWTLog(input, intermediate, assumption);
-      break;
-    case 'Cable Manual WT':
-      output = CableManualWT(input, intermediate, assumption);
-      break;
-    case 'Cable Manual Log':
-      output = CableManualLog(input, intermediate, assumption);
-      break;
-    case 'Cable CTL':
-      output = CableCTL(input, intermediate, assumption);
-      break;
-    case 'Helicopter Manual WT':
-      output = HelicopterManualWT(input, intermediate, assumption);
-      break;
-    case 'Helicopter CTL':
-      output = HelicopterCTL(input, intermediate, assumption);
-      break;
+    // case 'Ground-Based Manual WT':
+    //   output = GroundManualWT(input, intermediate, assumption);
+    //   break;
+    // case 'Ground-Based Manual Log': // CalcResidues must be 0
+    //   output = GroundManualLog(input, intermediate, assumption);
+    //   break;
+    // case 'Ground-Based CTL':
+    //   output = GroundCTL(input, intermediate, assumption);
+    //   break;
+    // case 'Cable Manual WT/Log':
+    //   output = CableManualWTLog(input, intermediate, assumption);
+    //   break;
+    // case 'Cable Manual WT':
+    //   output = CableManualWT(input, intermediate, assumption);
+    //   break;
+    // case 'Cable Manual Log':
+    //   output = CableManualLog(input, intermediate, assumption);
+    //   break;
+    // case 'Cable CTL':
+    //   output = CableCTL(input, intermediate, assumption);
+    //   break;
+    // case 'Helicopter Manual WT':
+    //   output = HelicopterManualWT(input, intermediate, assumption);
+    //   break;
+    // case 'Helicopter CTL':
+    //   output = HelicopterCTL(input, intermediate, assumption);
+    //   break;
   }
 
   return output;

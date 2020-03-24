@@ -160,13 +160,23 @@ export interface IntermediateVarMod {
 }
 
 export interface OutputVarMod {
-  TotalPerBoleCCF: number;
-  TotalPerGT: number;
-  TotalPerAcre: number;
+  Total: {
+    Weight: number;
+    CostPerAcre: number;
+    CostPerBoleCCF: number;
+    CostPerGT: number;
+    DieselPerAcre: number;
+    GasolinePerAcre: number;
+    JetFuelPerAcre: number;
+  };
   Residue: {
-    ResidueWt: number;
-    ResiduePerAcre: number;
-    ResiduePerGT: number;
+    Weight: number;
+    CostPerAcre: number;
+    CostPerBoleCCF: number;
+    CostPerGT: number;
+    DieselPerAcre: number;
+    GasolinePerAcre: number;
+    JetFuelPerAcre: number;
   };
 }
 
