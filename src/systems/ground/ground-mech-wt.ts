@@ -169,8 +169,7 @@ function GroundMechWT(
     OntoTruck4ResiduesWoMovein +
     Movein4Residues;
   Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
-  Total.CostPerGT =
-    Total.CostPerAcre / TotalPrimaryProductsAndOptionalResidues;
+  Total.CostPerGT = Total.CostPerAcre / Total.Weight;
   // Fuel
   Total.DieselPerAcre =
     DieselStump2Truck4PrimaryProductWithoutMovein +
@@ -192,7 +191,7 @@ function GroundMechWT(
   Residue.CostPerGT = Residue.CostPerAcre / Total.Weight;
   // Fuel
   Residue.DieselPerAcre =
-    ChipLooseResiduesFromLogTreesLess80cf2 +
+    OntoTruck4ResiduesWoMovein2 +
     ChipWholeTrees2 +
     FellAndBunchTreesLess80cf2 *
       (intermediate.BoleWtCT / intermediate.BoleWtST) +
