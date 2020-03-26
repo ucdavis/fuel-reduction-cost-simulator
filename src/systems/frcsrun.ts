@@ -410,9 +410,9 @@ export function calculate(input: InputVarMod) {
     case 'Cable Manual Log':
       output = CableManualLog(input, intermediate, assumption);
       break;
-    // case 'Cable CTL':
-    //   output = CableCTL(input, intermediate, assumption);
-    //   break;
+    case 'Cable CTL':
+      output = CableCTL(input, intermediate, assumption);
+      break;
     // case 'Helicopter Manual WT':
     //   output = HelicopterManualWT(input, intermediate, assumption);
     //   break;
