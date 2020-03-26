@@ -404,9 +404,9 @@ export function calculate(input: InputVarMod) {
     // case 'Cable Manual WT/Log':
     //   output = CableManualWTLog(input, intermediate, assumption);
     //   break;
-    // case 'Cable Manual WT':
-    //   output = CableManualWT(input, intermediate, assumption);
-    //   break;
+    case 'Cable Manual WT':
+      output = CableManualWT(input, intermediate, assumption);
+      break;
     // case 'Cable Manual Log':
     //   output = CableManualLog(input, intermediate, assumption);
     //   break;
