@@ -29,7 +29,8 @@ function CableCTL(
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
-  const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
+  const HarvestingResults = Harvesting(assumption, input, intermediate, machineCost);
+  const CostHarvest = HarvestingResults.CostHarvest;
   const CYCTLresults = CYCTL(assumption, input, intermediate, machineCost);
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoadCTL = LoadingResults.CostLoadCTL;

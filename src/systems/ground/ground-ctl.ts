@@ -48,13 +48,20 @@ function GroundCTL(
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
-  const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
+  const HarvestingResults = Harvesting(
+    assumption,
+    input,
+    intermediate,
+    machineCost
+  );
+  const CostHarvest = HarvestingResults.CostHarvest;
   const ForwardingResults = Forwarding(
     assumption,
     input,
     intermediate,
     machineCost
   );
+  const CostForward = ForwardingResults.CostForward;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoadCTL = LoadingResults.CostLoadCTL;
   const ChippingResults = Chipping(
@@ -76,10 +83,18 @@ function GroundCTL(
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipBundledRes = ChippingResults.CostChipBundledRes;
 
+  const GalHarvest = HarvestingResults.GalHarvest;
+  const GalForward = ForwardingResults.GalForward;
+  const GalLoadCTL = LoadingResults.GalLoadCTL;
+  const GalChipCTL = ChippingResults.GalChipCTL;
+  const GalBundleResidue = BundleForwardResidueResults.GalBundleResidue;
+  const GalForwardResidueBundles =
+    BundleForwardResidueResults.GalForwardResidueBundles;
+  const GalChipBundledRes = ChippingResults.GalChipBundledRes;
+
   // C. For All Products, $/ac
   const HarvestTreesLess80cf = (CostHarvest * intermediate.VolPerAcreST) / 100;
-  const ForwardTreesLess80cf =
-    (ForwardingResults.CostForward * intermediate.VolPerAcreST) / 100;
+  const ForwardTreesLess80cf = (CostForward * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf =
     (CostLoadCTL * intermediate.VolPerAcreSLT) / 100;
   const ChipCTLChipTreeBoles = (CostChipCTL * intermediate.VolPerAcreCT) / 100;
@@ -109,43 +124,100 @@ function GroundCTL(
     input.CalcMoveIn && input.CalcResidues
       ? MoveInCostsResults.CostPerCCFbundleResidues * ResidueRecoveredOptional
       : 0;
-  // III.0 Residue Cost Summaries
-  const Residue = {
-    ResidueWt: 0,
-    ResiduePerGT: 0,
-    ResiduePerAcre: 0
+
+  // D. For All Products, gal/ac
+  const HarvestTreesLess80cf2 = (GalHarvest * intermediate.VolPerAcreST) / 100;
+  const ForwardTreesLess80cf2 = (GalForward * intermediate.VolPerAcreST) / 100;
+  const LoadCTLlogTreesLess80cf2 =
+    (GalLoadCTL * intermediate.VolPerAcreSLT) / 100;
+  const ChipCTLChipTreeBoles2 = (GalChipCTL * intermediate.VolPerAcreCT) / 100;
+  const DieselStump2Truck4PrimaryProductWithoutMovein =
+    HarvestTreesLess80cf2 +
+    ForwardTreesLess80cf2 +
+    LoadCTLlogTreesLess80cf2 +
+    ChipCTLChipTreeBoles2;
+  // 2 refers to bundler and forwarder used to collect residues
+  const LowboyLoads = input.CalcMoveIn ? 4 + (input.CalcResidues ? 2 : 0) : 0;
+  const mpg = 6;
+  const Movein4PrimaryProduct2 =
+    (LowboyLoads * input.MoveInDist) / mpg / input.Area;
+  const BundleCTLResidues2 = input.CalcResidues
+    ? GalBundleResidue * ResidueRecoveredOptional
+    : 0;
+  const ForwardCTLResidues2 = input.CalcResidues
+    ? GalForwardResidueBundles * ResidueRecoveredOptional
+    : 0;
+  const ChipBundledResiduesFromTreesLess80cf2 = input.CalcResidues
+    ? GalChipBundledRes * ResidueRecoveredOptional
+    : 0;
+  const OntoTruck4ResiduesWoMovein2 =
+    BundleCTLResidues2 +
+    ForwardCTLResidues2 +
+    ChipBundledResiduesFromTreesLess80cf2;
+  const Movein4Residues2 =
+    input.CalcMoveIn && input.CalcResidues
+      ? (2 * input.MoveInDist) / mpg / input.Area
+      : 0;
+
+  // III. Summaries
+  const Total = {
+    Weight: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
   };
-  Residue.ResidueWt =
-    ResidueRecoveredOptional + intermediate.BoleWtCT + intermediate.ResidueCT;
-  Residue.ResiduePerAcre =
+
+  const Residue = {
+    Weight: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
+  };
+
+  // System Summaries - Total
+  Total.Weight = TotalPrimaryProductsAndOptionalResidues;
+  // Cost
+  Total.CostPerAcre =
+    Stump2Truck4PrimaryProductWithoutMovein +
+    Movein4PrimaryProduct +
+    OntoTruck4ResiduesWoMovein +
+    Movein4Residues;
+  Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
+  Total.CostPerGT = Total.CostPerAcre / Total.Weight;
+  // Fuel
+  Total.DieselPerAcre =
+    DieselStump2Truck4PrimaryProductWithoutMovein +
+    Movein4PrimaryProduct2 +
+    OntoTruck4ResiduesWoMovein2;
+
+  // System Summaries - Residue
+  // Cost
+  Residue.Weight =
+    ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
+  Residue.CostPerAcre =
     OntoTruck4ResiduesWoMovein +
     Movein4Residues +
     ChipCTLChipTreeBoles +
     (HarvestTreesLess80cf + ForwardTreesLess80cf) *
       (intermediate.BoleWtCT / intermediate.BoleWtST);
-  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
-
-  Residue.ResidueWt = Math.round(Residue.ResidueWt);
-  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
-  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
-
-  // III. System Cost Summaries
-  const TotalPerAcre =
-    Stump2Truck4PrimaryProductWithoutMovein +
-    Movein4PrimaryProduct +
-    OntoTruck4ResiduesWoMovein +
-    Movein4Residues;
-  const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
-  const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
-
-  const TotalPerAcreOut = Math.round(TotalPerAcre);
-  const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
-  const TotalPerGTout = Math.round(TotalPerGT);
+  Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
+  Residue.CostPerGT = Residue.CostPerAcre / Total.Weight;
+  // Fuel
+  Residue.DieselPerAcre =
+    OntoTruck4ResiduesWoMovein2 +
+    Movein4Residues2 +
+    (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
+      (intermediate.BoleWtCT / intermediate.BoleWtST) +
+    ChipCTLChipTreeBoles2;
 
   return {
-    TotalPerBoleCCF: TotalPerBoleCCFout,
-    TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut,
+    Total,
     Residue
   };
 }

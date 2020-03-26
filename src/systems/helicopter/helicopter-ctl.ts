@@ -28,7 +28,8 @@ function HelicopterCTL(
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
-  const CostHarvest = Harvesting(assumption, input, intermediate, machineCost);
+  const HarvestingResults = Harvesting(assumption, input, intermediate, machineCost);
+  const CostHarvest = HarvestingResults.CostHarvest;
   const HelicopterYardingResults = HelicopterYarding(input, intermediate);
   const CostHeliYardCTL = HelicopterYardingResults.CostHeliYardCTL;
   const CostHeliLoadCTL = HelicopterYardingResults.CostHeliLoadCTL;
