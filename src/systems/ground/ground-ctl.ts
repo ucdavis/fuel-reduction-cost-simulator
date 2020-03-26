@@ -136,11 +136,19 @@ function GroundCTL(
     ForwardTreesLess80cf2 +
     LoadCTLlogTreesLess80cf2 +
     ChipCTLChipTreeBoles2;
-  // 2 refers to bundler and forwarder used to collect residues
-  const LowboyLoads = input.CalcMoveIn ? 4 + (input.CalcResidues ? 2 : 0) : 0;
+  const DieselStump2Truck4ResiduesWithoutMovein =
+    (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
+      (intermediate.BoleWtCT / intermediate.BoleWtST) +
+    ChipCTLChipTreeBoles2;
+  const LowboyLoads = 4;
+  const LowboyLoadsResidues = 2; // bundler and forwarder used to collect residues
   const mpg = 6;
-  const Movein4PrimaryProduct2 =
-    (LowboyLoads * input.MoveInDist) / mpg / input.Area;
+  const Movein4PrimaryProduct2 = input.CalcMoveIn
+    ? ((LowboyLoads + (input.CalcResidues ? LowboyLoadsResidues : 0)) *
+        input.MoveInDist) /
+      mpg /
+      input.Area
+    : 0;
   const BundleCTLResidues2 = input.CalcResidues
     ? GalBundleResidue * ResidueRecoveredOptional
     : 0;
@@ -161,7 +169,7 @@ function GroundCTL(
 
   // III. Summaries
   const Total = {
-    Weight: 0,
+    WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
     CostPerGT: 0,
@@ -171,7 +179,7 @@ function GroundCTL(
   };
 
   const Residue = {
-    Weight: 0,
+    WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
     CostPerGT: 0,
@@ -181,7 +189,7 @@ function GroundCTL(
   };
 
   // System Summaries - Total
-  Total.Weight = TotalPrimaryProductsAndOptionalResidues;
+  Total.WeightPerAcre = TotalPrimaryProductsAndOptionalResidues;
   // Cost
   Total.CostPerAcre =
     Stump2Truck4PrimaryProductWithoutMovein +
@@ -189,7 +197,7 @@ function GroundCTL(
     OntoTruck4ResiduesWoMovein +
     Movein4Residues;
   Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
-  Total.CostPerGT = Total.CostPerAcre / Total.Weight;
+  Total.CostPerGT = Total.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Total.DieselPerAcre =
     DieselStump2Truck4PrimaryProductWithoutMovein +
@@ -198,7 +206,7 @@ function GroundCTL(
 
   // System Summaries - Residue
   // Cost
-  Residue.Weight =
+  Residue.WeightPerAcre =
     ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
   Residue.CostPerAcre =
     OntoTruck4ResiduesWoMovein +
@@ -207,14 +215,12 @@ function GroundCTL(
     (HarvestTreesLess80cf + ForwardTreesLess80cf) *
       (intermediate.BoleWtCT / intermediate.BoleWtST);
   Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
-  Residue.CostPerGT = Residue.CostPerAcre / Total.Weight;
+  Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Residue.DieselPerAcre =
+    DieselStump2Truck4ResiduesWithoutMovein +
     OntoTruck4ResiduesWoMovein2 +
-    Movein4Residues2 +
-    (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
-      (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    ChipCTLChipTreeBoles2;
+    Movein4Residues2;
 
   return {
     Total,

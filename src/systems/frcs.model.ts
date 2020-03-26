@@ -161,7 +161,7 @@ export interface IntermediateVarMod {
 
 export interface OutputVarMod {
   Total: {
-    Weight: number;
+    WeightPerAcre: number;
     CostPerAcre: number;
     CostPerBoleCCF: number;
     CostPerGT: number;
@@ -170,7 +170,7 @@ export interface OutputVarMod {
     JetFuelPerAcre: number;
   };
   Residue: {
-    Weight: number;
+    WeightPerAcre: number;
     CostPerAcre: number;
     CostPerBoleCCF: number;
     CostPerGT: number;

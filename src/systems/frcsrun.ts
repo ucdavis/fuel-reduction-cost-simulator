@@ -119,7 +119,7 @@ export function calculate(input: InputVarMod) {
   };
   let output: OutputVarMod = {
     Total: {
-      Weight: 0,
+      WeightPerAcre: 0,
       CostPerAcre: 0,
       CostPerBoleCCF: 0,
       CostPerGT: 0,
@@ -128,7 +128,7 @@ export function calculate(input: InputVarMod) {
       JetFuelPerAcre: 0
     },
     Residue: {
-      Weight: 0,
+      WeightPerAcre: 0,
       CostPerAcre: 0,
       CostPerBoleCCF: 0,
       CostPerGT: 0,
