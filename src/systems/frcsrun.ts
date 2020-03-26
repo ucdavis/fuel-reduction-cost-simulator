@@ -401,9 +401,9 @@ export function calculate(input: InputVarMod) {
     case 'Ground-Based CTL':
       output = GroundCTL(input, intermediate, assumption);
       break;
-    // case 'Cable Manual WT/Log':
-    //   output = CableManualWTLog(input, intermediate, assumption);
-    //   break;
+    case 'Cable Manual WT/Log':
+      output = CableManualWTLog(input, intermediate, assumption);
+      break;
     case 'Cable Manual WT':
       output = CableManualWT(input, intermediate, assumption);
       break;
