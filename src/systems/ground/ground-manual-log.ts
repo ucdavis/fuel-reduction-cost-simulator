@@ -70,6 +70,10 @@ function GroundManualLog(
     SkidUnbunchedAllTrees +
     LoadLogTrees +
     ChipTreeBoles;
+  const Stump2Truck4ResiduesWithoutMovein =
+    ChipTreeBoles +
+    (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
+      (intermediate.BoleWtCT / intermediate.BoleWt);
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
     : 0;
@@ -129,10 +133,7 @@ function GroundManualLog(
   // Cost
   Residue.WeightPerAcre =
     ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
-  Residue.CostPerAcre =
-    ChipTreeBoles +
-    (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
-      (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.CostPerAcre = Stump2Truck4ResiduesWithoutMovein;
   Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
