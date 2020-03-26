@@ -76,7 +76,7 @@ function GroundMechWT(
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
   const GalFellBunch = FellBunchResults.GalFellBunch;
-  const GalChainsaw = 0.007779726; // gal/CCF
+  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
   const GalSkidBun = SkiddingResults.GalSkidBun;
   const GalProcess = ProcessingResults.GalProcess;
   const GalLoad = LoadingResults.GalLoad;

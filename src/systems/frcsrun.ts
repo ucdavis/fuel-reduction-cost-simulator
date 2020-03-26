@@ -395,9 +395,9 @@ export function calculate(input: InputVarMod) {
     case 'Ground-Based Manual WT':
       output = GroundManualWT(input, intermediate, assumption);
       break;
-    // case 'Ground-Based Manual Log': // CalcResidues must be 0
-    //   output = GroundManualLog(input, intermediate, assumption);
-    //   break;
+    case 'Ground-Based Manual Log': // CalcResidues must be 0
+      output = GroundManualLog(input, intermediate, assumption);
+      break;
     case 'Ground-Based CTL':
       output = GroundCTL(input, intermediate, assumption);
       break;
