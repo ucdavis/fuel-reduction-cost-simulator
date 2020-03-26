@@ -101,6 +101,11 @@ function GroundMechWT(
     ProcessLogTreesLess80cf +
     LoadLogTrees +
     ChipWholeTrees;
+  const Stump2Truck4ResiduesWithoutMovein =
+    ChipWholeTrees +
+    FellAndBunchTreesLess80cf *
+      (intermediate.BoleWtCT / intermediate.BoleWtST) +
+    SkidBunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF
     : 0;
@@ -187,11 +192,7 @@ function GroundMechWT(
   Residue.WeightPerAcre =
     ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
   Residue.CostPerAcre =
-    OntoTruck4ResiduesWoMovein +
-    ChipWholeTrees +
-    FellAndBunchTreesLess80cf *
-      (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    SkidBunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+    Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein;
   Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel

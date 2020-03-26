@@ -178,7 +178,7 @@ function GroundManualWT(
   Residue.WeightPerAcre =
     ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
   Residue.CostPerAcre =
-    OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
+    Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein;
   Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
