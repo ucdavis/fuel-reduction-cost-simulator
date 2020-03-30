@@ -16,7 +16,7 @@ import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
 import { HelicopterCTL } from './helicopter/helicopter-ctl';
-import { HelicopterManualWT } from './helicopter/helicopter-manual-wt';
+import { HelicopterManualLog } from './helicopter/helicopter-manual-log';
 import { InLimits } from './methods/inlimits';
 
 export function calculate(input: InputVarMod) {
@@ -413,9 +413,9 @@ export function calculate(input: InputVarMod) {
     case 'Cable CTL':
       output = CableCTL(input, intermediate, assumption);
       break;
-    // case 'Helicopter Manual WT':
-    //   output = HelicopterManualWT(input, intermediate, assumption);
-    //   break;
+    case 'Helicopter Manual Log':
+      output = HelicopterManualLog(input, intermediate, assumption);
+      break;
     // case 'Helicopter CTL':
     //   output = HelicopterCTL(input, intermediate, assumption);
     //   break;

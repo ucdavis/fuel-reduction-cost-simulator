@@ -7,7 +7,7 @@ export const SystemTypes = {
   cableManualWt: 'Cable Manual WT',
   cableManualLog: 'Cable Manual Log',
   cableCtl: 'Cable CTL',
-  helicopterManualWt: 'Helicopter Manual WT',
+  helicopterManualWt: 'Helicopter Manual Log',
   helicopterCtl: 'Helicopter CTL'
 };
 
