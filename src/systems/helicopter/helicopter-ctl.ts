@@ -7,6 +7,7 @@ import {
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { Harvesting } from '../methods/harvesting';
+import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
 import { HelicopterYarding } from './methods/helicopteryarding';
@@ -28,7 +29,12 @@ function HelicopterCTL(
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
-  const HarvestingResults = Harvesting(assumption, input, intermediate, machineCost);
+  const HarvestingResults = Harvesting(
+    assumption,
+    input,
+    intermediate,
+    machineCost
+  );
   const CostHarvest = HarvestingResults.CostHarvest;
   const HelicopterYardingResults = HelicopterYarding(input, intermediate);
   const CostHeliYardCTL = HelicopterYardingResults.CostHeliYardCTL;
@@ -43,6 +49,13 @@ function HelicopterCTL(
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipBundledRes = ChippingResults.CostChipBundledRes;
 
+  const GalHarvest = HarvestingResults.GalHarvest;
+  const GalHeliYardCTL = HelicopterYardingResults.GalHeliYardCTL;
+  const LoadingResults = Loading(assumption, input, intermediate, machineCost);
+  const GalLoadCTL = LoadingResults.GalLoadCTL;
+  const GalHeliLoadCTL = GalLoadCTL * 2;
+  const GalChipWT = ChippingResults.GalChipWT;
+
   // C. For All Products, $/ac
   const HarvestTreesLess80cf = (CostHarvest * intermediate.VolPerAcreST) / 100;
   const HeliYardCTLtreesLess80cf =
@@ -56,6 +69,10 @@ function HelicopterCTL(
     HeliYardCTLtreesLess80cf +
     LoadCTLlogTreesLess80cf +
     ChipTreeBoles;
+  const Stump2Truck4ResiduesWithoutMovein =
+    ChipTreeBoles +
+    (HarvestTreesLess80cf + HeliYardCTLtreesLess80cf) *
+      (intermediate.BoleWtCT / intermediate.BoleWtST);
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFheliCTL * BoleVolCCF
     : 0;
@@ -68,40 +85,78 @@ function HelicopterCTL(
       ? MoveInCostsResults.CostPerCCFheliCTL * ResidueRecoveredOptional
       : 0;
 
-  // III.0 Residue Cost Summaries
-  const Residue = {
-    ResidueWt: 0,
-    ResiduePerGT: 0,
-    ResiduePerAcre: 0
+  // D. For All Products, $/ac
+  const HarvestTreesLess80cf2 = (GalHarvest * intermediate.VolPerAcreST) / 100;
+  const HeliYardCTLtreesLess80cf2 =
+    (GalHeliYardCTL * intermediate.VolPerAcreST) / 100;
+  const LoadCTLlogTreesLess80cf2 =
+    (GalHeliLoadCTL * intermediate.VolPerAcreSLT) / 100;
+  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+
+  const DieselStump2Truck4PrimaryProductWithoutMovein =
+    HarvestTreesLess80cf2 + LoadCTLlogTreesLess80cf2 + ChipTreeBoles2;
+  const DieselStump2Truck4ResiduesWithoutMovein = ChipTreeBoles2;
+  const LowboyLoads = 4;
+  const mpg = 6;
+  const Movein4PrimaryProduct2 = input.CalcMoveIn
+    ? (LowboyLoads * input.MoveInDist) / mpg / input.Area
+    : 0;
+  const JetFuelStump2Truck4PrimaryProductWithoutMovein = HeliYardCTLtreesLess80cf2;
+  const JetFuelStump2Truck4ResiduesWithoutMovein =
+    HeliYardCTLtreesLess80cf2 * (intermediate.BoleWtCT / intermediate.BoleWtST);
+
+  // III. Summaries
+  const Total = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
   };
-  Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
-  Residue.ResiduePerAcre =
-    ChipTreeBoles +
-    (HarvestTreesLess80cf + HeliYardCTLtreesLess80cf) *
-      (intermediate.BoleWtCT / intermediate.BoleWtST);
-  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
-  Residue.ResidueWt = Math.round(Residue.ResidueWt);
-  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
-  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
+  const Residue = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
+  };
 
-  // III. System Cost Summaries
-  const TotalPerAcre =
+  // System Summaries - Total
+  Total.WeightPerAcre = TotalPrimaryProductsAndOptionalResidues;
+  // Cost
+  Total.CostPerAcre =
     Stump2Truck4PrimaryProductWithoutMovein +
     Movein4PrimaryProduct +
     OntoTruck4ResiduesWoMovein +
     Movein4Residues;
-  const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
-  const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
+  Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
+  Total.CostPerGT = Total.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Total.DieselPerAcre =
+    DieselStump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct2;
+  Total.JetFuelPerAcre = JetFuelStump2Truck4PrimaryProductWithoutMovein;
 
-  const TotalPerAcreOut = Math.round(TotalPerAcre);
-  const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
-  const TotalPerGTout = Math.round(TotalPerGT);
+  // System Summaries - Residue
+  // Cost
+  Residue.WeightPerAcre =
+    ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
+  Residue.CostPerAcre =
+    Stump2Truck4ResiduesWithoutMovein +
+    OntoTruck4ResiduesWoMovein +
+    Movein4Residues;
+  Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
+  Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+  Residue.JetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
 
   return {
-    TotalPerBoleCCF: TotalPerBoleCCFout,
-    TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut,
+    Total,
     Residue
   };
 }

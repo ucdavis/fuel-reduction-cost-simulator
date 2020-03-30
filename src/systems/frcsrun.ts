@@ -416,9 +416,9 @@ export function calculate(input: InputVarMod) {
     case 'Helicopter Manual Log':
       output = HelicopterManualLog(input, intermediate, assumption);
       break;
-    // case 'Helicopter CTL':
-    //   output = HelicopterCTL(input, intermediate, assumption);
-    //   break;
+    case 'Helicopter CTL':
+      output = HelicopterCTL(input, intermediate, assumption);
+      break;
   }
 
   return output;
