@@ -141,7 +141,7 @@ export function calculate(input: InputVarMod) {
   // Other Assumptions
   assumption.MaxManualTreeVol = 150;
   assumption.MaxMechTreeVol = 80;
-  assumption.MoistureContent = 0.5;
+  assumption.MoistureContent = input.MoistureContent / 100;
   assumption.LogLength = 32;
   assumption.LoadWeightLog = 25;
   assumption.LoadWeightChip = 25;

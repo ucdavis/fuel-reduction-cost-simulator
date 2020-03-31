@@ -228,6 +228,12 @@
           "format": "float",
           "example": 3.882,
           "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
+        },
+        "MoistureContent": {
+          "type": "number",
+          "format": "float",
+          "example": 50,
+          "description": "Moisture Content of Biomass Feedstock (% wet basis)"
         }
       },
       "required": [

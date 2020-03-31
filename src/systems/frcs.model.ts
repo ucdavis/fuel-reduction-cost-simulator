@@ -45,6 +45,7 @@ export interface InputVarMod {
   TreeVolLLT: number;
 
   DieselFuelPrice: number;
+  MoistureContent: number;
 }
 
 export class InputVar implements InputVar {
@@ -74,6 +75,7 @@ export class InputVar implements InputVar {
   RemovalsLLT = 5;
   TreeVolLLT = 100;
   DieselFuelPrice = 3.882;
+  MoistureContent = 50;
   constructor() {}
 }
 
