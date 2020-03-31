@@ -25,7 +25,7 @@
           "frcs"
         ],
         "summary": "Runs FRCS from given input",
-        "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual WT | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 |  |  | 80 |  | 80 |  | 80 |\n| TreeVol Max LLT, ft3 | 250 | 100 | 500 |  |  | 500 |  | 100 |  | 100 |\n| TreeVol Max ALT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| TreeVol Max AT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max Slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
+        "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual Log | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 |  |  | 80 |  | 80 |  | 80 |\n| TreeVol Max LLT, ft3 | 250 | 100 | 500 |  |  | 500 |  | 100 |  | 100 |\n| TreeVol Max ALT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| TreeVol Max AT, ft3 | 250 |  | 500 | 250 | 250 | 500 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max Slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
         "operationId": "runFRCS",
         "produces": [
           "application/json"
@@ -70,7 +70,7 @@
             "Cable Manual WT",
             "Cable Manual Log",
             "Cable CTL",
-            "Helicopter Manual WT",
+            "Helicopter Manual Log",
             "Helicopter CTL"
           ]
         },
@@ -227,7 +227,7 @@
           "type": "number",
           "format": "float",
           "example": 3.882,
-          "description": "California On-Highway Diesel Fuel Price in dollars per gallon"
+          "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
         }
       },
       "required": [
@@ -255,50 +255,115 @@
     "OutputVarMod": {
       "type": "object",
       "properties": {
-        "TotalPerBoleCCF": {
-          "type": "number",
-          "format": "float",
-          "example": 72,
-          "description": "Logging Cost per Hundred Cubic Feet."
-        },
-        "TotalPerGT": {
-          "type": "number",
-          "format": "float",
-          "example": 21,
-          "description": "Logging Cost per Green Ton."
-        },
-        "TotalPerAcre": {
-          "type": "number",
-          "format": "float",
-          "example": 3624,
-          "description": "Logging Cost per Acre."
+        "Total": {
+          "$ref": "#/definitions/TotalMod"
         },
         "Residue": {
-          "type": "object",
-          "properties": {
-            "ResidueWt": {
-              "type": "number",
-              "format": "float",
-              "example": 50.518225,
-              "description": "Weight of Residues in Green Tons per Acre."
-            }, 
-            "ResiduePerAcre": {
-              "type": "number",
-              "format": "float",
-              "example": 593.2918894437706,
-              "description": "Harvesting Cost of Residues per Acre."
-            }, 
-            "ResiduePerGT": {
-              "type": "number",
-              "format": "float",
-              "example": 11.744115899633659,
-              "description": "Harvesting Cost of Residues per Green Ton."
-            }
-         }
+          "$ref": "#/definitions/ResidueMod"
         }
       },
       "xml": {
         "name": "OutputVarMod"
+      }
+    },
+    "TotalMod": {
+      "type": "object",
+      "properties": {
+        "WeightPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 168.639975,
+          "description": "Total Weight in Green Tons per Acre."
+        },
+        "CostPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 3708.621951,
+          "description": "Total Logging Cost in US dollars per Acre."
+        },
+        "CostPerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "example": 74.17243903,
+          "description": "Total Logging Cost in US dollars per Hundred Cubic Feet."
+        },
+        "CostPerGT": {
+          "type": "number",
+          "format": "float",
+          "example": 21.99135734,
+          "description": "Total Logging Cost in US dollars per Green Ton."
+        },
+        "DieselPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 50.99159554,
+          "description": "Total Diesel Consumption in Gallons per Acre."
+        },
+        "GasolinePerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 0.388986296,
+          "description": "Total Gasoline Consumption in Gallons per Acre."
+        },
+        "JetFuelPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 0,
+          "description": "Total Jet Fuel Consumption in Gallons per Acre."
+        }
+      },
+      "xml": {
+        "name": "TotalMod"
+      }
+    },
+    "ResidueMod": {
+      "type": "object",
+      "properties": {
+        "WeightPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 50.518225,
+          "description": "Weight of Residues in Green Tons per Acre."
+        }, 
+        "CostPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 534.2228831,
+          "description": "Cost of Harvesting Residues in US dollars per Acre."
+        }, 
+        "CostPerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "example": 10.68445766,
+          "description": "Cost of Harvesting Residues in US dollars per Hundred Cubic Feet."
+        }, 
+        "CostPerGT": {
+          "type": "number",
+          "format": "float",
+          "example": 3.167830659,
+          "description": "Cost of Harvesting Residues in US dollars per Green Ton."
+        },
+        "DieselPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 15.64078771,
+          "description": "Diesel Consumption of Harvesting Residues in Gallons per Acre."
+        },
+        "GasolinePerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 0.066371983,
+          "description": "Gasoline Consumption of Harvesting Residues in Gallons per Acre."
+        },
+        "JetFuelPerAcre": {
+          "type": "number",
+          "format": "float",
+          "example": 0,
+          "description": "Jet Fuel Consumption of Harvesting Residues in Gallons per Acre."
+        }
+      },
+      "xml": {
+        "name": "ResidueMod"
       }
     }
   },
