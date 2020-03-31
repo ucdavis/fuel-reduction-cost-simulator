@@ -94,8 +94,12 @@ function CableManualWT(
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
-    ManualFellTreesLess80cf * (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    CableYardUnbunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+    ManualFellTreesLess80cf *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWtST + intermediate.ResidueST)) +
+    CableYardUnbunchedAllTrees *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue));
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFcableManualWT * BoleVolCCF
     : 0;
@@ -131,10 +135,15 @@ function CableManualWT(
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     CableYardUnbunchedAllTrees2 *
-      (intermediate.BoleWtCT / intermediate.BoleWt) +
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue)) +
     ChipWholeTrees2;
   const GasolineStump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf2 + ManualFellTreesLess80cf2;
+  const GasolineStump2Truck4ResiduesWithoutMovein =
+    ManualFellTreesLess80cf2 *
+    ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+      (intermediate.BoleWtST + intermediate.ResidueST));
   const LowboyLoads = 5;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.CalcMoveIn
@@ -194,8 +203,7 @@ function CableManualWT(
   // Fuel
   Residue.DieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;
-  Residue.GasolinePerAcre =
-    ManualFellTreesLess80cf2 * (intermediate.BoleWtCT / intermediate.BoleWtST);
+  Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
 
   return {
     Total,

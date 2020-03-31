@@ -104,8 +104,11 @@ function GroundMechWT(
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
     FellAndBunchTreesLess80cf *
-      (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    SkidBunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWtST + intermediate.ResidueST)) +
+    SkidBunchedAllTrees *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue));
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF
     : 0;
@@ -136,8 +139,11 @@ function GroundMechWT(
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     FellAndBunchTreesLess80cf2 *
-      (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    SkidBunchedAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWtST + intermediate.ResidueST)) +
+    SkidBunchedAllTrees2 *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue));
   const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckTreesLarger80cf2;
   const LowboyLoads = 5;
   const mpg = 6;
