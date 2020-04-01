@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is a service for running FRCS on a single stand of trees in California, funded by California Energy Commission.",
-    "version": "1.0.0",
+    "version": "1.0.9",
     "title": "Fuel Reduction Cost Simulator",
     "contact": {
       "email": "kkyli@ucdavis.edu"
