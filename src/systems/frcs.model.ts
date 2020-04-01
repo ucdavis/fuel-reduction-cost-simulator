@@ -7,7 +7,7 @@ export const SystemTypes = {
   cableManualWt: 'Cable Manual WT',
   cableManualLog: 'Cable Manual Log',
   cableCtl: 'Cable CTL',
-  helicopterManualWt: 'Helicopter Manual WT',
+  helicopterManualWt: 'Helicopter Manual Log',
   helicopterCtl: 'Helicopter CTL'
 };
 
@@ -45,6 +45,7 @@ export interface InputVarMod {
   TreeVolLLT: number;
 
   DieselFuelPrice: number;
+  MoistureContent: number;
 }
 
 export class InputVar implements InputVar {
@@ -74,6 +75,7 @@ export class InputVar implements InputVar {
   RemovalsLLT = 5;
   TreeVolLLT = 100;
   DieselFuelPrice = 3.882;
+  MoistureContent = 50;
   constructor() {}
 }
 
@@ -160,13 +162,23 @@ export interface IntermediateVarMod {
 }
 
 export interface OutputVarMod {
-  TotalPerBoleCCF: number;
-  TotalPerGT: number;
-  TotalPerAcre: number;
+  Total: {
+    WeightPerAcre: number;
+    CostPerAcre: number;
+    CostPerBoleCCF: number;
+    CostPerGT: number;
+    DieselPerAcre: number;
+    GasolinePerAcre: number;
+    JetFuelPerAcre: number;
+  };
   Residue: {
-    ResidueWt: number;
-    ResiduePerAcre: number;
-    ResiduePerGT: number;
+    WeightPerAcre: number;
+    CostPerAcre: number;
+    CostPerBoleCCF: number;
+    CostPerGT: number;
+    DieselPerAcre: number;
+    GasolinePerAcre: number;
+    JetFuelPerAcre: number;
   };
 }
 

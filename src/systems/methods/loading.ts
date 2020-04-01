@@ -97,6 +97,7 @@ function Loading(
 
   // Loading Summary
   // I. Loading Full-Length Logs
+  // CostLoad
   const CostLoad = input.CalcLoad
     ? intermediate.TreeVolALT > 0
       ? (intermediate.CHardwoodALT *
@@ -113,7 +114,18 @@ function Loading(
           RelevanceLoadingIE * VolPerPMHloadingIE)
       : 0
     : 0;
+  // GalLoad
+  const HorsepowerLoaderS = 120;
+  const HorsepowerLoaderB = 200;
+  const fcrLoader = 0.022;
+  const WeightedGalPMH =
+    HorsepowerLoaderS * fcrLoader * (1 - intermediate.ManualMachineSizeALT) +
+    HorsepowerLoaderB * fcrLoader * intermediate.ManualMachineSizeALT;
+  const WeightedCostPMH = LoaderHourlyCost;
+  const GalLoad = (WeightedGalPMH * CostLoad) / WeightedCostPMH;
+
   // II. Loading CTL Logs
+  // CostLoadCTL
   const CostLoadCTL = input.CalcLoad
     ? input.TreeVolSLT > 0
       ? (intermediate.CHardwoodSLT *
@@ -126,8 +138,15 @@ function Loading(
           RelevanceLoadingIIC * VolPerPMHloadingIIC)
       : 0
     : 0;
+  // GalLoadCTL
+  const GalLoadCTL = (WeightedGalPMH * CostLoadCTL) / WeightedCostPMH;
 
-  return { CostLoad: CostLoad, CostLoadCTL: CostLoadCTL };
+  return {
+    CostLoad: CostLoad,
+    CostLoadCTL: CostLoadCTL,
+    GalLoad: GalLoad,
+    GalLoadCTL: GalLoadCTL
+  };
 }
 
 export { Loading };

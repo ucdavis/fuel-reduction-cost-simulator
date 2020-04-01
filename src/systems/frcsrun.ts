@@ -16,7 +16,7 @@ import { GroundManualLog } from './ground/ground-manual-log';
 import { GroundManualWT } from './ground/ground-manual-wt';
 import { GroundMechWT } from './ground/ground-mech-wt';
 import { HelicopterCTL } from './helicopter/helicopter-ctl';
-import { HelicopterManualWT } from './helicopter/helicopter-manual-wt';
+import { HelicopterManualLog } from './helicopter/helicopter-manual-log';
 import { InLimits } from './methods/inlimits';
 
 export function calculate(input: InputVarMod) {
@@ -118,20 +118,30 @@ export function calculate(input: InputVarMod) {
     ResidueRecovFracCTL: 0
   };
   let output: OutputVarMod = {
-    TotalPerBoleCCF: 0,
-    TotalPerGT: 0,
-    TotalPerAcre: 0,
+    Total: {
+      WeightPerAcre: 0,
+      CostPerAcre: 0,
+      CostPerBoleCCF: 0,
+      CostPerGT: 0,
+      DieselPerAcre: 0,
+      GasolinePerAcre: 0,
+      JetFuelPerAcre: 0
+    },
     Residue: {
-      ResidueWt: 0,
-      ResiduePerAcre: 0,
-      ResiduePerGT: 0,
+      WeightPerAcre: 0,
+      CostPerAcre: 0,
+      CostPerBoleCCF: 0,
+      CostPerGT: 0,
+      DieselPerAcre: 0,
+      GasolinePerAcre: 0,
+      JetFuelPerAcre: 0
     }
   };
 
   // Other Assumptions
   assumption.MaxManualTreeVol = 150;
   assumption.MaxMechTreeVol = 80;
-  assumption.MoistureContent = 0.5;
+  assumption.MoistureContent = input.MoistureContent / 100;
   assumption.LogLength = 32;
   assumption.LoadWeightLog = 25;
   assumption.LoadWeightChip = 25;
@@ -403,8 +413,8 @@ export function calculate(input: InputVarMod) {
     case 'Cable CTL':
       output = CableCTL(input, intermediate, assumption);
       break;
-    case 'Helicopter Manual WT':
-      output = HelicopterManualWT(input, intermediate, assumption);
+    case 'Helicopter Manual Log':
+      output = HelicopterManualLog(input, intermediate, assumption);
       break;
     case 'Helicopter CTL':
       output = HelicopterCTL(input, intermediate, assumption);

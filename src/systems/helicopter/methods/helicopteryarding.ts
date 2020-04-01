@@ -184,6 +184,29 @@ function HelicopterYarding(
       CCFperDay1B * Relevance1B +
       CCFperDay1C * Relevance1C +
       CCFperDay1D * Relevance1D);
+  // GalHeliYardML
+  const WeightedCostPerDay =
+    (CCFperDay1A * CostPerCCF1A * Relevance1A +
+      CCFperDay1B * CostPerCCF1B * Relevance1B +
+      CCFperDay1C * CostPerCCF1C * Relevance1C +
+      CCFperDay1D * CostPerCCF1D * Relevance1D) /
+    (Relevance1A + Relevance1B + Relevance1C + Relevance1D);
+  const GalPMHIA = 86;
+  const GalPMHIB = 180;
+  const GalPMHIC = 86;
+  const GalPMHID = 0; // User Defined
+  const FlightTimeIA = 6;
+  const FlightTimeIB = 6.76;
+  const FlightTimeIC = 8.5;
+  const FlightTimeID = 0;
+  const WeightedGallonPerDay =
+    (GalPMHIA * Relevance1A * FlightTimeIA +
+      GalPMHIB * Relevance1B * FlightTimeIB +
+      GalPMHIC * Relevance1C * FlightTimeIC +
+      GalPMHID * Relevance1D * FlightTimeID) /
+    (Relevance1A + Relevance1B + Relevance1C + Relevance1D);
+  const GalHeliYardML =
+    (WeightedGallonPerDay * CostHeliYardML) / WeightedCostPerDay;
   // II. CTL
   const CostHeliYardCTL =
     (intermediate.CHardwood *
@@ -195,6 +218,15 @@ function HelicopterYarding(
       CCFperDay2B * Relevance2B +
       CCFperDay2C * Relevance2C +
       CCFperDay2D * Relevance2D);
+  // GalHeliYardCTL
+  const WeightedCostPerDayCTL =
+    (CCFperDay2A * CostPerCCF2A * Relevance2A +
+      CCFperDay2B * CostPerCCF2B * Relevance2B +
+      CCFperDay2C * CostPerCCF2C * Relevance2C +
+      CCFperDay2D * CostPerCCF2D * Relevance2D) /
+    (Relevance2A + Relevance2B + Relevance2C + Relevance2D);
+  const GalHeliYardCTL =
+    (WeightedGallonPerDay * CostHeliYardCTL) / WeightedCostPerDayCTL;
 
   // Helicopter Loading Summary
   const Total2A = (1 + 0.1) * 1 * (263 + 770);
@@ -209,7 +241,6 @@ function HelicopterYarding(
   const CostPerCCF2B2 = Total2B / CCFperDay2B;
   const CostPerCCF2C2 = Total2C / CCFperDay2C;
   const CostPerCCF2D2 = Total2D / CCFperDay2D;
-
   // I. Manual Log-Length
   const CostHeliLoadML =
     (intermediate.CHardwood *
@@ -237,7 +268,9 @@ function HelicopterYarding(
     CostHeliYardML: CostHeliYardML,
     CostHeliYardCTL: CostHeliYardCTL,
     CostHeliLoadML: CostHeliLoadML,
-    CostHeliLoadCTL: CostHeliLoadCTL
+    CostHeliLoadCTL: CostHeliLoadCTL,
+    GalHeliYardML: GalHeliYardML,
+    GalHeliYardCTL: GalHeliYardCTL
   };
 
   return resultObj;

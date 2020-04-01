@@ -102,7 +102,7 @@ function InLimits(input: InputVarMod) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 1300;
       break;
-    case 'Helicopter Manual WT':
+    case 'Helicopter Manual Log':
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;

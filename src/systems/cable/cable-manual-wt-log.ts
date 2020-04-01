@@ -52,8 +52,10 @@ function CableManualWTLog(
   );
   const CostManFLBALT2 = FellwtChipLogOtherResults.CostManFLBALT2;
   const CostManFellCT2 = FellwtChipLogOtherResults.CostManFellCT2;
-  const CostYardPCUB = CYPCU(assumption, input, intermediate, machineCost);
-  const CostYardCCUB = CYCCU(input, intermediate, machineCost);
+  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
+  const CostYardPCUB = CYPCUresults.CostYardPCUB;
+  const CYCCUresults = CYCCU(input, intermediate, machineCost);
+  const CostYardCCUB = CYCCUresults.CostYardCCUB;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(
@@ -66,10 +68,13 @@ function CableManualWTLog(
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
+  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
+  const GalYardPCUB = CYPCUresults.GalYardPCUB;
+  const GalYardCCUB = CYCCUresults.GalYardCCUB;
+  const GalLoad = LoadingResults.GalLoad;
+  const GalChipWT = ChippingResults.GalChipWT;
+
   // C. For All Products, $/ac
-  // const ManualFellLimbBuckAllLogTrees = 0;
-  // const ManualFellChipTrees = 0;
-  // const CableYardUnbunchedAllTrees = 0;
   const ManualFellLimbBuckAllLogTrees =
     (CostManFLBALT2 * intermediate.VolPerAcreALT) / 100;
   const ManualFellChipTrees =
@@ -91,7 +96,12 @@ function CableManualWTLog(
     CableYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipWholeTrees;
-  // const Movein4PrimaryProduct = 0;
+  const Stump2Truck4ResiduesWithoutMovein =
+    ChipWholeTrees +
+    ManualFellChipTrees +
+    CableYardUnbunchedAllTrees *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue));
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFcableManualWTLog * BoleVolCCF
     : 0;
@@ -103,40 +113,87 @@ function CableManualWTLog(
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
 
-  // III.0 Residue Cost Summaries
-  const Residue = {
-    ResidueWt: 0,
-    ResiduePerGT: 0,
-    ResiduePerAcre: 0
+  // D. For All Products, gal/ac
+  const ManualFellLimbBuckAllLogTrees2 =
+    (GalChainsaw * intermediate.VolPerAcreALT) / 100;
+  const ManualFellChipTrees2 = (GalChainsaw * intermediate.VolPerAcreCT) / 100;
+  const CableYardUnbunchedAllTrees2 =
+    ((input.PartialCut === true
+      ? GalYardPCUB
+      : input.PartialCut === false
+      ? GalYardCCUB
+      : 0) *
+      intermediate.VolPerAcre) /
+    100;
+  const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
+  const ChipWholeTrees2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+
+  const DieselStump2Truck4PrimaryProductWithoutMovein =
+    CableYardUnbunchedAllTrees2 + LoadLogTrees2 + ChipWholeTrees2;
+  const DieselStump2Truck4ResiduesWithoutMovein =
+    CableYardUnbunchedAllTrees2 *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue)) +
+    ChipWholeTrees2;
+  const GasolineStump2Truck4PrimaryProductWithoutMovein =
+    ManualFellLimbBuckAllLogTrees2 + ManualFellChipTrees2;
+  const GasolineStump2Truck4ResiduesWithoutMovein = ManualFellChipTrees2;
+  const LowboyLoads = 4;
+  const mpg = 6;
+  const Movein4PrimaryProduct2 = input.CalcMoveIn
+    ? (LowboyLoads * input.MoveInDist) / mpg / input.Area
+    : 0;
+
+  // III. Summaries
+  const Total = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
   };
-  Residue.ResidueWt = intermediate.BoleWtCT + intermediate.ResidueCT;
-  Residue.ResiduePerAcre =
-    ChipWholeTrees +
-    ManualFellChipTrees +
-    CableYardUnbunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
-  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
-  Residue.ResidueWt = Math.round(Residue.ResidueWt);
-  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
-  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
+  const Residue = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
+  };
 
-  // III. System Cost Summaries
-  const TotalPerAcre =
+  // System Summaries - Total
+  Total.WeightPerAcre = TotalPrimaryProductsAndOptionalResidues;
+  // Cost
+  Total.CostPerAcre =
     Stump2Truck4PrimaryProductWithoutMovein +
     Movein4PrimaryProduct +
     OntoTruck4ResiduesWoMovein +
     Movein4Residues;
-  const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
-  const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
+  Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
+  Total.CostPerGT = Total.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Total.DieselPerAcre =
+    DieselStump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct2;
+  Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
 
-  const TotalPerAcreOut = Math.round(TotalPerAcre);
-  const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
-  const TotalPerGTout = Math.round(TotalPerGT);
+  // System Summaries - Residue
+  // Cost
+  Residue.WeightPerAcre =
+    ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
+  Residue.CostPerAcre =
+    OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
+  Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
+  Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+  Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
 
   return {
-    TotalPerBoleCCF: TotalPerBoleCCFout,
-    TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut,
+    Total,
     Residue
   };
 }

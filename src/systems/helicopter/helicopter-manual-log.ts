@@ -1,4 +1,4 @@
-// Outputs sheet: Ground-Based Manual Log column
+// Outputs sheet: Helicopter Manual Log column
 import {
   AssumptionMod,
   InputVarMod,
@@ -10,10 +10,9 @@ import { FellAllTrees } from '../methods/fellalltrees';
 import { Loading } from '../methods/loading';
 import { MachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
-import { FellBunch } from './methods/fellbunch';
-import { Skidding } from './methods/skidding';
+import { HelicopterYarding } from './methods/helicopteryarding';
 
-function GroundManualLog(
+function HelicopterManualLog(
   input: InputVarMod,
   intermediate: IntermediateVarMod,
   assumption: AssumptionMod
@@ -30,17 +29,11 @@ function GroundManualLog(
   // Machine costs
   const machineCost: MachineCostMod = MachineCosts(input);
   // System Cost Elements-------
-  const FellBunchResults = FellBunch(input, intermediate, machineCost);
-  const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
-  const SkiddingResults = Skidding(
-    input,
-    intermediate,
-    machineCost,
-    TreesPerCycleIIB
-  );
-  const CostSkidUB = SkiddingResults.CostSkidUB;
-  const LoadingResults = Loading(assumption, input, intermediate, machineCost);
-  const CostLoad = LoadingResults.CostLoad;
+  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
+  const CostManFLB = FellAllTreesResults.CostManFLB;
+  const HelicopterYardingResults = HelicopterYarding(input, intermediate);
+  const CostHeliYardML = HelicopterYardingResults.CostHeliYardML;
+  const CostHeliLoadML = HelicopterYardingResults.CostHeliLoadML;
   const ChippingResults = Chipping(
     assumption,
     input,
@@ -50,51 +43,63 @@ function GroundManualLog(
   const CostChipWT = ChippingResults.CostChipWT;
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
-  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
-  const CostManFLB = FellAllTreesResults.CostManFLB;
 
   const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
-  const GalSkidUB = SkiddingResults.GalSkidUB;
+  const GalHeliYardML = HelicopterYardingResults.GalHeliYardML;
+  const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const GalLoad = LoadingResults.GalLoad;
+  const GalHeliLoadML = GalLoad * 2;
   const GalChipWT = ChippingResults.GalChipWT;
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees =
     (CostManFLB * intermediate.VolPerAcre) / 100;
-  const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.VolPerAcre) / 100;
-  const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
+  const HeliYardUnbunchedAllTrees =
+    (CostHeliYardML * intermediate.VolPerAcre) / 100;
+  const LoadLogTrees = (CostHeliLoadML * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
-    SkidUnbunchedAllTrees +
+    HeliYardUnbunchedAllTrees +
     LoadLogTrees +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
+    (ManualFellLimbBuckAllTrees + HeliYardUnbunchedAllTrees) *
       (intermediate.BoleWtCT / intermediate.BoleWt);
   const Movein4PrimaryProduct = input.CalcMoveIn
-    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
+    ? MoveInCostsResults.CostPerCCFhManualLog * BoleVolCCF
     : 0;
+  const ChipLooseResiduesFromLogTreesLess80cf = input.CalcResidues
+    ? CostChipLooseRes * ResidueRecoveredOptional
+    : 0;
+  const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
+  const Movein4Residues =
+    input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
 
-  // D. For All Products, gal/ac
+  // D. For All Products, $/ac
   const ManualFellLimbBuckAllTrees2 =
     (GalChainsaw * intermediate.VolPerAcre) / 100;
-  const SkidUnbunchedAllTrees2 = (GalSkidUB * intermediate.VolPerAcre) / 100;
-  const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
+  const HeliYardUnbunchedAllTrees2 =
+    (GalHeliYardML * intermediate.VolPerAcre) / 100;
+  const LoadLogTrees2 = (GalHeliLoadML * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    SkidUnbunchedAllTrees2 + LoadLogTrees2 + ChipTreeBoles2;
-  const DieselStump2Truck4ResiduesWithoutMovein =
-    SkidUnbunchedAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt) +
-    ChipTreeBoles2;
+    LoadLogTrees2 + ChipTreeBoles2;
+  const DieselStump2Truck4ResiduesWithoutMovein = ChipTreeBoles2;
   const LowboyLoads = 3;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.CalcMoveIn
     ? (LowboyLoads * input.MoveInDist) / mpg / input.Area
     : 0;
   const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckAllTrees2;
+  const GasolineStump2Truck4ResiduesWithoutMovein =
+    ManualFellLimbBuckAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
+  const JetFuelStump2Truck4PrimaryProductWithoutMovein = HeliYardUnbunchedAllTrees2;
+  const JetFuelStump2Truck4ResiduesWithoutMovein =
+    HeliYardUnbunchedAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
 
   // III. Summaries
   const Total = {
@@ -121,13 +126,17 @@ function GroundManualLog(
   Total.WeightPerAcre = TotalPrimaryProductsAndOptionalResidues;
   // Cost
   Total.CostPerAcre =
-    Stump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct;
+    Stump2Truck4PrimaryProductWithoutMovein +
+    Movein4PrimaryProduct +
+    OntoTruck4ResiduesWoMovein +
+    Movein4Residues;
   Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
   Total.CostPerGT = Total.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Total.DieselPerAcre =
     DieselStump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct2;
   Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
+  Total.JetFuelPerAcre = JetFuelStump2Truck4PrimaryProductWithoutMovein;
 
   // System Summaries - Residue
   // Cost
@@ -138,8 +147,8 @@ function GroundManualLog(
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
-  Residue.GasolinePerAcre =
-    ManualFellLimbBuckAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
+  Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
+  Residue.JetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
 
   return {
     Total,
@@ -147,4 +156,4 @@ function GroundManualLog(
   };
 }
 
-export { GroundManualLog };
+export { HelicopterManualLog };

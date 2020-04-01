@@ -276,17 +276,27 @@ function Skidding(
   const CostPerCCFskidIVH = (100 * SkidderHourlyCost) / VolPerPMHskidIVH;
   const RelevanceSkidIVH = 0;
   // Skidding Summary
-  const CostSkidUB =
-    (intermediate.CHardwood *
-      100 *
-      (SkidderHourlyCost * RelevanceSkidIA +
-        SkidderHourlyCost * RelevanceSkidIB +
-        SkidderHourlyCost * RelevanceSkidIC +
-        SkidderHourlyCost * RelevanceSkidID +
-        SkidderHourlyCost * RelevanceSkidIE +
-        SkidderHourlyCost * RelevanceSkidIIA +
-        SkidderHourlyCost * RelevanceSkidIIB +
-        SkidderHourlyCost * RelevanceSkidIII)) /
+  // CostSkidUB ($/CCF)
+  const RelevanceSumUB =
+    RelevanceSkidIA +
+    RelevanceSkidIB +
+    RelevanceSkidIC +
+    RelevanceSkidID +
+    RelevanceSkidIE +
+    RelevanceSkidIIA +
+    RelevanceSkidIIB +
+    RelevanceSkidIII;
+  const WeightedCostPerPMHUB =
+    (SkidderHourlyCost * RelevanceSkidIA +
+      SkidderHourlyCost * RelevanceSkidIB +
+      SkidderHourlyCost * RelevanceSkidIC +
+      SkidderHourlyCost * RelevanceSkidID +
+      SkidderHourlyCost * RelevanceSkidIE +
+      SkidderHourlyCost * RelevanceSkidIIA +
+      SkidderHourlyCost * RelevanceSkidIIB +
+      SkidderHourlyCost * RelevanceSkidIII) /
+    RelevanceSumUB;
+  const WeightedVolPerPMHUB =
     (RelevanceSkidIA * VolPerPMHskidIA +
       RelevanceSkidIB * VolPerPMHskidIB +
       RelevanceSkidIC * VolPerPMHskidIC +
@@ -294,18 +304,39 @@ function Skidding(
       RelevanceSkidIE * VolPerPMHskidIE +
       RelevanceSkidIIA * VolPerPMHskidIIA +
       RelevanceSkidIIB * VolPerPMHskidIIB +
-      RelevanceSkidIII * VolPerPMHskidIII);
-  const CostSkidBun =
-    (intermediate.CHardwood *
-      100 *
-      (SkidderHourlyCost * RelevanceSkidIVA +
-        SkidderHourlyCost * RelevanceSkidIVB +
-        SkidderHourlyCost * RelevanceSkidIVC +
-        SkidderHourlyCost * RelevanceSkidIVD +
-        SkidderHourlyCost * RelevanceSkidIVE +
-        SkidderHourlyCost * RelevanceSkidIVF +
-        SkidderHourlyCost * RelevanceSkidIVG +
-        SkidderHourlyCost * RelevanceSkidIVH)) /
+      RelevanceSkidIII * VolPerPMHskidIII) /
+    RelevanceSumUB;
+  const CostSkidUB =
+    (intermediate.CHardwood * 100 * WeightedCostPerPMHUB) / WeightedVolPerPMHUB;
+  // GalSkidUB (gal/CCF)
+  const HorsepowerSkidderS = 120;
+  const HorsepowerSkidderB = 200;
+  const fcrSkidder = 0.028;
+  const WeightedGalPerPMH =
+    HorsepowerSkidderS * fcrSkidder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerSkidderB * fcrSkidder * intermediate.ManualMachineSize;
+  const GalSkidUB = (WeightedGalPerPMH * CostSkidUB) / WeightedCostPerPMHUB;
+  // CostSkidBun
+  const RelevanceSumB =
+    RelevanceSkidIVA +
+    RelevanceSkidIVB +
+    RelevanceSkidIVC +
+    RelevanceSkidIVD +
+    RelevanceSkidIVE +
+    RelevanceSkidIVF +
+    RelevanceSkidIVG +
+    RelevanceSkidIVH;
+  const WeightedCostPerPMHB =
+    (SkidderHourlyCost * RelevanceSkidIVA +
+      SkidderHourlyCost * RelevanceSkidIVB +
+      SkidderHourlyCost * RelevanceSkidIVC +
+      SkidderHourlyCost * RelevanceSkidIVD +
+      SkidderHourlyCost * RelevanceSkidIVE +
+      SkidderHourlyCost * RelevanceSkidIVF +
+      SkidderHourlyCost * RelevanceSkidIVG +
+      SkidderHourlyCost * RelevanceSkidIVH) /
+    RelevanceSumB;
+  const WeightedVolPerPMHB =
     (RelevanceSkidIVA * VolPerPMHskidIVA +
       RelevanceSkidIVB * VolPerPMHskidIVB +
       RelevanceSkidIVC * VolPerPMHskidIVC +
@@ -313,9 +344,19 @@ function Skidding(
       RelevanceSkidIVE * VolPerPMHskidIVE +
       RelevanceSkidIVF * VolPerPMHskidIVF +
       RelevanceSkidIVG * VolPerPMHskidIVG +
-      RelevanceSkidIVH * VolPerPMHskidIVH);
+      RelevanceSkidIVH * VolPerPMHskidIVH) /
+    RelevanceSumB;
+  const CostSkidBun =
+    (intermediate.CHardwood * 100 * WeightedCostPerPMHB) / WeightedVolPerPMHB;
+  // GalSkidBun
+  const GalSkidBun = (WeightedGalPerPMH * CostSkidBun) / WeightedCostPerPMHB;
 
-  return { CostSkidBun: CostSkidBun, CostSkidUB: CostSkidUB };
+  return {
+    CostSkidBun: CostSkidBun,
+    CostSkidUB: CostSkidUB,
+    GalSkidUB: GalSkidUB,
+    GalSkidBun: GalSkidBun
+  };
 }
 
 export { Skidding };

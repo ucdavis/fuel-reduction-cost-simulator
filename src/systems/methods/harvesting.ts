@@ -410,6 +410,7 @@ function Harvesting(
   const CostPerCCFIRharvest = CostPerCCFfunc(VolPerPMHIRharvest);
   const RelevanceIRharvest = 0;
   // Summary
+  // CostHarvest
   const IntermediateCalcs1 =
     RelevanceIAharvest * VolPerPMHIAharvest +
     RelevanceIBharvest * VolPerPMHIBharvest +
@@ -454,8 +455,17 @@ function Harvesting(
         IntermediateCalcs1
       : 0;
   const CostHarvest = WeightAverageHarvesting * (input.PartialCut ? 1 : 0.9);
+  // GalHarvest
+  const HorsepowerHarvesterS = 120;
+  const HorsepowerHarvesterB = 200;
+  const fcrHarvester = 0.029;
+  const WeightedAverageGalPMH =
+    HorsepowerHarvesterS * fcrHarvester * (1 - intermediate.MechMachineSize) +
+    HorsepowerHarvesterB * fcrHarvester * intermediate.MechMachineSize;
+  const GalHarvest =
+    (WeightedAverageGalPMH * CostHarvest) / HarvesterHourlyCost;
 
-  return CostHarvest;
+  return { CostHarvest: CostHarvest, GalHarvest: GalHarvest };
 }
 
 export { Harvesting };

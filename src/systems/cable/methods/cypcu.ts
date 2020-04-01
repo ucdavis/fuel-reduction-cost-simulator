@@ -347,6 +347,7 @@ function CYPCU(
   const WeightingDivisorIIPcable = VolPerPMHIIPcable * RelevanceIIPcable;
 
   // Results
+  // CostYardPCUB
   const WeightingProductSum =
     WeightingProductIIAcable +
     WeightingProductIIBcable +
@@ -382,8 +383,17 @@ function CYPCU(
     WeightingDivisorIIOcable +
     WeightingDivisorIIPcable;
   const CostYardPCUB = WeightingProductSum / WeightingDivisorSum;
+  // GalYardPCUB
+  const HorsepowerYarderS = 100;
+  const HorsepowerYarderI = 200;
+  const fcrYarder = 0.04;
+  const WeightedGalPMH =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const WeightedCostPMH = YarderHourlyCost;
+  const GalYardPCUB = (WeightedGalPMH * CostYardPCUB) / WeightedCostPMH;
 
-  return CostYardPCUB;
+  return { CostYardPCUB: CostYardPCUB, GalYardPCUB: GalYardPCUB };
 }
 
 export { CYPCU };

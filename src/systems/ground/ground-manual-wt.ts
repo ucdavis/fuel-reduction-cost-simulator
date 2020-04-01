@@ -50,7 +50,8 @@ function GroundManualWT(
     TreesPerCycleIIB
   );
   const CostSkidUB = SkiddingResults.CostSkidUB;
-  const CostProcess = Processing(input, intermediate, machineCost);
+  const ProcessingResults = Processing(input, intermediate, machineCost);
+  const CostProcess = ProcessingResults.CostProcess;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(
@@ -62,6 +63,13 @@ function GroundManualWT(
   const CostChipWT = ChippingResults.CostChipWT;
   const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
+
+  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
+  const GalSkidUB = SkiddingResults.GalSkidUB;
+  const GalProcess = ProcessingResults.GalProcess;
+  const GalLoad = LoadingResults.GalLoad;
+  const GalChipWT = ChippingResults.GalChipWT;
+  const GalChipLooseRes = ChippingResults.GalChipLooseRes;
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckTreesLarger80cf =
@@ -81,6 +89,14 @@ function GroundManualWT(
     ProcessLogTreesLess80cf +
     LoadLogTrees +
     ChipWholeTrees;
+  const Stump2Truck4ResiduesWithoutMovein =
+    ChipWholeTrees +
+    ManualFellTreesLess80cf *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWtST + intermediate.ResidueST)) +
+    SkidUnbunchedAllTrees *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue));
   const Movein4PrimaryProduct = input.CalcMoveIn
     ? MoveInCostsResults.CostPerCCFmanualWT * BoleVolCCF
     : 0;
@@ -92,42 +108,96 @@ function GroundManualWT(
   const Movein4Residues =
     input.CalcMoveIn && input.CalcResidues ? 0 * ResidueRecoveredOptional : 0;
 
-  // III.0 Residue Cost Summaries
-  const Residue = {
-    ResidueWt: 0,
-    ResiduePerGT: 0,
-    ResiduePerAcre: 0
+  // D. For All Products, gal/ac
+  const ManualFellLimbBuckTreesLarger80cf2 =
+    (GalChainsaw * intermediate.VolPerAcreLLT) / 100;
+  const ManualFellTreesLess80cf2 =
+    (GalChainsaw * intermediate.VolPerAcreST) / 100;
+  const SkidUnbunchedAllTrees2 = (GalSkidUB * intermediate.VolPerAcre) / 100;
+  const ProcessLogTreesLess80cf2 =
+    (GalProcess * intermediate.VolPerAcreSLT) / 100;
+  const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
+  const ChipWholeTrees2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+
+  const DieselStump2Truck4PrimaryProductWithoutMovein =
+    SkidUnbunchedAllTrees2 +
+    ProcessLogTreesLess80cf2 +
+    LoadLogTrees2 +
+    ChipWholeTrees2;
+  const DieselStump2Truck4ResiduesWithoutMovein =
+    SkidUnbunchedAllTrees2 *
+      ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+        (intermediate.BoleWt + intermediate.Residue)) +
+    ChipWholeTrees2;
+  const GasolineStump2Truck4PrimaryProductWithoutMovein =
+    ManualFellLimbBuckTreesLarger80cf2 + ManualFellTreesLess80cf2;
+  const GasolineStump2Truck4ResiduesWithoutMovein =
+    ManualFellTreesLess80cf2 *
+    ((intermediate.BoleWtCT + intermediate.ResidueCT) /
+      (intermediate.BoleWtST + intermediate.ResidueST));
+  const LowboyLoads = 4;
+  const mpg = 6;
+  const Movein4PrimaryProduct2 = input.CalcMoveIn
+    ? (LowboyLoads * input.MoveInDist) / mpg / input.Area
+    : 0;
+  const ChipLooseResiduesFromLogTreesLess80cf2 = input.CalcResidues
+    ? GalChipLooseRes * ResidueRecoveredOptional
+    : 0;
+  const OntoTruck4ResiduesWoMovein2 = ChipLooseResiduesFromLogTreesLess80cf2;
+
+  // III. Summaries
+  const Total = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
   };
-  Residue.ResidueWt =
-    ResidueRecoveredOptional + intermediate.BoleWtCT + intermediate.ResidueCT;
-  Residue.ResiduePerAcre =
-    OntoTruck4ResiduesWoMovein +
-    ChipWholeTrees +
-    ManualFellTreesLess80cf * (intermediate.BoleWtCT / intermediate.BoleWtST) +
-    SkidUnbunchedAllTrees * (intermediate.BoleWtCT / intermediate.BoleWt);
-  Residue.ResiduePerGT = Residue.ResiduePerAcre / Residue.ResidueWt;
 
-  Residue.ResidueWt = Math.round(Residue.ResidueWt);
-  Residue.ResiduePerAcre = Math.round(Residue.ResiduePerAcre);
-  Residue.ResiduePerGT = Math.round(Residue.ResiduePerGT);
+  const Residue = {
+    WeightPerAcre: 0,
+    CostPerAcre: 0,
+    CostPerBoleCCF: 0,
+    CostPerGT: 0,
+    DieselPerAcre: 0,
+    GasolinePerAcre: 0,
+    JetFuelPerAcre: 0
+  };
 
-  // III. System Cost Summaries
-  const TotalPerAcre =
+  // System Summaries - Total
+  Total.WeightPerAcre = TotalPrimaryProductsAndOptionalResidues;
+  // Cost
+  Total.CostPerAcre =
     Stump2Truck4PrimaryProductWithoutMovein +
     Movein4PrimaryProduct +
     OntoTruck4ResiduesWoMovein +
     Movein4Residues;
-  const TotalPerBoleCCF = TotalPerAcre / BoleVolCCF;
-  const TotalPerGT = TotalPerAcre / TotalPrimaryProductsAndOptionalResidues;
+  Total.CostPerBoleCCF = Total.CostPerAcre / BoleVolCCF;
+  Total.CostPerGT = Total.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Total.DieselPerAcre =
+    DieselStump2Truck4PrimaryProductWithoutMovein +
+    Movein4PrimaryProduct2 +
+    OntoTruck4ResiduesWoMovein2;
+  Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
 
-  const TotalPerAcreOut = Math.round(TotalPerAcre);
-  const TotalPerBoleCCFout = Math.round(TotalPerBoleCCF);
-  const TotalPerGTout = Math.round(TotalPerGT);
+  // System Summaries - Residue
+  // Cost
+  Residue.WeightPerAcre =
+    ResidueRecoveredOptional + intermediate.BoleWtCT + ResidueRecoveredPrimary;
+  Residue.CostPerAcre =
+    Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein;
+  Residue.CostPerBoleCCF = Residue.CostPerAcre / BoleVolCCF;
+  Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
+  // Fuel
+  Residue.DieselPerAcre =
+    DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;
+  Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
 
   return {
-    TotalPerBoleCCF: TotalPerBoleCCFout,
-    TotalPerGT: TotalPerGTout,
-    TotalPerAcre: TotalPerAcreOut,
+    Total,
     Residue
   };
 }

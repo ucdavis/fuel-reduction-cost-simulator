@@ -225,6 +225,7 @@ function CYCCU(
     VolPerPMHIHcable * CostPerCCFIHcable * RelevanceIHcable;
   const WeightingDivisorIHcable = VolPerPMHIHcable * RelevanceIHcable;
   // Results
+  // CostYardCCUB
   const WeightingProduct1Sum =
     WeightingProductIAcable +
     WeightingProductIBcable +
@@ -244,8 +245,62 @@ function CYCCU(
     WeightingDivisorIGcable +
     WeightingDivisorIHcable;
   const CostYardCCUB = WeightingProduct1Sum / WeightingDivisor1Sum;
+  // GalYardCCUB
+  const HorsepowerYarderS = 100;
+  const HorsepowerYarderI = 200;
+  const fcrYarder = 0.04;
+  const GalPerPMHIA = HorsepowerYarderS * fcrYarder;
+  const GalPerPMHIB = HorsepowerYarderS * fcrYarder;
+  const GalPerPMHIC =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalPerPMHID =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalPerPMHIE =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalPerPMHIF =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalPerPMHIG =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const GalPerPMHIH =
+    HorsepowerYarderS * fcrYarder * (1 - intermediate.ManualMachineSize) +
+    HorsepowerYarderI * fcrYarder * intermediate.ManualMachineSize;
+  const RelevanceSum =
+    RelevanceIAcable +
+    RelevanceIBcable +
+    RelevanceICcable +
+    RelevanceIDcable +
+    RelevanceIEcable +
+    RelevanceIFcable +
+    RelevanceIGcable +
+    RelevanceIHcable;
+  const WeightedGalPerPMH =
+    (GalPerPMHIA * RelevanceIAcable +
+      GalPerPMHIB * RelevanceIBcable +
+      GalPerPMHIC * RelevanceICcable +
+      GalPerPMHID * RelevanceIDcable +
+      GalPerPMHIE * RelevanceIEcable +
+      GalPerPMHIF * RelevanceIFcable +
+      GalPerPMHIG * RelevanceIGcable +
+      GalPerPMHIH * RelevanceIHcable) /
+    RelevanceSum;
+  const WeightedCostPerPMH =
+    (machineCost.PMH_YarderS * RelevanceIAcable +
+      machineCost.PMH_YarderS * RelevanceIBcable +
+      YarderHourlyCost * RelevanceICcable +
+      YarderHourlyCost * RelevanceIDcable +
+      YarderHourlyCost * RelevanceIEcable +
+      YarderHourlyCost * RelevanceIFcable +
+      YarderHourlyCost * RelevanceIGcable +
+      YarderHourlyCost * RelevanceIHcable) /
+    RelevanceSum;
+  const GalYardCCUB = (WeightedGalPerPMH * CostYardCCUB) / WeightedCostPerPMH;
 
-  return CostYardCCUB;
+  return { CostYardCCUB, GalYardCCUB };
 }
 
 export { CYCCU };

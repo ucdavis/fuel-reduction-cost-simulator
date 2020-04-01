@@ -80,6 +80,7 @@ function Processing(
   const CostPerCCFprocessH = (100 * ProcessorHourlyCost) / VolPerPMHprocessH;
   const RelevanceProcessH = 0;
   // Processing Summary
+  // CostProcess
   const CostProcess =
     input.TreeVolSLT > 0
       ? (intermediate.CHardwoodSLT *
@@ -101,8 +102,17 @@ function Processing(
           RelevanceProcessG * VolPerPMHprocessG +
           RelevanceProcessH * VolPerPMHprocessH)
       : 0;
+  // GalProcess
+  const HorsepowerProcessorS = 120;
+  const HorsepowerProcessorB = 200;
+  const fcrProcessor = 0.022;
+  const WeightedGalPMH =
+    HorsepowerProcessorS * fcrProcessor * (1 - intermediate.MechMachineSize) +
+    HorsepowerProcessorB * fcrProcessor * intermediate.MechMachineSize;
+  const WeightedCostPMH = ProcessorHourlyCost;
+  const GalProcess = (WeightedGalPMH * CostProcess) / WeightedCostPMH;
 
-  return CostProcess;
+  return { CostProcess: CostProcess, GalProcess: GalProcess };
 }
 
 export { Processing };
