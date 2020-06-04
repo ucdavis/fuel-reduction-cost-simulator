@@ -1,5 +1,6 @@
 // Felling (WT small, log other) sheet
-import { InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
+import { InputVarMod, IntermediateVarMod, MachineCostMod } from "../frcs.model";
+import { FellAllTrees } from "./fellalltrees";
 
 function FellwtSmallLogOther(
   input: InputVarMod,
@@ -156,23 +157,25 @@ function FellwtSmallLogOther(
   const RelevanceIIDllt = 0;
 
   // Summary;
+  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
+  const RelevanceIIBat = FellAllTreesResults.RelevanceIIBat;
   const CostManFLBLLT2 =
     input.TreeVolLLT > 0
       ? (intermediate.CHardwoodLLT *
           100 *
           (machineCost.PMH_Chainsaw * RelevanceIIAllt +
-            machineCost.PMH_Chainsaw * RelevanceIIBllt +
+            machineCost.PMH_Chainsaw * RelevanceIIBat +
             machineCost.PMH_Chainsaw * RelevanceIICllt +
             machineCost.PMH_Chainsaw * RelevanceIIDllt)) /
         (RelevanceIIAllt * VolPerPMHIIAllt +
-          RelevanceIIBllt * VolPerPMHIIBllt +
+          RelevanceIIBat * VolPerPMHIIBllt +
           RelevanceIICllt * VolPerPMHIICllt +
           RelevanceIIDllt * VolPerPMHIIDllt)
       : 0;
 
   return {
     CostManFellST2: CostManFellST2,
-    CostManFLBLLT2: CostManFLBLLT2
+    CostManFLBLLT2: CostManFLBLLT2,
   };
 }
 
