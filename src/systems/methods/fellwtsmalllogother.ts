@@ -44,7 +44,7 @@ function FellwtSmallLogOther(
     1.082 + 0.01505 * intermediate.TreeVolST - 0.634 / intermediate.TreeVolST;
   const VolPerPMHIDst = intermediate.TreeVolST / (TimePerTreeIDst / 60);
   const CostPerCCFIDst = (100 * machineCost.PMH_Chainsaw) / VolPerPMHIDst;
-  const RelevanceIDst =
+  let RelevanceIDst =
     intermediate.TreeVolST < 0.6
       ? 0
       : intermediate.TreeVolST < 15
@@ -58,7 +58,12 @@ function FellwtSmallLogOther(
   const VolPerPMHIEst = 0.001;
   const CostPerCCFIEst = (100 * machineCost.PMH_Chainsaw) / VolPerPMHIEst;
   const RelevanceIEst = 0;
+
+  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
+  const RelevanceIDat = FellAllTreesResults.RelevanceIDat;
+  const RelevanceIIBat = FellAllTreesResults.RelevanceIIBat;
   // Summary
+  RelevanceIDst = Math.min(RelevanceIDst, RelevanceIDat);
   const CostManFellST2 =
     intermediate.TreeVolST > 0
       ? (intermediate.CHardwoodST *
@@ -157,8 +162,6 @@ function FellwtSmallLogOther(
   const RelevanceIIDllt = 0;
 
   // Summary;
-  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
-  const RelevanceIIBat = FellAllTreesResults.RelevanceIIBat;
   const CostManFLBLLT2 =
     input.TreeVolLLT > 0
       ? (intermediate.CHardwoodLLT *

@@ -169,6 +169,7 @@ function FellAllTrees(
     CostManFell: CostManFell,
     CostManFLB: CostManFLB,
     RelevanceIIBat: RelevanceIIBat,
+    RelevanceIDat: RelevanceIDat
   };
 }
 
