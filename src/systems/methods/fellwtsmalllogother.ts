@@ -1,6 +1,6 @@
 // Felling (WT small, log other) sheet
-import { InputVarMod, IntermediateVarMod, MachineCostMod } from "../frcs.model";
-import { FellAllTrees } from "./fellalltrees";
+import { InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
+import { FellAllTrees } from './fellalltrees';
 
 function FellwtSmallLogOther(
   input: InputVarMod,
