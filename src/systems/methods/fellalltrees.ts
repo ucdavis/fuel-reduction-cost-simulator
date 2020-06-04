@@ -165,7 +165,11 @@ function FellAllTrees(
       RelevanceIICat * VolPerPMHIICat +
       RelevanceIIDat * VolPerPMHIIDat);
 
-  return { CostManFell: CostManFell, CostManFLB: CostManFLB };
+  return {
+    CostManFell: CostManFell,
+    CostManFLB: CostManFLB,
+    RelevanceIIBat: RelevanceIIBat,
+  };
 }
 
 export { FellAllTrees };
