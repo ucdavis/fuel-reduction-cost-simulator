@@ -137,7 +137,7 @@ function CableManualLog(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -170,6 +170,10 @@ function CableManualLog(
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   Residue.GasolinePerAcre =
     ManualFellLimbBuckAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,

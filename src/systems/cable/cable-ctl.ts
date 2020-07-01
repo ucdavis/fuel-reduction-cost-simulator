@@ -128,7 +128,7 @@ function CableCTL(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -164,6 +164,10 @@ function CableCTL(
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,

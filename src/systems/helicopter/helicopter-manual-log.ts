@@ -122,7 +122,7 @@ function HelicopterManualLog(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -159,6 +159,10 @@ function HelicopterManualLog(
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
   Residue.JetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,

@@ -174,7 +174,7 @@ function GroundMechWT(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -214,6 +214,10 @@ function GroundMechWT(
     DieselStump2Truck4ResiduesWithoutMovein +
     OntoTruck4ResiduesWoMovein2 +
     ChipWholeTrees2;
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,

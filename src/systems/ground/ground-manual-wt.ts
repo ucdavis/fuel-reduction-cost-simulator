@@ -164,7 +164,7 @@ function GroundManualWT(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -203,6 +203,10 @@ function GroundManualWT(
   Residue.DieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;
   Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,

@@ -193,7 +193,7 @@ function GroundCTL(
     JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
@@ -234,6 +234,10 @@ function GroundCTL(
     DieselStump2Truck4ResiduesWithoutMovein +
     OntoTruck4ResiduesWoMovein2 +
     Movein4Residues2;
+
+  if (input.ChipAll) {
+    Residue = Total;
+  }
 
   return {
     Total,
