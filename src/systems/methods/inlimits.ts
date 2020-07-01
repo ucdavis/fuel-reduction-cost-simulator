@@ -11,7 +11,7 @@ function InLimits(input: InputVarMod) {
     AvgTreeSizeLimit4loading: 0,
     AvgTreeSize4GrappleSkidding: 0,
     SlopeLimit: 0,
-    YardingDistLimit: 0
+    YardingDistLimit: 0,
   };
   switch (input.System) {
     case 'Ground-Based Mech WT':
@@ -20,8 +20,6 @@ function InLimits(input: InputVarMod) {
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
       limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
-      limit.AvgTreeSizeLimit4loading = 250;
-      limit.AvgTreeSize4GrappleSkidding = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
@@ -30,9 +28,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 500;
-      limit.AvgTreeSizeLimit4loading = 500;
-      limit.AvgTreeSize4GrappleSkidding = 500;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
@@ -40,10 +36,8 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
-      limit.AvgTreeSizeLimit4Processing = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4loading = 250;
-      limit.AvgTreeSize4GrappleSkidding = 250;
+      limit.AvgTreeSizeLimit4Processing = 80;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
@@ -52,9 +46,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 100;
-      limit.AvgTreeSizeLimit4loading = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSize4GrappleSkidding = 9999; // assign a large number to indicate it has no upper limit
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
@@ -62,10 +54,8 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
-      limit.AvgTreeSizeLimit4Processing = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4loading = 250;
-      limit.AvgTreeSize4GrappleSkidding = 250;
+      limit.AvgTreeSizeLimit4Processing = 80;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
@@ -74,9 +64,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 500;
-      limit.AvgTreeSizeLimit4loading = 500;
-      limit.AvgTreeSize4GrappleSkidding = 500;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
@@ -84,10 +72,8 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
-      limit.AvgTreeSizeLimit4Processing = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4loading = 250;
-      limit.AvgTreeSize4GrappleSkidding = 250;
+      limit.AvgTreeSizeLimit4Processing = 80;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
@@ -96,9 +82,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 100;
-      limit.AvgTreeSizeLimit4loading = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSize4GrappleSkidding = 9999; // assign a large number to indicate it has no upper limit
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 1300;
       break;
@@ -106,10 +90,8 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
-      limit.AvgTreeSizeLimit4Processing = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSizeLimit4loading = 250;
-      limit.AvgTreeSize4GrappleSkidding = 250;
+      limit.AvgTreeSizeLimit4Processing = 80;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 10000;
       break;
@@ -118,22 +100,12 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 100;
-      limit.AvgTreeSizeLimit4loading = 9999; // assign a large number to indicate it has no upper limit
-      limit.AvgTreeSize4GrappleSkidding = 9999; // assign a large number to indicate it has no upper limit
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 10000;
       break;
   }
   const RemovalsALT = input.RemovalsSLT + input.RemovalsLLT;
-  const Removals = input.RemovalsCT + input.RemovalsSLT + input.RemovalsLLT;
-  const VolPerAcreCT = input.RemovalsCT * input.TreeVolCT;
-  const VolPerAcreSLT = input.RemovalsSLT * input.TreeVolSLT;
-  const VolPerAcreLLT = input.RemovalsLLT * input.TreeVolLLT;
-  const VolPerAcreALT = VolPerAcreSLT + VolPerAcreLLT;
-  const VolPerAcre = VolPerAcreCT + VolPerAcreSLT + VolPerAcreLLT;
-  const TreeVolALT = RemovalsALT > 0 ? VolPerAcreALT / RemovalsALT : 0;
-  const TreeVol = Removals > 0 ? VolPerAcre / Removals : 0;
 
   const ExceededMaxLLT =
     limit.MaxLLTperAcre === 0 && limit.MaxLLTasPercentALT === 0
@@ -146,9 +118,7 @@ function InLimits(input: InputVarMod) {
   const ExceededMaxTreeVol =
     input.TreeVolCT > limit.AvgTreeSizeLimit4Chipping ||
     input.TreeVolSLT > limit.AvgTreeSizeLimit4Processing ||
-    input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck ||
-    TreeVolALT > limit.AvgTreeSizeLimit4loading ||
-    TreeVol > limit.AvgTreeSize4GrappleSkidding
+    input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck
       ? 1
       : 0;
   // Slope, %
@@ -191,28 +161,9 @@ function InLimits(input: InputVarMod) {
         err += `TreeVolCT should not be greater than ${limit.AvgTreeSizeLimit4Chipping}\n`;
       } else if (input.TreeVolSLT > limit.AvgTreeSizeLimit4Processing) {
         err += `TreeVolSLT should not be greater than ${limit.AvgTreeSizeLimit4Processing}\n`;
-      } else if (input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck) {
-        err += `TreeVolLLT should not be greater than ${limit.AvgTreeSizeLimit4ManualFellLimbBuck}\n`;
-      } else if (TreeVolALT > limit.AvgTreeSizeLimit4loading) {
-        err += `TreeVolALT should not be greater than ${
-          limit.AvgTreeSizeLimit4loading
-        }.\n
-        Explanation:
-        TreeVolALT = VolPerAcreALT / RemovalsALT = ${VolPerAcreALT} / ${RemovalsALT} = ${VolPerAcreALT /
-          RemovalsALT}
-        VolPerAcreALT = RemovalsSLT * TreeVolSLT + RemovalsLLT * TreeVolLLT = ${VolPerAcreALT}
-        RemovalsALT = RemovalsSLT + RemovalsLLT = ${RemovalsALT}
-        `;
       } else {
-        err += `TreeVol should not be greater than ${limit.AvgTreeSize4GrappleSkidding}\n
-        Explanation:
-        TreeVol = VolPerAcre / Removals = ${VolPerAcre} / ${Removals} = ${TreeVol}
-        VolPerAcre = VolPerAcreCT + VolPerAcreSLT + VolPerAcreLLT = ${VolPerAcre}
-        Removals = RemovalsCT + RemovalsSLT + RemovalsLLT = ${Removals}
-        VolPerAcreCT = RemovalsCT * TreeVolCT = ${VolPerAcreCT}
-        VolPerAcreSLT = RemovalsSLT * TreeVolSLT = ${VolPerAcreSLT}
-        VolPerAcreLLT = RemovalsLLT * TreeVolLLT = ${VolPerAcreLLT}
-        `;
+        // input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck
+        err += `TreeVolLLT should not be greater than ${limit.AvgTreeSizeLimit4ManualFellLimbBuck}\n`;
       }
     }
     if (ExceededMaxSkidLimit === 1) {
