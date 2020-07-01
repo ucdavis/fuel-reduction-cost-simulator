@@ -94,8 +94,7 @@ function CableManualWT(
     ManualFellLimbBuckTreesLarger80cf +
     ManualFellTreesLess80cf +
     CableYardUnbunchedAllTrees +
-    ProcessLogTreesLess80cf +
-    LoadLogTrees +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +

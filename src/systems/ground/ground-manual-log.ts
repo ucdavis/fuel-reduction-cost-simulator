@@ -73,7 +73,7 @@ function GroundManualLog(
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
     SkidUnbunchedAllTrees +
-    LoadLogTrees +
+    (input.ChipAll === false ? LoadLogTrees : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +

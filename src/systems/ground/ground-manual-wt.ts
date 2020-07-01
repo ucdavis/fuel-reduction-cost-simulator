@@ -91,8 +91,7 @@ function GroundManualWT(
     ManualFellLimbBuckTreesLarger80cf +
     ManualFellTreesLess80cf +
     SkidUnbunchedAllTrees +
-    ProcessLogTreesLess80cf +
-    LoadLogTrees +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +

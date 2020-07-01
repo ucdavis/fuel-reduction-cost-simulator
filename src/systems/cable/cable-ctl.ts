@@ -71,7 +71,7 @@ function CableCTL(
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
     CableYardCTLtreesLess80cf +
-    LoadCTLlogTreesLess80cf +
+    (input.ChipAll === false ? LoadCTLlogTreesLess80cf : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +

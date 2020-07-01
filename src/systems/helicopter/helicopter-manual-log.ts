@@ -67,7 +67,7 @@ function HelicopterManualLog(
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
     HeliYardUnbunchedAllTrees +
-    LoadLogTrees +
+    (input.ChipAll === false ? LoadLogTrees : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +

@@ -76,7 +76,7 @@ function CableManualLog(
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
     CableYardUnbunchedAllTrees +
-    LoadLogTrees +
+    (input.ChipAll === false ? LoadLogTrees : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +

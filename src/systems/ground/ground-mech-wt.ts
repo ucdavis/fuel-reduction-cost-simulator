@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellLargeLogTrees } from '../methods/felllargelogtrees';
@@ -103,8 +103,7 @@ function GroundMechWT(
     FellAndBunchTreesLess80cf +
     ManualFellLimbBuckTreesLarger80cf +
     SkidBunchedAllTrees +
-    ProcessLogTreesLess80cf +
-    LoadLogTrees +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
@@ -135,11 +134,11 @@ function GroundMechWT(
     (GalProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
   const ChipWholeTrees2 =
-  (GalChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     FellAndBunchTreesLess80cf2 +

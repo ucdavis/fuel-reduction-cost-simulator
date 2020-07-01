@@ -107,7 +107,7 @@ function GroundCTL(
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
     ForwardTreesLess80cf +
-    LoadCTLlogTreesLess80cf +
+    (input.ChipAll === false ? LoadCTLlogTreesLess80cf : 0) +
     ChipCTLChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipCTLChipTreeBoles +
