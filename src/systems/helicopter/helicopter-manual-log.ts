@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellAllTrees } from '../methods/fellalltrees';
@@ -58,11 +58,11 @@ function HelicopterManualLog(
     (CostHeliYardML * intermediate.VolPerAcre) / 100;
   const LoadLogTrees = (CostHeliLoadML * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles =
-  (CostChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -90,14 +90,14 @@ function HelicopterManualLog(
     (GalHeliYardML * intermediate.VolPerAcre) / 100;
   const LoadLogTrees2 = (GalHeliLoadML * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles2 =
-  (GalChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    LoadLogTrees2 + ChipTreeBoles2;
+    (input.ChipAll === false ? LoadLogTrees2 : 0) + +ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein = ChipTreeBoles2;
   const LowboyLoads = 3;
   const mpg = 6;
@@ -119,7 +119,7 @@ function HelicopterManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   const Residue = {
@@ -129,7 +129,7 @@ function HelicopterManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -162,7 +162,7 @@ function HelicopterManualLog(
 
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 

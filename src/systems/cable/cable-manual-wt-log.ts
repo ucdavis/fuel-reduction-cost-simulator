@@ -139,7 +139,9 @@ function CableManualWTLog(
     100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    CableYardUnbunchedAllTrees2 + LoadLogTrees2 + ChipWholeTrees2;
+    CableYardUnbunchedAllTrees2 +
+    (input.ChipAll === false ? LoadLogTrees2 : 0) +
+    +ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     CableYardUnbunchedAllTrees2 *
       ((intermediate.BoleWtCT + intermediate.ResidueCT) /

@@ -143,8 +143,7 @@ function GroundMechWT(
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     FellAndBunchTreesLess80cf2 +
     SkidBunchedAllTrees2 +
-    ProcessLogTreesLess80cf2 +
-    LoadLogTrees2 +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf2 + LoadLogTrees2 : 0) +
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     FellAndBunchTreesLess80cf2 *

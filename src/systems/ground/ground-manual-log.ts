@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellAllTrees } from '../methods/fellalltrees';
@@ -64,11 +64,11 @@ function GroundManualLog(
   const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.VolPerAcre) / 100;
   const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles =
-  (CostChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
@@ -89,14 +89,16 @@ function GroundManualLog(
   const SkidUnbunchedAllTrees2 = (GalSkidUB * intermediate.VolPerAcre) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles2 =
-  (GalChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    SkidUnbunchedAllTrees2 + LoadLogTrees2 + ChipTreeBoles2;
+    SkidUnbunchedAllTrees2 +
+    (input.ChipAll === false ? LoadLogTrees2 : 0) +
+    +ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     SkidUnbunchedAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt) +
     ChipTreeBoles2;
@@ -115,7 +117,7 @@ function GroundManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   const Residue = {
@@ -125,7 +127,7 @@ function GroundManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -154,7 +156,7 @@ function GroundManualLog(
 
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 

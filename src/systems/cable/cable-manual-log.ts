@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellAllTrees } from '../methods/fellalltrees';
@@ -105,14 +105,16 @@ function CableManualLog(
     100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
   const ChipTreeBoles2 =
-  (GalChipWT *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcre)) /
-  100;
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    CableYardUnbunchedAllTrees2 + LoadLogTrees2 + ChipTreeBoles2;
+    CableYardUnbunchedAllTrees2 +
+    (input.ChipAll === false ? LoadLogTrees2 : 0) +
+    +ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     CableYardUnbunchedAllTrees2 *
       (intermediate.BoleWtCT / intermediate.BoleWt) +
@@ -132,7 +134,7 @@ function CableManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   const Residue = {
@@ -142,7 +144,7 @@ function CableManualLog(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -171,7 +173,7 @@ function CableManualLog(
 
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 

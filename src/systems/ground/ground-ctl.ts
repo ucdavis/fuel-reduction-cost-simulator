@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { Harvesting } from '../methods/harvesting';
@@ -98,11 +98,11 @@ function GroundCTL(
   const LoadCTLlogTreesLess80cf =
     (CostLoadCTL * intermediate.VolPerAcreSLT) / 100;
   const ChipCTLChipTreeBoles =
-  (CostChipCTL *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcreST)) /
-  100;
+    (CostChipCTL *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcreST)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
@@ -140,16 +140,16 @@ function GroundCTL(
   const LoadCTLlogTreesLess80cf2 =
     (GalLoadCTL * intermediate.VolPerAcreSLT) / 100;
   const ChipCTLChipTreeBoles2 =
-  (GalChipCTL *
-    (input.ChipAll === false
-      ? intermediate.VolPerAcreCT
-      : intermediate.VolPerAcreST)) /
-  100;
+    (GalChipCTL *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcreST)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf2 +
     ForwardTreesLess80cf2 +
-    LoadCTLlogTreesLess80cf2 +
+    (input.ChipAll === false ? LoadCTLlogTreesLess80cf2 : 0) +
     ChipCTLChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
@@ -190,7 +190,7 @@ function GroundCTL(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   const Residue = {
@@ -200,7 +200,7 @@ function GroundCTL(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -237,7 +237,7 @@ function GroundCTL(
 
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 
