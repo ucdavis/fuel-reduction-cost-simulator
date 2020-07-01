@@ -97,7 +97,12 @@ function GroundCTL(
   const ForwardTreesLess80cf = (CostForward * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf =
     (CostLoadCTL * intermediate.VolPerAcreSLT) / 100;
-  const ChipCTLChipTreeBoles = (CostChipCTL * intermediate.VolPerAcreCT) / 100;
+  const ChipCTLChipTreeBoles =
+  (CostChipCTL *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcreST)) /
+  100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +

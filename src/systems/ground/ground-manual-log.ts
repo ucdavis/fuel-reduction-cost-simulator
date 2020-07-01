@@ -63,7 +63,12 @@ function GroundManualLog(
     (CostManFLB * intermediate.VolPerAcre) / 100;
   const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.VolPerAcre) / 100;
   const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles =
+  (CostChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcre)) /
+  100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +

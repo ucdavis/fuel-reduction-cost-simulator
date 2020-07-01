@@ -80,7 +80,12 @@ function GroundManualWT(
   const ProcessLogTreesLess80cf =
     (CostProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipWholeTrees = (CostChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipWholeTrees =
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf +

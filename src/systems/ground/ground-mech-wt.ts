@@ -92,7 +92,12 @@ function GroundMechWT(
   const ProcessLogTreesLess80cf =
     (CostProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipWholeTrees = (CostChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipWholeTrees =
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     FellAndBunchTreesLess80cf +
@@ -163,7 +168,7 @@ function GroundMechWT(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   const Residue = {
@@ -173,7 +178,7 @@ function GroundMechWT(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -209,7 +214,7 @@ function GroundMechWT(
 
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 
