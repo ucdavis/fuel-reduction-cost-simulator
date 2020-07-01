@@ -134,7 +134,12 @@ function GroundMechWT(
   const ProcessLogTreesLess80cf2 =
     (GalProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipWholeTrees2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipWholeTrees2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcre)) /
+  100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     FellAndBunchTreesLess80cf2 +

@@ -95,7 +95,13 @@ function CableCTL(
     (GalYardCTL * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf2 =
     (GalLoadCTL * intermediate.VolPerAcreSLT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcreST)) /
+  100;
+
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf2 +
     CableYardCTLtreesLess80cf2 +

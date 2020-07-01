@@ -104,7 +104,13 @@ function CableManualLog(
       intermediate.VolPerAcre) /
     100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcre)) /
+  100;
+
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     CableYardUnbunchedAllTrees2 + LoadLogTrees2 + ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =

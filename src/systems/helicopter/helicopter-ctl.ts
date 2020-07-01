@@ -96,7 +96,12 @@ function HelicopterCTL(
     (GalHeliYardCTL * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf2 =
     (GalHeliLoadCTL * intermediate.VolPerAcreSLT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcreST)) /
+  100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf2 + LoadCTLlogTreesLess80cf2 + ChipTreeBoles2;

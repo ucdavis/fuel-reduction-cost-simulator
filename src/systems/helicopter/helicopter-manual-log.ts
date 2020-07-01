@@ -89,7 +89,12 @@ function HelicopterManualLog(
   const HeliYardUnbunchedAllTrees2 =
     (GalHeliYardML * intermediate.VolPerAcre) / 100;
   const LoadLogTrees2 = (GalHeliLoadML * intermediate.VolPerAcreALT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcre)) /
+  100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     LoadLogTrees2 + ChipTreeBoles2;

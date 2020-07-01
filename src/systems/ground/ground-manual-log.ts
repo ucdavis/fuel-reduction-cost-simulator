@@ -88,7 +88,13 @@ function GroundManualLog(
     (GalChainsaw * intermediate.VolPerAcre) / 100;
   const SkidUnbunchedAllTrees2 = (GalSkidUB * intermediate.VolPerAcre) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+  (GalChipWT *
+    (input.ChipAll === false
+      ? intermediate.VolPerAcreCT
+      : intermediate.VolPerAcre)) /
+  100;
+
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     SkidUnbunchedAllTrees2 + LoadLogTrees2 + ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
