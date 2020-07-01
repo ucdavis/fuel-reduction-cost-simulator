@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellwtSmallLogOther } from '../methods/fellwtsmalllogother';
@@ -83,14 +83,18 @@ function CableManualWT(
   const ProcessLogTreesLess80cf =
     (CostProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees = (CostLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipWholeTrees = (CostChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipWholeTrees =
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf +
     ManualFellTreesLess80cf +
     CableYardUnbunchedAllTrees +
-    ProcessLogTreesLess80cf +
-    LoadLogTrees +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
@@ -126,12 +130,16 @@ function CableManualWT(
   const ProcessLogTreesLess80cf2 =
     (GalProcess * intermediate.VolPerAcreSLT) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.VolPerAcreALT) / 100;
-  const ChipWholeTrees2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipWholeTrees2 =
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcre)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
     CableYardUnbunchedAllTrees2 +
-    ProcessLogTreesLess80cf2 +
-    LoadLogTrees2 +
+    (input.ChipAll === false ? ProcessLogTreesLess80cf2 + LoadLogTrees2 : 0) +
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
     CableYardUnbunchedAllTrees2 *
@@ -162,17 +170,17 @@ function CableManualWT(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -205,9 +213,13 @@ function CableManualWT(
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;
   Residue.GasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
 
+  if (input.ChipAll) {
+    Residue = Total;
+  }
+
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 

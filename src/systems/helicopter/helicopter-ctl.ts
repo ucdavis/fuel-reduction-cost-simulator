@@ -3,7 +3,7 @@ import {
   AssumptionMod,
   InputVarMod,
   IntermediateVarMod,
-  MachineCostMod
+  MachineCostMod,
 } from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { Harvesting } from '../methods/harvesting';
@@ -62,12 +62,17 @@ function HelicopterCTL(
     (CostHeliYardCTL * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf =
     (CostHeliLoadCTL * intermediate.VolPerAcreSLT) / 100;
-  const ChipTreeBoles = (CostChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles =
+    (CostChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcreST)) /
+    100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     HarvestTreesLess80cf +
     HeliYardCTLtreesLess80cf +
-    LoadCTLlogTreesLess80cf +
+    (input.ChipAll === false ? LoadCTLlogTreesLess80cf : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
@@ -91,10 +96,17 @@ function HelicopterCTL(
     (GalHeliYardCTL * intermediate.VolPerAcreST) / 100;
   const LoadCTLlogTreesLess80cf2 =
     (GalHeliLoadCTL * intermediate.VolPerAcreSLT) / 100;
-  const ChipTreeBoles2 = (GalChipWT * intermediate.VolPerAcreCT) / 100;
+  const ChipTreeBoles2 =
+    (GalChipWT *
+      (input.ChipAll === false
+        ? intermediate.VolPerAcreCT
+        : intermediate.VolPerAcreST)) /
+    100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    HarvestTreesLess80cf2 + LoadCTLlogTreesLess80cf2 + ChipTreeBoles2;
+    HarvestTreesLess80cf2 +
+    (input.ChipAll === false ? LoadCTLlogTreesLess80cf2 : 0) +
+    ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein = ChipTreeBoles2;
   const LowboyLoads = 4;
   const mpg = 6;
@@ -113,17 +125,17 @@ function HelicopterCTL(
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
-  const Residue = {
+  let Residue = {
     WeightPerAcre: 0,
     CostPerAcre: 0,
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
     GasolinePerAcre: 0,
-    JetFuelPerAcre: 0
+    JetFuelPerAcre: 0,
   };
 
   // System Summaries - Total
@@ -155,9 +167,13 @@ function HelicopterCTL(
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   Residue.JetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
 
+  if (input.ChipAll) {
+    Residue = Total;
+  }
+
   return {
     Total,
-    Residue
+    Residue,
   };
 }
 
