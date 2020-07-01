@@ -233,7 +233,12 @@
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Moisture Content of Biomass Feedstock (% wet basis)"
+          "description": "Moisture Content of Biomass Feedstock (% wet basis)."
+        },
+        "ChipAll": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicate whether all trees (including log trees) are chipped."
         }
       },
       "required": [
