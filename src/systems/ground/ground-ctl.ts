@@ -26,7 +26,6 @@ function GroundCTL(
   const ResidueRecoveredOptional = input.CalcResidues
     ? assumption.ResidueRecovFracCTL * intermediate.ResidueST
     : 0;
-  const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
   // Amounts Unrecovered and Left within the Stand Per Acre

@@ -25,7 +25,6 @@ function CableManualWTLog(
     assumption.ResidueRecovFracWT * intermediate.ResidueCT;
   const PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
   const ResidueRecoveredOptional = 0;
-  const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
   // Amounts Unrecovered and Left within the Stand Per Acre

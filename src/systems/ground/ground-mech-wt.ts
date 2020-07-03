@@ -28,7 +28,6 @@ function GroundMechWT(
   const ResidueRecoveredOptional = input.CalcResidues
     ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
     : 0;
-  const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
   // Amounts Unrecovered and Left within the Stand Per Acre

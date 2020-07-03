@@ -117,8 +117,7 @@ function InLimits(input: InputVarMod) {
       : 0;
   const ExceededMaxTreeVol =
     input.TreeVolCT > limit.AvgTreeSizeLimit4Chipping ||
-    input.TreeVolSLT > limit.AvgTreeSizeLimit4Processing ||
-    input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck
+    input.TreeVolSLT > limit.AvgTreeSizeLimit4Processing
       ? 1
       : 0;
   // Slope, %
@@ -161,9 +160,6 @@ function InLimits(input: InputVarMod) {
         err += `TreeVolCT should not be greater than ${limit.AvgTreeSizeLimit4Chipping}\n`;
       } else if (input.TreeVolSLT > limit.AvgTreeSizeLimit4Processing) {
         err += `TreeVolSLT should not be greater than ${limit.AvgTreeSizeLimit4Processing}\n`;
-      } else {
-        // input.TreeVolLLT > limit.AvgTreeSizeLimit4ManualFellLimbBuck
-        err += `TreeVolLLT should not be greater than ${limit.AvgTreeSizeLimit4ManualFellLimbBuck}\n`;
       }
     }
     if (ExceededMaxSkidLimit === 1) {

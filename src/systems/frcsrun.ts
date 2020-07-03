@@ -9,7 +9,7 @@ import {
   InputVarMod,
   IntermediateVarMod,
   OutputVarMod,
-  SystemTypes
+  SystemTypes,
 } from './frcs.model';
 import { GroundCTL } from './ground/ground-ctl';
 import { GroundManualLog } from './ground/ground-manual-log';
@@ -24,7 +24,56 @@ export function calculate(input: InputVarMod) {
   if (message) {
     throw new Error(message);
   }
-  const intermediate: IntermediateVarMod = {
+  return calculateOutput(input);
+}
+
+function createErrorMessages(params: InputVarMod) {
+  const exampleObj = new InputVar();
+  let message = '';
+  const exampleDesc = Object.getOwnPropertyDescriptors(exampleObj);
+  const paramDesc = Object.getOwnPropertyDescriptors(params);
+
+  // check that each param exists (even if it is null)
+  for (const key in exampleDesc) {
+    if (!params.hasOwnProperty(key)) {
+      message += 'missing param ' + key + '\n';
+    }
+  }
+
+  // check that each param that exists has the correct type
+  for (const key in paramDesc) {
+    if (
+      !key.includes('User') &&
+      typeof paramDesc[key].value !== typeof exampleDesc[key].value
+    ) {
+      message += `wrong type for ${key} (should be ${typeof exampleDesc[key]
+        .value}, was ${typeof paramDesc[key].value}) \n`;
+    }
+  }
+
+  // check specific requirements
+  if (params.System && !Object.values(SystemTypes).includes(params.System)) {
+    message += 'unidentified System type\n';
+  } else if (
+    (params.System === SystemTypes.helicopterCtl ||
+      params.System === SystemTypes.helicopterManualWt) &&
+    params.Elevation < 0
+  ) {
+    message +=
+      'elevation is required to be a valid number for the system you have selected\n';
+  }
+
+  // check that the values of some params do not exceed the limits
+  const err = InLimits(params);
+  if (err !== '') {
+    message += err;
+  }
+
+  return message;
+}
+
+function calculateOutput(input: InputVarMod) {
+  let intermediate: IntermediateVarMod = {
     RemovalsST: 0,
     RemovalsALT: 0,
     Removals: 0,
@@ -103,7 +152,7 @@ export function calculate(input: InputVarMod) {
     CHardwoodLLT: 0,
     CHardwoodST: 0,
     CHardwoodALT: 0,
-    CHardwood: 0
+    CHardwood: 0,
   };
   const assumption: AssumptionMod = {
     MaxManualTreeVol: 0,
@@ -115,7 +164,7 @@ export function calculate(input: InputVarMod) {
     CTLTrailSpacing: 0,
     HdwdCostPremium: 0,
     ResidueRecovFracWT: 0,
-    ResidueRecovFracCTL: 0
+    ResidueRecovFracCTL: 0,
   };
   let output: OutputVarMod = {
     Total: {
@@ -125,7 +174,7 @@ export function calculate(input: InputVarMod) {
       CostPerGT: 0,
       DieselPerAcre: 0,
       GasolinePerAcre: 0,
-      JetFuelPerAcre: 0
+      JetFuelPerAcre: 0,
     },
     Residue: {
       WeightPerAcre: 0,
@@ -134,8 +183,8 @@ export function calculate(input: InputVarMod) {
       CostPerGT: 0,
       DieselPerAcre: 0,
       GasolinePerAcre: 0,
-      JetFuelPerAcre: 0
-    }
+      JetFuelPerAcre: 0,
+    },
   };
 
   // Other Assumptions
@@ -150,6 +199,81 @@ export function calculate(input: InputVarMod) {
   assumption.ResidueRecovFracWT = 0.8;
   assumption.ResidueRecovFracCTL = 0.5;
 
+  // When TreeVolLLT > 250
+  if (input.TreeVolLLT > 250) {
+    const originalTreeVolLLT = input.TreeVolLLT;
+    input.TreeVolLLT = 250;
+    output = calculateOutput(input);
+    const costCCF = output.Total.CostPerBoleCCF;
+    const costResidueCCF = output.Residue.CostPerBoleCCF;
+
+    input.TreeVolLLT = originalTreeVolLLT;
+    intermediate = calculateIntermediate(input, intermediate, assumption);
+    const AmountRecovered = calculateAmountsRecovered(
+      input,
+      intermediate,
+      assumption
+    );
+    let cost = costCCF * AmountRecovered.BoleVolCCF;
+    output.Total.WeightPerAcre =
+      AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+    output.Total.CostPerAcre = cost / input.Area;
+    output.Total.CostPerGT =
+      cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+
+    cost = costResidueCCF * AmountRecovered.BoleVolCCF;
+    output.Residue.WeightPerAcre =
+      intermediate.BoleWtCT +
+      AmountRecovered.ResidueRecoveredPrimary +
+      AmountRecovered.ResidueRecoveredOptional;
+    output.Total.CostPerAcre = cost / input.Area;
+    output.Total.CostPerGT =
+      cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+  }
+
+  intermediate = calculateIntermediate(input, intermediate, assumption);
+
+  switch (input.System) {
+    case 'Ground-Based Mech WT':
+      output = GroundMechWT(input, intermediate, assumption);
+      break;
+    case 'Ground-Based Manual WT':
+      output = GroundManualWT(input, intermediate, assumption);
+      break;
+    case 'Ground-Based Manual Log':
+      output = GroundManualLog(input, intermediate, assumption);
+      break;
+    case 'Ground-Based CTL':
+      output = GroundCTL(input, intermediate, assumption);
+      break;
+    case 'Cable Manual WT/Log':
+      output = CableManualWTLog(input, intermediate, assumption);
+      break;
+    case 'Cable Manual WT':
+      output = CableManualWT(input, intermediate, assumption);
+      break;
+    case 'Cable Manual Log':
+      output = CableManualLog(input, intermediate, assumption);
+      break;
+    case 'Cable CTL':
+      output = CableCTL(input, intermediate, assumption);
+      break;
+    case 'Helicopter Manual Log':
+      output = HelicopterManualLog(input, intermediate, assumption);
+      break;
+    case 'Helicopter CTL':
+      output = HelicopterCTL(input, intermediate, assumption);
+      break;
+  }
+
+  return output;
+}
+
+function calculateIntermediate(
+  input: InputVarMod,
+  intermediate: IntermediateVarMod,
+  assumption: AssumptionMod
+) {
   // funtions
   intermediate.RemovalsST = input.RemovalsCT + input.RemovalsSLT;
   intermediate.RemovalsALT = input.RemovalsSLT + input.RemovalsLLT;
@@ -388,83 +512,119 @@ export function calculate(input: InputVarMod) {
   intermediate.CHardwood =
     1 + assumption.HdwdCostPremium * intermediate.HdwdFraction;
 
-  switch (input.System) {
-    case 'Ground-Based Mech WT':
-      output = GroundMechWT(input, intermediate, assumption);
-      break;
-    case 'Ground-Based Manual WT':
-      output = GroundManualWT(input, intermediate, assumption);
-      break;
-    case 'Ground-Based Manual Log': // CalcResidues must be 0
-      output = GroundManualLog(input, intermediate, assumption);
-      break;
-    case 'Ground-Based CTL':
-      output = GroundCTL(input, intermediate, assumption);
-      break;
-    case 'Cable Manual WT/Log':
-      output = CableManualWTLog(input, intermediate, assumption);
-      break;
-    case 'Cable Manual WT':
-      output = CableManualWT(input, intermediate, assumption);
-      break;
-    case 'Cable Manual Log':
-      output = CableManualLog(input, intermediate, assumption);
-      break;
-    case 'Cable CTL':
-      output = CableCTL(input, intermediate, assumption);
-      break;
-    case 'Helicopter Manual Log':
-      output = HelicopterManualLog(input, intermediate, assumption);
-      break;
-    case 'Helicopter CTL':
-      output = HelicopterCTL(input, intermediate, assumption);
-      break;
-  }
-
-  return output;
+  return intermediate;
 }
 
-function createErrorMessages(params: InputVarMod) {
-  const exampleObj = new InputVar();
-  let message = '';
-  const exampleDesc = Object.getOwnPropertyDescriptors(exampleObj);
-  const paramDesc = Object.getOwnPropertyDescriptors(params);
-
-  // check that each param exists (even if it is null)
-  for (const key in exampleDesc) {
-    if (!params.hasOwnProperty(key)) {
-      message += 'missing param ' + key + '\n';
-    }
+function calculateAmountsRecovered(
+  input: InputVar,
+  intermediate: IntermediateVarMod,
+  assumption: AssumptionMod
+) {
+  // tslint:disable-next-line: one-variable-per-declaration
+  let BoleVolCCF = 0,
+    ResidueRecoveredPrimary = 0,
+    PrimaryProduct = 0,
+    ResidueRecoveredOptional = 0,
+    TotalPrimaryProductsAndOptionalResidues = 0;
+  switch (input.System) {
+    case 'Ground-Based Mech WT':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary =
+        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.CalcResidues
+        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+        : 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Ground-Based Manual WT':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary =
+        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.CalcResidues
+        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+        : 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Ground-Based Manual Log':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Ground-Based CTL':
+      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.CalcResidues
+        ? assumption.ResidueRecovFracCTL * intermediate.ResidueST
+        : 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Cable Manual WT/Log':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary =
+        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Cable Manual WT':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary =
+        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.CalcResidues
+        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+        : 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Cable Manual Log':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Cable CTL':
+      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Helicopter Manual Log':
+      BoleVolCCF = intermediate.VolPerAcre / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
+    case 'Helicopter CTL':
+      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      ResidueRecoveredPrimary = 0;
+      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = 0;
+      TotalPrimaryProductsAndOptionalResidues =
+        PrimaryProduct + ResidueRecoveredOptional;
+      break;
   }
-
-  // check that each param that exists has the correct type
-  for (const key in paramDesc) {
-    if (
-      !key.includes('User') &&
-      typeof paramDesc[key].value !== typeof exampleDesc[key].value
-    ) {
-      message += `wrong type for ${key} (should be ${typeof exampleDesc[key]
-        .value}, was ${typeof paramDesc[key].value}) \n`;
-    }
-  }
-
-  // check specific requirements
-  if (params.System && !Object.values(SystemTypes).includes(params.System)) {
-    message += 'unidentified System type\n';
-  } else if (
-    (params.System === SystemTypes.helicopterCtl ||
-      params.System === SystemTypes.helicopterManualWt) &&
-    params.Elevation < 0
-  ) {
-    message +=
-      'elevation is required to be a valid number for the system you have selected\n';
-  }
-
-  // check that the values of some params do not exceed the limits
-  const err = InLimits(params);
-  if (err !== '') {
-    message += err;
-  }
-
-  return message;
+  return {
+    BoleVolCCF,
+    ResidueRecoveredPrimary,
+    ResidueRecoveredOptional,
+    TotalPrimaryProductsAndOptionalResidues,
+  };
+  // tslint:disable-next-line: max-file-line-count
 }
