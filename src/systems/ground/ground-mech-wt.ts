@@ -182,11 +182,8 @@ function GroundMechWT(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
-    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
-    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
-    JetFuelPerBoleCCF: 0
   };
 
   // System Summaries - Total
@@ -221,7 +218,6 @@ function GroundMechWT(
     DieselStump2Truck4ResiduesWithoutMovein +
     OntoTruck4ResiduesWoMovein2 +
     ChipWholeTrees2;
-  Residue.DieselPerBoleCCF = Residue.DieselPerAcre / BoleVolCCF;
 
   if (input.ChipAll) {
     Residue = Total;

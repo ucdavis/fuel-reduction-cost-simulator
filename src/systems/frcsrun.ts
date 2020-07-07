@@ -61,6 +61,13 @@ function createErrorMessages(params: InputVarMod) {
   ) {
     message +=
       'elevation is required to be a valid number for the system you have selected\n';
+  } else if (
+    (params.System === SystemTypes.groundBasedCtl ||
+      params.System === SystemTypes.cableCtl ||
+      params.System === SystemTypes.helicopterCtl) &&
+    params.RemovalsLLT !== 0
+  ) {
+    message += 'large log trees cannot be harvested in CTL systems\n';
   }
 
   // check that the values of some params do not exceed the limits
@@ -185,11 +192,8 @@ function calculateOutput(input: InputVarMod) {
       CostPerBoleCCF: 0,
       CostPerGT: 0,
       DieselPerAcre: 0,
-      DieselPerBoleCCF: 0,
       GasolinePerAcre: 0,
-      GasolinePerBoleCCF: 0,
       JetFuelPerAcre: 0,
-      JetFuelPerBoleCCF: 0,
     },
   };
 
@@ -211,13 +215,9 @@ function calculateOutput(input: InputVarMod) {
     input.TreeVolLLT = 250;
     output = calculateOutput(input);
     const costCCF = output.Total.CostPerBoleCCF;
-    const costResidueCCF = output.Residue.CostPerBoleCCF;
     const dieselCCF = output.Total.DieselPerBoleCCF;
-    const dieselResidueCCF = output.Residue.DieselPerBoleCCF;
     const gasolineCCF = output.Total.GasolinePerBoleCCF;
-    const gasolineResidueCCF = output.Residue.GasolinePerBoleCCF;
     const jetFuelCCF = output.Total.JetFuelPerBoleCCF;
-    const jetFuelResidueCCF = output.Residue.JetFuelPerBoleCCF;
 
     input.TreeVolLLT = originalTreeVolLLT;
     intermediate = calculateIntermediate(input, intermediate, assumption);
@@ -226,35 +226,19 @@ function calculateOutput(input: InputVarMod) {
       intermediate,
       assumption
     );
-    let cost = costCCF * AmountRecovered.BoleVolCCF;
+    const cost = costCCF * AmountRecovered.BoleVolCCF;
     output.Total.WeightPerAcre =
       AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
     output.Total.CostPerAcre = cost / input.Area;
     output.Total.CostPerGT =
       cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
 
-    cost = costResidueCCF * AmountRecovered.BoleVolCCF;
-    output.Residue.WeightPerAcre =
-      intermediate.BoleWtCT +
-      AmountRecovered.ResidueRecoveredPrimary +
-      AmountRecovered.ResidueRecoveredOptional;
-    output.Residue.CostPerAcre = cost / input.Area;
-    output.Residue.CostPerGT =
-      cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
-
-    let diesel = dieselCCF * AmountRecovered.BoleVolCCF;
-    let gasoline = gasolineCCF * AmountRecovered.BoleVolCCF;
-    let jetFuel = jetFuelCCF * AmountRecovered.BoleVolCCF;
+    const diesel = dieselCCF * AmountRecovered.BoleVolCCF;
+    const gasoline = gasolineCCF * AmountRecovered.BoleVolCCF;
+    const jetFuel = jetFuelCCF * AmountRecovered.BoleVolCCF;
     output.Total.DieselPerAcre = diesel / input.Area;
     output.Total.GasolinePerAcre = gasoline / input.Area;
     output.Total.JetFuelPerAcre = jetFuel / input.Area;
-
-    diesel = dieselResidueCCF * AmountRecovered.BoleVolCCF;
-    gasoline = gasolineResidueCCF * AmountRecovered.BoleVolCCF;
-    jetFuel = jetFuelResidueCCF * AmountRecovered.BoleVolCCF;
-    output.Residue.DieselPerAcre = diesel / input.Area;
-    output.Residue.GasolinePerAcre = gasoline / input.Area;
-    output.Residue.JetFuelPerAcre = jetFuel / input.Area;
   }
 
   intermediate = calculateIntermediate(input, intermediate, assumption);

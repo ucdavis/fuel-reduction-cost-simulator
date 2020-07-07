@@ -182,11 +182,8 @@ export interface OutputVarMod {
     CostPerBoleCCF: number;
     CostPerGT: number;
     DieselPerAcre: number;
-    DieselPerBoleCCF: number;
     GasolinePerAcre: number;
-    GasolinePerBoleCCF: number;
     JetFuelPerAcre: number;
-    JetFuelPerBoleCCF: number;
   };
 }
 

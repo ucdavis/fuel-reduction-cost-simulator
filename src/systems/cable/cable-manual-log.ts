@@ -146,11 +146,8 @@ function CableManualLog(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
-    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
-    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
-    JetFuelPerBoleCCF: 0
   };
 
   // System Summaries - Total
@@ -176,10 +173,8 @@ function CableManualLog(
   Residue.CostPerGT = Residue.CostPerAcre / Total.WeightPerAcre;
   // Fuel
   Residue.DieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
-  Residue.DieselPerBoleCCF = Residue.DieselPerAcre / BoleVolCCF;
   Residue.GasolinePerAcre =
     ManualFellLimbBuckAllTrees2 * (intermediate.BoleWtCT / intermediate.BoleWt);
-  Residue.GasolinePerBoleCCF = Residue.GasolinePerAcre / BoleVolCCF;
 
   if (input.ChipAll) {
     Residue = Total;

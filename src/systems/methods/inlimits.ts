@@ -46,7 +46,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
@@ -82,7 +82,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 1300;
       break;
@@ -100,7 +100,7 @@ function InLimits(input: InputVarMod) {
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
-      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 250;
+      limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 10000;
       break;
