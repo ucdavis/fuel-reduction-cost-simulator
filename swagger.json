@@ -378,35 +378,17 @@
           "example": 15.64078771,
           "description": "Diesel Consumption of Harvesting Residues in Gallons per Acre."
         },
-        "DieselPerBoleCCF": {
-          "type": "number",
-          "format": "float",
-          "example": 0.3128157542595066,
-          "description": "Diesel Consumption of Harvesting Residues in Gallons per Hundred Cubic Feet."
-        },
         "GasolinePerAcre": {
           "type": "number",
           "format": "float",
           "example": 0.066371983,
           "description": "Gasoline Consumption of Harvesting Residues in Gallons per Acre."
         },
-        "GasolinePerBoleCCF": {
-          "type": "number",
-          "format": "float",
-          "example": 0.0013274396590691045,
-          "description": "Gasoline Consumption of Harvesting Residues in Gallons per Hundred Cubic Feet."
-        },
         "JetFuelPerAcre": {
           "type": "number",
           "format": "float",
           "example": 0,
           "description": "Jet Fuel Consumption of Harvesting Residues in Gallons per Acre."
-        },
-        "JetFuelPerBoleCCF": {
-          "type": "number",
-          "format": "float",
-          "example": 0,
-          "description": "Jet Fuel Consumption of Harvesting Residues in Gallons per Hundred Cubic Feet."
         }
       },
       "xml": {
