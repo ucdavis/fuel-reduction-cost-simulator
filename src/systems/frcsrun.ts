@@ -239,6 +239,7 @@ function calculateOutput(input: InputVarMod) {
     output.Total.DieselPerAcre = diesel / input.Area;
     output.Total.GasolinePerAcre = gasoline / input.Area;
     output.Total.JetFuelPerAcre = jetFuel / input.Area;
+    return output;
   }
 
   intermediate = calculateIntermediate(input, intermediate, assumption);
