@@ -201,8 +201,11 @@ function GroundCTL(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
+    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
+    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
+    JetFuelPerBoleCCF: 0
   };
 
   // System Summaries - Total
@@ -237,6 +240,7 @@ function GroundCTL(
     DieselStump2Truck4ResiduesWithoutMovein +
     OntoTruck4ResiduesWoMovein2 +
     Movein4Residues2;
+  Residue.DieselPerBoleCCF = Residue.DieselPerAcre / BoleVolCCF;
 
   if (input.ChipAll) {
     Residue = Total;

@@ -8,7 +8,7 @@ export const SystemTypes = {
   cableManualLog: 'Cable Manual Log',
   cableCtl: 'Cable CTL',
   helicopterManualWt: 'Helicopter Manual Log',
-  helicopterCtl: 'Helicopter CTL'
+  helicopterCtl: 'Helicopter CTL',
 };
 
 // if you add any parameters here, you must add it to the class below
@@ -170,8 +170,11 @@ export interface OutputVarMod {
     CostPerBoleCCF: number;
     CostPerGT: number;
     DieselPerAcre: number;
+    DieselPerBoleCCF: number;
     GasolinePerAcre: number;
+    GasolinePerBoleCCF: number;
     JetFuelPerAcre: number;
+    JetFuelPerBoleCCF: number;
   };
   Residue: {
     WeightPerAcre: number;
@@ -179,8 +182,11 @@ export interface OutputVarMod {
     CostPerBoleCCF: number;
     CostPerGT: number;
     DieselPerAcre: number;
+    DieselPerBoleCCF: number;
     GasolinePerAcre: number;
+    GasolinePerBoleCCF: number;
     JetFuelPerAcre: number;
+    JetFuelPerBoleCCF: number;
   };
 }
 
