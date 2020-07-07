@@ -116,8 +116,11 @@ function GroundManualLog(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
+    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
+    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
+    JetFuelPerBoleCCF: 0
   };
 
   let Residue = {
@@ -140,7 +143,9 @@ function GroundManualLog(
   // Fuel
   Total.DieselPerAcre =
     DieselStump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct2;
+  Total.DieselPerBoleCCF = Total.DieselPerAcre / BoleVolCCF;
   Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
+  Total.GasolinePerBoleCCF = Total.GasolinePerAcre / BoleVolCCF;
 
   // System Summaries - Residue
   // Cost

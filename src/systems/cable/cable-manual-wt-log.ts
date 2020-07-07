@@ -25,7 +25,6 @@ function CableManualWTLog(
     assumption.ResidueRecovFracWT * intermediate.ResidueCT;
   const PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
   const ResidueRecoveredOptional = 0;
-  const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
   // Amounts Unrecovered and Left within the Stand Per Acre
@@ -163,8 +162,11 @@ function CableManualWTLog(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
+    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
+    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
+    JetFuelPerBoleCCF: 0
   };
 
   let Residue = {
@@ -190,7 +192,9 @@ function CableManualWTLog(
   // Fuel
   Total.DieselPerAcre =
     DieselStump2Truck4PrimaryProductWithoutMovein + Movein4PrimaryProduct2;
+  Total.DieselPerBoleCCF = Total.DieselPerAcre / BoleVolCCF;
   Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
+  Total.GasolinePerBoleCCF = Total.GasolinePerAcre / BoleVolCCF;
 
   // System Summaries - Residue
   // Cost

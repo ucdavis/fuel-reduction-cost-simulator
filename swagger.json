@@ -122,7 +122,7 @@
         "CalcResidues": {
           "type": "boolean",
           "example": true,
-          "description": "Indicate whether the costs of collecting and chipping residues needs to be included. This option is only available for the three WT systems and the ground-based CTL system."
+          "description": "Indicate whether the costs of collecting and chipping residues needs to be included."
         },
         "UserSpecWDCT": {
           "type": "number",
@@ -310,17 +310,35 @@
           "example": 50.99159554,
           "description": "Total Diesel Consumption in Gallons per Acre."
         },
+        "DieselPerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "example": 1.0198319107071314,
+          "description": "Total Diesel Consumption in Gallons per Hundred Cubic Feet."
+        },
         "GasolinePerAcre": {
           "type": "number",
           "format": "float",
           "example": 0.388986296,
           "description": "Total Gasoline Consumption in Gallons per Acre."
         },
+        "GasolinePerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "example": 0.007779725917184,
+          "description": "Total Gasoline Consumption in Gallons per Hundred Cubic Feet."
+        },
         "JetFuelPerAcre": {
           "type": "number",
           "format": "float",
           "example": 0,
           "description": "Total Jet Fuel Consumption in Gallons per Acre."
+        },
+        "JetFuelPerBoleCCF": {
+          "type": "number",
+          "format": "float",
+          "example": 0,
+          "description": "Total Jet Fuel Consumption in Gallons per Hundred Cubic Feet."
         }
       },
       "xml": {

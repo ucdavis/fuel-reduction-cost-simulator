@@ -26,7 +26,6 @@ function GroundCTL(
   const ResidueRecoveredOptional = input.CalcResidues
     ? assumption.ResidueRecovFracCTL * intermediate.ResidueST
     : 0;
-  const TotalPrimaryAndOptional = PrimaryProduct + ResidueRecoveredOptional;
   const TotalPrimaryProductsAndOptionalResidues =
     PrimaryProduct + ResidueRecoveredOptional;
   // Amounts Unrecovered and Left within the Stand Per Acre
@@ -189,8 +188,11 @@ function GroundCTL(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
+    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
+    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
+    JetFuelPerBoleCCF: 0
   };
 
   let Residue = {
@@ -218,6 +220,7 @@ function GroundCTL(
     DieselStump2Truck4PrimaryProductWithoutMovein +
     Movein4PrimaryProduct2 +
     OntoTruck4ResiduesWoMovein2;
+  Total.DieselPerBoleCCF = Total.DieselPerAcre / BoleVolCCF;
 
   // System Summaries - Residue
   // Cost
