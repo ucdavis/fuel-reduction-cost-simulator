@@ -160,8 +160,11 @@ function GroundManualWT(
     CostPerBoleCCF: 0,
     CostPerGT: 0,
     DieselPerAcre: 0,
+    DieselPerBoleCCF: 0,
     GasolinePerAcre: 0,
+    GasolinePerBoleCCF: 0,
     JetFuelPerAcre: 0,
+    JetFuelPerBoleCCF: 0
   };
 
   let Residue = {
@@ -189,7 +192,9 @@ function GroundManualWT(
     DieselStump2Truck4PrimaryProductWithoutMovein +
     Movein4PrimaryProduct2 +
     OntoTruck4ResiduesWoMovein2;
+  Total.DieselPerBoleCCF = Total.DieselPerAcre / BoleVolCCF;
   Total.GasolinePerAcre = GasolineStump2Truck4PrimaryProductWithoutMovein;
+  Total.GasolinePerBoleCCF = Total.GasolinePerAcre / BoleVolCCF;
 
   // System Summaries - Residue
   // Cost
