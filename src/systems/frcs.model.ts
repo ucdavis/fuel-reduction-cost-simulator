@@ -75,7 +75,7 @@ export class InputVar implements InputVar {
   TreeVolSLT = 70;
   RemovalsLLT = 5;
   TreeVolLLT = 100;
-  DieselFuelPrice = 3.882;
+  DieselFuelPrice = 3.251;
   MoistureContent = 50;
   ChipAll = false;
   constructor() {}
