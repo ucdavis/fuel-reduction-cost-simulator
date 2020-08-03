@@ -81,6 +81,13 @@ export class InputVar implements InputVar {
   constructor() {}
 }
 
+export interface MoveInInputVarMod {
+  System: string;
+  MoveInDist: number;
+  DieselFuelPrice: number;
+  ChipAll: boolean;
+}
+
 export interface IntermediateVarMod {
   RemovalsST: number;
   RemovalsALT: number;
