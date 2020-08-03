@@ -3,8 +3,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { InputVarMod } from './systems/frcs.model';
+import { InputVarMod, MoveInInputVarMod } from './systems/frcs.model';
 import { calculate } from './systems/frcsrun';
+import { calculateMoveIn } from './systems/movein';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
@@ -22,6 +23,18 @@ app.post('/frcsrun', async (req, res) => {
   const params: InputVarMod = req.body;
   try {
     const result = await calculate(params);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(400).send(e.message);
+    return;
+  }
+});
+
+// api endpoint for calculating move-in costs
+app.post('/movein', async (req, res) => {
+  const params: MoveInInputVarMod = req.body;
+  try {
+    const result = await calculateMoveIn(params);
     res.status(200).json(result);
   } catch (e) {
     res.status(400).send(e.message);
