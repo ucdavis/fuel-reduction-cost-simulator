@@ -42,7 +42,7 @@ function CableManualWTLog(
     GroundFuel +
     PiledFuel;
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts(input);
+  const machineCost: MachineCostMod = MachineCosts(input.DieselFuelPrice);
   // System Cost Elements-------
   const FellwtChipLogOtherResults = FellwtChipLogOther(
     input,

@@ -27,7 +27,7 @@ function HelicopterCTL(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts(input);
+  const machineCost: MachineCostMod = MachineCosts(input.DieselFuelPrice);
   // System Cost Elements-------
   const HarvestingResults = Harvesting(
     assumption,

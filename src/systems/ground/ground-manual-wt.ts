@@ -32,7 +32,7 @@ function GroundManualWT(
     PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCostMod = MachineCosts(input);
+  const machineCost: MachineCostMod = MachineCosts(input.DieselFuelPrice);
   // System Cost Elements-------
   const FellBunchResults = FellBunch(input, intermediate, machineCost);
   const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;

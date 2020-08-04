@@ -1,7 +1,5 @@
 // MachineCosts sheet
-import { InputVarMod } from '../frcs.model';
-
-function MachineCosts(input: InputVarMod) {
+function MachineCosts(DieselFuelPrice: number) {
   const HourlyMeanWageFeller = 30.96; // = CA FallBuckWage May 2019
   const HourlyMeanWageOthers = 22.26; // = CA AllOthersWage May 2019
   const benefits = 0.35; // Assume a nationwide average of 35% for benefits and other payroll costs
@@ -9,7 +7,7 @@ function MachineCosts(input: InputVarMod) {
   const WageAndBenRate = HourlyMeanWageOthers * (1 + benefits);
   const interest = 0.08; // Interest rate, percent of avg yearly investment (in%)
   const insuranceAtax = 0.07; // Insurance and tax rate, percent of avg yearly investment (it%)
-  const Diesel_fuel_price = input.DieselFuelPrice;
+  const Diesel_fuel_price = DieselFuelPrice;
   const smh = 1600; // Scheduled machine hours (SMH, sh/year)
   const PPI2002 = 176.6; // Producer Price Index in 2002
   const PPI2019 = 264.3; // Producer Price Index in Dec 2019
