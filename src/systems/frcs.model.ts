@@ -88,6 +88,15 @@ export interface MoveInInputVarMod {
   ChipAll: boolean;
 }
 
+export class MoveInInputVar implements MoveInInputVar {
+  System = 'Cable Manual WT';
+  Area = 1;
+  MoveInDist = 2;
+  DieselFuelPrice = 3.251;
+  ChipAll = false;
+  constructor() {}
+}
+
 export interface IntermediateVarMod {
   RemovalsST: number;
   RemovalsALT: number;
