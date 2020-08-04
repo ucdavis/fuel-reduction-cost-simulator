@@ -51,6 +51,38 @@
           }
         }
       }
+    },
+    "/movein": {
+      "post": {
+        "tags": [
+          "frcs"
+        ],
+        "summary": "Calculate the costs of moving equipment to the harvesting unit",
+        "operationId": "getMoveInCosts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "schema": {
+              "$ref": "#/definitions/MoveInInputVarMod"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/MoveInOutputVarMod"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters supplied"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -226,7 +258,7 @@
         "DieselFuelPrice": {
           "type": "number",
           "format": "float",
-          "example": 3.882,
+          "example": 3.251,
           "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
         },
         "MoistureContent": {
@@ -257,7 +289,8 @@
         "TreeVolSLT",
         "RemovalsLLT",
         "TreeVolLLT",
-        "DieselFuelPrice"
+        "DieselFuelPrice",
+        "ChipAll"
       ],
       "xml": {
         "name": "InputVarMod"
@@ -393,6 +426,81 @@
       },
       "xml": {
         "name": "ResidueMod"
+      }
+    },
+    "MoveInInputVarMod": {
+      "type": "object",
+      "properties": {
+        "System": {
+          "type": "string",
+          "example": "Cable Manual WT",
+          "description": "Select from a list of 10 types of harvesting systems.",
+          "enum": [
+            "Ground-Based Mech WT",
+            "Ground-Based Manual WT",
+            "Ground-Based Manual Log",
+            "Ground-Based CTL",
+            "Cable Manual WT/Log",
+            "Cable Manual WT",
+            "Cable Manual Log",
+            "Cable CTL",
+            "Helicopter Manual Log",
+            "Helicopter CTL"
+          ]
+        },
+        "Area": {
+          "type": "number",
+          "format": "float",
+          "example": 1,
+          "description": "Area in acres of one harvest unit if this is the only unit in a treatment contract or timber; Area in acres of the combined harvest units if multiple units that would likely be harvested together are close enough to drive equipment between them."
+        },
+        "MoveInDist": {
+          "type": "number",
+          "format": "float",
+          "example": 2,
+          "description": "One-way move-in distance in miles that equipment is transported to reach the harvest unit."
+        },
+        "DieselFuelPrice": {
+          "type": "number",
+          "format": "float",
+          "example": 3.251,
+          "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
+        },
+        "ChipAll": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicate whether all trees (including log trees) are chipped."
+        }
+      },
+      "required": [
+        "System",
+        "Area",
+        "MoveInDist",
+        "DieselFuelPrice",
+        "ChipAll"
+      ],
+      "xml": {
+        "name": "MoveInInputVarMod"
+      }
+    },
+    "MoveInOutputVarMod": {
+      "type": "object",
+      "properties": {
+        "Total": {
+          "type": "number",
+          "format": "float",
+          "example": 1175.8340569082673,
+          "description": "Total Move-in Cost in US dollars."
+        },
+        "Residue": {
+          "type": "number",
+          "format": "float",
+          "example": 0,
+          "description": "Move-in Cost for Harvesting Residues in US dollars."
+        }
+      },
+      "xml": {
+        "name": "MoveInOutputVarMod"
       }
     }
   },
