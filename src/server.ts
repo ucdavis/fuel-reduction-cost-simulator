@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
@@ -9,8 +8,6 @@ import { calculateMoveIn } from './systems/movein';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
-
-dotenv.config();
 
 const app = express();
 

@@ -41,7 +41,7 @@ function HelicopterManualLog(
     machineCost
   );
   const CostChipWT = ChippingResults.CostChipWT;
-  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost, assumption.ResidueRecovFracCTL);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
   const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
