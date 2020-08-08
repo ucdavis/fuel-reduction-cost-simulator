@@ -48,7 +48,7 @@ function GroundManualLog(
     machineCost
   );
   const CostChipWT = ChippingResults.CostChipWT;
-  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost, assumption.ResidueRecovFracCTL);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
   const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
   const CostManFLB = FellAllTreesResults.CostManFLB;

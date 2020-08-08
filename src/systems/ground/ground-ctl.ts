@@ -79,7 +79,7 @@ function GroundCTL(
   const CostBundleResidue = BundleForwardResidueResults.CostBundleResidue;
   const CostForwardResidueBundles =
     BundleForwardResidueResults.CostForwardResidueBundles;
-  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost, assumption.ResidueRecovFracCTL);
   const CostChipBundledRes = ChippingResults.CostChipBundledRes;
 
   const GalHarvest = HarvestingResults.GalHarvest;

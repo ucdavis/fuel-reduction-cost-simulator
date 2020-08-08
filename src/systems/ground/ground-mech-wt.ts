@@ -71,7 +71,7 @@ function GroundMechWT(
     machineCost
   );
   const CostChipWT = ChippingResults.CostChipWT;
-  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost, assumption.ResidueRecovFracCTL);
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
   const GalFellBunch = FellBunchResults.GalFellBunch;

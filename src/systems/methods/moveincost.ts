@@ -4,7 +4,8 @@ import { InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
 function MoveInCosts(
   input: InputVarMod,
   intermediate: IntermediateVarMod,
-  machineCost: MachineCostMod
+  machineCost: MachineCostMod,
+  ResidueRecovFracCTL: number
 ) {
   // Move-In Assumptions
   const SpeedLoaded = 25;
@@ -323,7 +324,7 @@ function MoveInCosts(
   const totalBundleResidues =
     totalFixedBundleResidues + totalVariableBundleResidues * input.MoveInDist;
   const CostPerCCFbundleResidues =
-    totalBundleResidues / (input.Area * intermediate.ResidueST);
+    totalBundleResidues / (input.Area * intermediate.ResidueST * ResidueRecovFracCTL);
 
   return {
     CostPerCCFmechWT: CostPerCCFmechWT,

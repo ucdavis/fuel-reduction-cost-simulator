@@ -47,7 +47,7 @@ function CableCTL(
     machineCost
   );
   const CostChipWT = ChippingResults.CostChipWT;
-  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost);
+  const MoveInCostsResults = MoveInCosts(input, intermediate, machineCost, assumption.ResidueRecovFracCTL);
   const CostChipBundledRes = ChippingResults.CostChipBundledRes;
 
   const GalHarvest = HarvestingResults.GalHarvest;
