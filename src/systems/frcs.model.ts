@@ -75,7 +75,7 @@ export class InputVar implements InputVar {
   TreeVolSLT = 70;
   RemovalsLLT = 5;
   TreeVolLLT = 100;
-  DieselFuelPrice = 3.251;
+  DieselFuelPrice = 3.356;
   MoistureContent = 50;
   ChipAll = false;
   constructor() {}
@@ -92,7 +92,7 @@ export class MoveInInputVar implements MoveInInputVar {
   System = 'Cable Manual WT';
   Area = 1;
   MoveInDist = 2;
-  DieselFuelPrice = 3.251;
+  DieselFuelPrice = 3.356;
   ChipAll = false;
   constructor() {}
 }
