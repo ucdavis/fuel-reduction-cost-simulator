@@ -258,7 +258,7 @@
         "DieselFuelPrice": {
           "type": "number",
           "format": "float",
-          "example": 3.251,
+          "example": 3.356,
           "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
         },
         "MoistureContent": {
@@ -463,7 +463,7 @@
         "DieselFuelPrice": {
           "type": "number",
           "format": "float",
-          "example": 3.251,
+          "example": 3.356,
           "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
         },
         "ChipAll": {
