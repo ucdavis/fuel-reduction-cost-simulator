@@ -61,13 +61,6 @@ function createErrorMessages(params: InputVarMod) {
   ) {
     message +=
       'elevation is required to be a valid number for the system you have selected\n';
-  } else if (
-    (params.System === SystemTypes.groundBasedCtl ||
-      params.System === SystemTypes.cableCtl ||
-      params.System === SystemTypes.helicopterCtl) &&
-    params.RemovalsLLT !== 0
-  ) {
-    message += 'large log trees cannot be harvested in CTL systems\n';
   }
 
   // check that the values of some params do not exceed the limits
