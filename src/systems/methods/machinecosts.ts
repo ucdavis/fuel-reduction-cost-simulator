@@ -1,5 +1,5 @@
 // MachineCosts sheet
-function MachineCosts(DieselFuelPrice: number) {
+export function calculateMachineCosts(DieselFuelPrice: number) {
   const HourlyMeanWageFeller = 35.13; // = CA FallBuckWage May 2020
   const HourlyMeanWageOthers = 22.07; // = CA AllOthersWage May 2020
   const benefits = 0.35; // Assume a nationwide average of 35% for benefits and other payroll costs
@@ -11,7 +11,6 @@ function MachineCosts(DieselFuelPrice: number) {
   const smh = 1600; // Scheduled machine hours (SMH, sh/year)
   const PPI2002 = 176.6; // Producer Price Index in 2002
   const PPIcurrent = 267.4; // Producer Price Index in Dec 2020
-
   const EquipmentCosts2002 = {
     PurchasePriceChainsaw: 700,
     PurchasePriceFBuncherDTT: 150000,
@@ -35,8 +34,7 @@ function MachineCosts(DieselFuelPrice: number) {
   };
 
   // Chainsaw
-  const PurchasePriceChainsaw =
-    (EquipmentCosts2002.PurchasePriceChainsaw * PPIcurrent) / PPI2002;
+  const PurchasePriceChainsaw = (EquipmentCosts2002.PurchasePriceChainsaw * PPIcurrent) / PPI2002;
   const HorsepowerChainsaw = 0;
   const LifeChainsaw = 1;
   const svChainsaw = 0.2;
@@ -121,7 +119,6 @@ function MachineCosts(DieselFuelPrice: number) {
     wbFBuncher
   );
   const PMH_SelfLevel = SelfLeveling[1];
-
   const FB_OwnCost = (DriveToTree[0] + SwingBoom[0] + SelfLeveling[0]) / 3;
 
   // Harvester
@@ -165,7 +162,6 @@ function MachineCosts(DieselFuelPrice: number) {
     wbHarvester
   );
   const PMH_HarvB = HarvesterB[1];
-
   const Harvester_OwnCost = (HarvesterS[0] + HarvesterB[0]) / 2;
 
   // Skidder global
@@ -177,8 +173,7 @@ function MachineCosts(DieselFuelPrice: number) {
   const personsSkidder = 1;
   const wbSkidder = personsSkidder * WageAndBenRate;
   // Small
-  const PurchasePriceSkidderS =
-    (EquipmentCosts2002.PurchasePriceSkidderS * PPIcurrent) / PPI2002;
+  const PurchasePriceSkidderS = (EquipmentCosts2002.PurchasePriceSkidderS * PPIcurrent) / PPI2002;
   const HorsepowerSkidderS = 120;
   const LifeSkidderS = 5;
   const SkidderS = CostCalc(
@@ -194,8 +189,7 @@ function MachineCosts(DieselFuelPrice: number) {
   );
   const PMH_SkidderS = SkidderS[1];
   // Big
-  const PurchasePriceSkidderB =
-    (EquipmentCosts2002.PurchasePriceSkidderB * PPIcurrent) / PPI2002;
+  const PurchasePriceSkidderB = (EquipmentCosts2002.PurchasePriceSkidderB * PPIcurrent) / PPI2002;
   const HorsepowerSkidderB = 200;
   const LifeSkidderB = 4;
   const SkidderB = CostCalc(
@@ -254,8 +248,7 @@ function MachineCosts(DieselFuelPrice: number) {
   const Forwarder_OwnCost = (ForwarderS[0] + ForwarderB[0]) / 2;
 
   // Yarder small
-  const PurchasePriceYarderS =
-    (EquipmentCosts2002.PurchasePriceYarderS * PPIcurrent) / PPI2002;
+  const PurchasePriceYarderS = (EquipmentCosts2002.PurchasePriceYarderS * PPIcurrent) / PPI2002;
   const HorsepowerYarderS = 100;
   const LifeYarder = 10;
   const svYarder = 0.1;
@@ -278,8 +271,7 @@ function MachineCosts(DieselFuelPrice: number) {
   );
   const PMH_YarderS = YarderS[1];
   // Yarder intermediate
-  const PurchasePriceYarderI =
-    (EquipmentCosts2002.PurchasePriceYarderI * PPIcurrent) / PPI2002;
+  const PurchasePriceYarderI = (EquipmentCosts2002.PurchasePriceYarderI * PPIcurrent) / PPI2002;
   const HorsepowerYarderI = 200;
   const YarderI = CostCalc(
     PurchasePriceYarderI,
@@ -348,8 +340,7 @@ function MachineCosts(DieselFuelPrice: number) {
   const personsLoader = 1;
   const wbLoader = personsLoader * WageAndBenRate;
   // Small
-  const PurchasePriceLoaderS =
-    (EquipmentCosts2002.PurchasePriceLoaderS * PPIcurrent) / PPI2002;
+  const PurchasePriceLoaderS = (EquipmentCosts2002.PurchasePriceLoaderS * PPIcurrent) / PPI2002;
   const HorsepowerLoaderS = 120;
   const LoaderS = CostCalc(
     PurchasePriceLoaderS,
@@ -364,8 +355,7 @@ function MachineCosts(DieselFuelPrice: number) {
   );
   const PMH_LoaderS = LoaderS[1];
   // Big
-  const PurchasePriceLoaderB =
-    (EquipmentCosts2002.PurchasePriceLoaderB * PPIcurrent) / PPI2002;
+  const PurchasePriceLoaderB = (EquipmentCosts2002.PurchasePriceLoaderB * PPIcurrent) / PPI2002;
   const HorsepowerLoaderB = 200;
   const LoaderB = CostCalc(
     PurchasePriceLoaderB,
@@ -391,8 +381,7 @@ function MachineCosts(DieselFuelPrice: number) {
   const personsChipper = 1;
   const wbChipper = personsChipper * WageAndBenRate;
   // Small
-  const PurchasePriceChipperS =
-    (EquipmentCosts2002.PurchasePriceChipperS * PPIcurrent) / PPI2002;
+  const PurchasePriceChipperS = (EquipmentCosts2002.PurchasePriceChipperS * PPIcurrent) / PPI2002;
   const HorsepowerChipperS = 350;
   const ChipperS = CostCalc(
     PurchasePriceChipperS,
@@ -407,8 +396,7 @@ function MachineCosts(DieselFuelPrice: number) {
   );
   const PMH_ChipperS = ChipperS[1];
   // Big
-  const PurchasePriceChipperB =
-    (EquipmentCosts2002.PurchasePriceChipperB * PPIcurrent) / PPI2002;
+  const PurchasePriceChipperB = (EquipmentCosts2002.PurchasePriceChipperB * PPIcurrent) / PPI2002;
   const HorsepowerChipperB = 700;
   const ChipperB = CostCalc(
     PurchasePriceChipperB,
@@ -425,8 +413,7 @@ function MachineCosts(DieselFuelPrice: number) {
   const Chipper_OwnCost = (ChipperS[0] + ChipperB[0]) / 2;
 
   // Bundler
-  const PurchasePriceBundler =
-    (EquipmentCosts2002.PurchasePriceBundler * PPIcurrent) / PPI2002;
+  const PurchasePriceBundler = (EquipmentCosts2002.PurchasePriceBundler * PPIcurrent) / PPI2002;
   const HorsepowerBundler = 180;
   const fcrBundler = 0.025;
   // the other vars are the same as Chipper's, therefore pass chipper vars in the function below
@@ -488,11 +475,9 @@ function MachineCosts(DieselFuelPrice: number) {
     wb: number
   ) {
     const SalvageYarderS = PurchasePriceYarder * sv;
-    const AnnualDepreciationYarder =
-      (PurchasePriceYarder - SalvageYarderS) / Life;
+    const AnnualDepreciationYarder = (PurchasePriceYarder - SalvageYarderS) / Life;
     const avgYearlyInvestmentYarder =
-      ((PurchasePriceYarder - SalvageYarderS) * (Life + 1)) / (2 * Life) +
-      SalvageYarderS;
+      ((PurchasePriceYarder - SalvageYarderS) * (Life + 1)) / (2 * Life) + SalvageYarderS;
     const PMHyarder = smh * ut;
     const InterestCostYarder = interest * avgYearlyInvestmentYarder;
     const InsuranceAndTaxCost = insuranceAtax * avgYearlyInvestmentYarder;
@@ -502,21 +487,13 @@ function MachineCosts(DieselFuelPrice: number) {
     const OwnershipCostPMHyarder = YearlyOwnershipCostYarder / PMHyarder;
     const FuelCostYarder = HorsepowerYarder * fcr * Diesel_fuel_price;
     const LubeCostYarder = lo * FuelCostYarder;
-    const RepairAndMaintenanceCostYarder =
-      (AnnualDepreciationYarder * rm) / PMHyarder;
+    const RepairAndMaintenanceCostYarder = (AnnualDepreciationYarder * rm) / PMHyarder;
     const LaborCostPMHyarder = wb / ut;
     const OperatingCostPMHyarder =
-      FuelCostYarder +
-      LubeCostYarder +
-      RepairAndMaintenanceCostYarder +
-      LaborCostPMHyarder;
+      FuelCostYarder + LubeCostYarder + RepairAndMaintenanceCostYarder + LaborCostPMHyarder;
     const OperatingCostSMHyarder = OperatingCostPMHyarder * ut;
     const TotalCostSMHyarder = OwnershipCostSMHyarder + OperatingCostSMHyarder;
     const TotalCostPMHyarderS = OwnershipCostPMHyarder + OperatingCostPMHyarder;
-
     return [OwnershipCostPMHyarder, TotalCostPMHyarderS];
   }
 }
-
-// tslint:disable-next-line: max-file-line-count
-export { MachineCosts };

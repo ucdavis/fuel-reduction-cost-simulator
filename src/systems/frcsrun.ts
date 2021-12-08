@@ -1,25 +1,25 @@
 // Inputs sheet
-import { CableCTL } from './cable/cable-ctl';
-import { CableManualLog } from './cable/cable-manual-log';
-import { CableManualWT } from './cable/cable-manual-wt';
-import { CableManualWTLog } from './cable/cable-manual-wt-log';
+import { cableCTL } from './cable/cable-ctl';
+import { cableManualLog } from './cable/cable-manual-log';
+import { cableManualWT } from './cable/cable-manual-wt';
+import { cableManualWTLog } from './cable/cable-manual-wt-log';
 import {
-  AssumptionMod,
-  InputVar,
-  InputVarMod,
-  IntermediateVarMod,
-  OutputVarMod,
+  Assumptions,
+  FrcsInputs,
+  FrcsInputsDefault,
+  FrcsOutputs,
+  IntermediateVariables,
   SystemTypes,
 } from './frcs.model';
-import { GroundCTL } from './ground/ground-ctl';
-import { GroundManualLog } from './ground/ground-manual-log';
-import { GroundManualWT } from './ground/ground-manual-wt';
-import { GroundMechWT } from './ground/ground-mech-wt';
-import { HelicopterCTL } from './helicopter/helicopter-ctl';
-import { HelicopterManualLog } from './helicopter/helicopter-manual-log';
+import { groundCTL } from './ground/ground-ctl';
+import { groundManualLog } from './ground/ground-manual-log';
+import { groundManualWT } from './ground/ground-manual-wt';
+import { groundMechWT } from './ground/ground-mech-wt';
+import { helicopterCTL } from './helicopter/helicopter-ctl';
+import { helicopterManualLog } from './helicopter/helicopter-manual-log';
 import { InLimits } from './methods/inlimits';
 
-export function calculate(input: InputVarMod) {
+export function calculate(input: FrcsInputs) {
   const message = createErrorMessages(input);
   if (message) {
     throw new Error(message);
@@ -27,8 +27,8 @@ export function calculate(input: InputVarMod) {
   return calculateOutput(input);
 }
 
-function createErrorMessages(params: InputVarMod) {
-  const exampleObj = new InputVar();
+function createErrorMessages(params: FrcsInputs) {
+  const exampleObj = new FrcsInputsDefault();
   let message = '';
   const exampleDesc = Object.getOwnPropertyDescriptors(exampleObj);
   const paramDesc = Object.getOwnPropertyDescriptors(params);
@@ -42,25 +42,21 @@ function createErrorMessages(params: InputVarMod) {
 
   // check that each param that exists has the correct type
   for (const key in paramDesc) {
-    if (
-      !key.includes('User') &&
-      typeof paramDesc[key].value !== typeof exampleDesc[key].value
-    ) {
+    if (!key.includes('User') && typeof paramDesc[key].value !== typeof exampleDesc[key].value) {
       message += `wrong type for ${key} (should be ${typeof exampleDesc[key]
         .value}, was ${typeof paramDesc[key].value}) \n`;
     }
   }
 
   // check specific requirements
-  if (params.System && !Object.values(SystemTypes).includes(params.System)) {
+  if (params.system && !Object.values(SystemTypes).includes(params.system)) {
     message += 'unidentified System type\n';
   } else if (
-    (params.System === SystemTypes.helicopterCtl ||
-      params.System === SystemTypes.helicopterManualWt) &&
-    params.Elevation < 0
+    (params.system === SystemTypes.helicopterCtl ||
+      params.system === SystemTypes.helicopterManualWt) &&
+    params.elevation < 0
   ) {
-    message +=
-      'elevation is required to be a valid number for the system you have selected\n';
+    message += 'elevation is required to be a valid number for the system you have selected\n';
   }
 
   // check that the values of some params do not exceed the limits
@@ -72,89 +68,89 @@ function createErrorMessages(params: InputVarMod) {
   return message;
 }
 
-function calculateOutput(input: InputVarMod) {
-  let intermediate: IntermediateVarMod = {
-    RemovalsST: 0,
-    RemovalsALT: 0,
-    Removals: 0,
-    TreeVolST: 0,
-    TreeVolALT: 0,
-    TreeVol: 0,
-    VolPerAcreCT: 0,
-    VolPerAcreSLT: 0,
-    VolPerAcreLLT: 0,
-    VolPerAcreST: 0,
-    VolPerAcreALT: 0,
-    VolPerAcre: 0,
-    DBHCT: 0,
-    DBHSLT: 0,
-    DBHLLT: 0,
-    DBHST: 0,
-    DBHALT: 0,
-    DBH: 0,
-    HeightCT: 0,
-    HeightSLT: 0,
-    HeightLLT: 0,
-    HeightST: 0,
-    HeightALT: 0,
-    Height: 0,
-    WoodDensityCT: 0,
-    WoodDensitySLT: 0,
-    WoodDensityLLT: 0,
-    WoodDensityST: 0,
-    WoodDensityALT: 0,
-    WoodDensity: 0,
-    HdwdFractionCT: 0,
-    HdwdFractionSLT: 0,
-    HdwdFractionLLT: 0,
-    HdwdFractionST: 0,
-    HdwdFractionALT: 0,
-    HdwdFraction: 0,
-    ButtDiamSLT: 0,
-    ButtDiamST: 0,
-    ButtDiam: 0,
-    LogsPerTreeCT: 0,
-    LogsPerTreeSLT: 0,
-    LogsPerTreeLLT: 0,
-    LogsPerTreeST: 0,
-    LogsPerTreeALT: 0,
-    LogsPerTree: 0,
-    LogVolST: 0,
-    LogVolALT: 0,
-    LogVol: 0,
-    CTLLogsPerTreeCT: 0,
-    CTLLogsPerTree: 0,
-    CTLLogVolCT: 0,
-    CTLLogVol: 0,
-    BFperCF: 0,
-    BoleWtCT: 0,
-    BoleWtSLT: 0,
-    BoleWtLLT: 0,
-    BoleWtST: 0,
-    BoleWtALT: 0,
-    BoleWt: 0,
-    ResidueCT: 0,
-    ResidueSLT: 0,
-    ResidueLLT: 0,
-    ResidueST: 0,
-    ResidueALT: 0,
-    Residue: 0,
-    ManualMachineSizeALT: 0,
-    ManualMachineSize: 0,
-    MechMachineSize: 0,
-    ChipperSize: 0,
-    NonSelfLevelCabDummy: 0,
-    CSlopeFB_Harv: 0,
-    CRemovalsFB_Harv: 0,
-    CSlopeSkidForwLoadSize: 0,
-    CHardwoodCT: 0,
-    CHardwoodSLT: 0,
-    CHardwoodLLT: 0,
-    CHardwoodST: 0,
-    CHardwoodALT: 0,
-    CHardwood: 0,
+function calculateOutput(input: FrcsInputs) {
+  let intermediate: IntermediateVariables = {
+    treesPerAcreST: 0,
+    treesPerAcreALT: 0,
+    treesPerAcre: 0,
+    volumeST: 0,
+    volumeALT: 0,
+    volume: 0,
+    volPerAcreCT: 0,
+    volPerAcreSLT: 0,
+    volPerAcreLLT: 0,
+    volPerAcreST: 0,
+    volPerAcreALT: 0,
+    volPerAcre: 0,
+    dbhCT: 0,
+    dbhSLT: 0,
+    dbhLLT: 0,
+    dbhST: 0,
+    dbhALT: 0,
+    dbh: 0,
+    heightCT: 0,
+    heightSLT: 0,
+    heightLLT: 0,
+    heightST: 0,
+    heightALT: 0,
+    height: 0,
+    woodDensityCT: 0,
+    woodDensitySLT: 0,
+    woodDensityLLT: 0,
+    woodDensityST: 0,
+    woodDensityALT: 0,
+    woodDensity: 0,
+    hardwoodFractionCT: 0,
+    hardwoodFractionSLT: 0,
+    hardwoodFractionLLT: 0,
+    hardwoodFractionST: 0,
+    hardwoodFractionALT: 0,
+    hardwoodFraction: 0,
+    buttDiamSLT: 0,
+    buttDiamST: 0,
+    buttDiam: 0,
+    logsPerTreeCT: 0,
+    logsPerTreeSLT: 0,
+    logsPerTreeLLT: 0,
+    logsPerTreeST: 0,
+    logsPerTreeALT: 0,
+    logsPerTree: 0,
+    logVolST: 0,
+    logVolALT: 0,
+    logVol: 0,
+    ctlLogsPerTreeCT: 0,
+    ctlLogsPerTree: 0,
+    ctlLogVolCT: 0,
+    ctlLogVol: 0,
+    bfPerCF: 0,
+    boleWeightCT: 0,
+    boleWeightSLT: 0,
+    boleWeightLLT: 0,
+    boleWeightST: 0,
+    boleWeightALT: 0,
+    boleWeight: 0,
+    residueCT: 0,
+    residueSLT: 0,
+    residueLLT: 0,
+    residueST: 0,
+    residueALT: 0,
+    residue: 0,
+    manualMachineSizeALT: 0,
+    manualMachineSize: 0,
+    mechMachineSize: 0,
+    chipperSize: 0,
+    nonSelfLevelCabDummy: 0,
+    cSlopeFBHarv: 0,
+    cRemovalsFBHarv: 0,
+    cSlopeSkidForwLoadSize: 0,
+    cHardwoodCT: 0,
+    cHardwoodSLT: 0,
+    cHardwoodLLT: 0,
+    cHardwoodST: 0,
+    cHardwoodALT: 0,
+    cHardwood: 0,
   };
-  const assumption: AssumptionMod = {
+  const assumption: Assumptions = {
     MaxManualTreeVol: 0,
     MaxMechTreeVol: 0,
     MoistureContent: 0,
@@ -166,34 +162,34 @@ function calculateOutput(input: InputVarMod) {
     ResidueRecovFracWT: 0,
     ResidueRecovFracCTL: 0,
   };
-  let output: OutputVarMod = {
-    Total: {
-      WeightPerAcre: 0,
-      CostPerAcre: 0,
-      CostPerBoleCCF: 0,
-      CostPerGT: 0,
-      DieselPerAcre: 0,
-      DieselPerBoleCCF: 0,
-      GasolinePerAcre: 0,
-      GasolinePerBoleCCF: 0,
-      JetFuelPerAcre: 0,
-      JetFuelPerBoleCCF: 0,
+  let output: FrcsOutputs = {
+    total: {
+      yieldPerAcre: 0,
+      costPerAcre: 0,
+      costPerBoleCCF: 0,
+      costPerGT: 0,
+      dieselPerAcre: 0,
+      dieselPerBoleCCF: 0,
+      gasolinePerAcre: 0,
+      gasolinePerBoleCCF: 0,
+      jetFuelPerAcre: 0,
+      jetFuelPerBoleCCF: 0,
     },
-    Residue: {
-      WeightPerAcre: 0,
-      CostPerAcre: 0,
-      CostPerBoleCCF: 0,
-      CostPerGT: 0,
-      DieselPerAcre: 0,
-      GasolinePerAcre: 0,
-      JetFuelPerAcre: 0,
+    biomass: {
+      yieldPerAcre: 0,
+      costPerAcre: 0,
+      costPerBoleCCF: 0,
+      costPerGT: 0,
+      dieselPerAcre: 0,
+      gasolinePerAcre: 0,
+      jetFuelPerAcre: 0,
     },
   };
 
   // Other Assumptions
   assumption.MaxManualTreeVol = 150;
   assumption.MaxMechTreeVol = 80;
-  assumption.MoistureContent = input.MoistureContent / 100;
+  assumption.MoistureContent = input.moistureContent / 100;
   assumption.LogLength = 32;
   assumption.LoadWeightLog = 25;
   assumption.LoadWeightChip = 25;
@@ -203,70 +199,64 @@ function calculateOutput(input: InputVarMod) {
   assumption.ResidueRecovFracCTL = 0.5;
 
   // When TreeVolLLT > 250
-  if (input.TreeVolLLT > 250) {
-    const originalTreeVolLLT = input.TreeVolLLT;
-    input.TreeVolLLT = 250;
+  if (input.volumeLLT > 250) {
+    const originalTreeVolLLT = input.volumeLLT;
+    input.volumeLLT = 250;
     output = calculateOutput(input);
-    const costCCF = output.Total.CostPerBoleCCF;
-    const dieselCCF = output.Total.DieselPerBoleCCF;
-    const gasolineCCF = output.Total.GasolinePerBoleCCF;
-    const jetFuelCCF = output.Total.JetFuelPerBoleCCF;
+    const costCCF = output.total.costPerBoleCCF;
+    const dieselCCF = output.total.dieselPerBoleCCF;
+    const gasolineCCF = output.total.gasolinePerBoleCCF;
+    const jetFuelCCF = output.total.jetFuelPerBoleCCF;
 
-    input.TreeVolLLT = originalTreeVolLLT;
+    input.volumeLLT = originalTreeVolLLT;
     intermediate = calculateIntermediate(input, intermediate, assumption);
-    const AmountRecovered = calculateAmountsRecovered(
-      input,
-      intermediate,
-      assumption
-    );
+    const AmountRecovered = calculateAmountsRecovered(input, intermediate, assumption);
     const cost = costCCF * AmountRecovered.BoleVolCCF;
-    output.Total.WeightPerAcre =
-      AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
-    output.Total.CostPerAcre = cost / input.Area;
-    output.Total.CostPerGT =
-      cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+    output.total.yieldPerAcre = AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+    output.total.costPerAcre = cost / input.area;
+    output.total.costPerGT = cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
 
     const diesel = dieselCCF * AmountRecovered.BoleVolCCF;
     const gasoline = gasolineCCF * AmountRecovered.BoleVolCCF;
     const jetFuel = jetFuelCCF * AmountRecovered.BoleVolCCF;
-    output.Total.DieselPerAcre = diesel / input.Area;
-    output.Total.GasolinePerAcre = gasoline / input.Area;
-    output.Total.JetFuelPerAcre = jetFuel / input.Area;
+    output.total.dieselPerAcre = diesel / input.area;
+    output.total.gasolinePerAcre = gasoline / input.area;
+    output.total.jetFuelPerAcre = jetFuel / input.area;
     return output;
   }
 
   intermediate = calculateIntermediate(input, intermediate, assumption);
 
-  switch (input.System) {
-    case 'Ground-Based Mech WT':
-      output = GroundMechWT(input, intermediate, assumption);
+  switch (input.system) {
+    case SystemTypes.groundBasedMechWt:
+      output = groundMechWT(input, intermediate, assumption);
       break;
-    case 'Ground-Based Manual WT':
-      output = GroundManualWT(input, intermediate, assumption);
+    case SystemTypes.groundBasedManualWt:
+      output = groundManualWT(input, intermediate, assumption);
       break;
-    case 'Ground-Based Manual Log':
-      output = GroundManualLog(input, intermediate, assumption);
+    case SystemTypes.groundBasedManualLog:
+      output = groundManualLog(input, intermediate, assumption);
       break;
-    case 'Ground-Based CTL':
-      output = GroundCTL(input, intermediate, assumption);
+    case SystemTypes.groundBasedCtl:
+      output = groundCTL(input, intermediate, assumption);
       break;
-    case 'Cable Manual WT/Log':
-      output = CableManualWTLog(input, intermediate, assumption);
+    case SystemTypes.cableManualWtLog:
+      output = cableManualWTLog(input, intermediate, assumption);
       break;
-    case 'Cable Manual WT':
-      output = CableManualWT(input, intermediate, assumption);
+    case SystemTypes.cableManualWt:
+      output = cableManualWT(input, intermediate, assumption);
       break;
-    case 'Cable Manual Log':
-      output = CableManualLog(input, intermediate, assumption);
+    case SystemTypes.cableManualLog:
+      output = cableManualLog(input, intermediate, assumption);
       break;
-    case 'Cable CTL':
-      output = CableCTL(input, intermediate, assumption);
+    case SystemTypes.cableCtl:
+      output = cableCTL(input, intermediate, assumption);
       break;
-    case 'Helicopter Manual Log':
-      output = HelicopterManualLog(input, intermediate, assumption);
+    case SystemTypes.helicopterManualWt:
+      output = helicopterManualLog(input, intermediate, assumption);
       break;
-    case 'Helicopter CTL':
-      output = HelicopterCTL(input, intermediate, assumption);
+    case SystemTypes.helicopterCtl:
+      output = helicopterCTL(input, intermediate, assumption);
       break;
   }
 
@@ -274,255 +264,212 @@ function calculateOutput(input: InputVarMod) {
 }
 
 function calculateIntermediate(
-  input: InputVarMod,
-  intermediate: IntermediateVarMod,
-  assumption: AssumptionMod
+  input: FrcsInputs,
+  intermediate: IntermediateVariables,
+  assumption: Assumptions
 ) {
   // funtions
-  intermediate.RemovalsST = input.RemovalsCT + input.RemovalsSLT;
-  intermediate.RemovalsALT = input.RemovalsSLT + input.RemovalsLLT;
-  intermediate.Removals =
-    input.RemovalsCT + input.RemovalsSLT + input.RemovalsLLT;
+  intermediate.treesPerAcreST = input.treesPerAcreCT + input.treesPerAcreSLT;
+  intermediate.treesPerAcreALT = input.treesPerAcreSLT + input.treesPerAcreLLT;
+  intermediate.treesPerAcre = input.treesPerAcreCT + input.treesPerAcreSLT + input.treesPerAcreLLT;
 
-  intermediate.VolPerAcreCT = input.RemovalsCT * input.TreeVolCT;
-  intermediate.VolPerAcreSLT = input.RemovalsSLT * input.TreeVolSLT;
-  intermediate.VolPerAcreLLT = input.RemovalsLLT * input.TreeVolLLT;
-  intermediate.VolPerAcreST =
-    intermediate.VolPerAcreCT + intermediate.VolPerAcreSLT;
-  intermediate.VolPerAcreALT =
-    intermediate.VolPerAcreSLT + intermediate.VolPerAcreLLT;
-  intermediate.VolPerAcre =
-    intermediate.VolPerAcreCT +
-    intermediate.VolPerAcreSLT +
-    intermediate.VolPerAcreLLT;
+  intermediate.volPerAcreCT = input.treesPerAcreCT * input.volumeCT;
+  intermediate.volPerAcreSLT = input.treesPerAcreSLT * input.volumeSLT;
+  intermediate.volPerAcreLLT = input.treesPerAcreLLT * input.volumeLLT;
+  intermediate.volPerAcreST = intermediate.volPerAcreCT + intermediate.volPerAcreSLT;
+  intermediate.volPerAcreALT = intermediate.volPerAcreSLT + intermediate.volPerAcreLLT;
+  intermediate.volPerAcre =
+    intermediate.volPerAcreCT + intermediate.volPerAcreSLT + intermediate.volPerAcreLLT;
 
-  intermediate.TreeVolST =
-    intermediate.RemovalsST > 0
-      ? intermediate.VolPerAcreST / intermediate.RemovalsST
+  intermediate.volumeST =
+    intermediate.treesPerAcreST > 0 ? intermediate.volPerAcreST / intermediate.treesPerAcreST : 0;
+  intermediate.volumeALT =
+    intermediate.treesPerAcreALT > 0
+      ? intermediate.volPerAcreALT / intermediate.treesPerAcreALT
       : 0;
-  intermediate.TreeVolALT =
-    intermediate.RemovalsALT > 0
-      ? intermediate.VolPerAcreALT / intermediate.RemovalsALT
-      : 0;
-  intermediate.TreeVol =
-    intermediate.Removals > 0
-      ? intermediate.VolPerAcre / intermediate.Removals
-      : 0;
+  intermediate.volume =
+    intermediate.treesPerAcre > 0 ? intermediate.volPerAcre / intermediate.treesPerAcre : 0;
 
   // DBH
-  intermediate.DBHCT = Math.sqrt((input.TreeVolCT + 3.675) / 0.216);
-  intermediate.DBHSLT = Math.sqrt((input.TreeVolSLT + 3.675) / 0.216);
-  intermediate.DBHLLT = Math.sqrt((input.TreeVolLLT + 3.675) / 0.216);
-  intermediate.DBHST =
-    intermediate.TreeVolST > 0
+  intermediate.dbhCT = Math.sqrt((input.volumeCT + 3.675) / 0.216);
+  intermediate.dbhSLT = Math.sqrt((input.volumeSLT + 3.675) / 0.216);
+  intermediate.dbhLLT = Math.sqrt((input.volumeLLT + 3.675) / 0.216);
+  intermediate.dbhST =
+    intermediate.volumeST > 0
       ? Math.sqrt(
-          (input.RemovalsCT * Math.pow(intermediate.DBHCT, 2) +
-            input.RemovalsSLT * Math.pow(intermediate.DBHSLT, 2)) /
-            intermediate.RemovalsST
+          (input.treesPerAcreCT * Math.pow(intermediate.dbhCT, 2) +
+            input.treesPerAcreSLT * Math.pow(intermediate.dbhSLT, 2)) /
+            intermediate.treesPerAcreST
         )
       : 0;
-  intermediate.DBHALT =
-    intermediate.TreeVolALT > 0
+  intermediate.dbhALT =
+    intermediate.volumeALT > 0
       ? Math.sqrt(
-          (input.RemovalsSLT * Math.pow(intermediate.DBHSLT, 2) +
-            input.RemovalsLLT * Math.pow(intermediate.DBHLLT, 2)) /
-            intermediate.RemovalsALT
+          (input.treesPerAcreSLT * Math.pow(intermediate.dbhSLT, 2) +
+            input.treesPerAcreLLT * Math.pow(intermediate.dbhLLT, 2)) /
+            intermediate.treesPerAcreALT
         )
       : 0;
-  intermediate.DBH = Math.sqrt(
-    (input.RemovalsCT * Math.pow(intermediate.DBHCT, 2) +
-      intermediate.RemovalsALT * Math.pow(intermediate.DBHALT, 2)) /
-      intermediate.Removals
+  intermediate.dbh = Math.sqrt(
+    (input.treesPerAcreCT * Math.pow(intermediate.dbhCT, 2) +
+      intermediate.treesPerAcreALT * Math.pow(intermediate.dbhALT, 2)) /
+      intermediate.treesPerAcre
   );
   // Tree Height
-  intermediate.HeightCT =
-    input.TreeVolCT > 0 ? -20 + 24 * Math.sqrt(intermediate.DBHCT) : 0;
-  intermediate.HeightSLT =
-    input.TreeVolSLT > 0 ? -20 + 24 * Math.sqrt(intermediate.DBHSLT) : 0;
-  intermediate.HeightLLT =
-    input.TreeVolLLT > 0 ? -20 + 24 * Math.sqrt(intermediate.DBHLLT) : 0;
-  intermediate.HeightST =
-    intermediate.TreeVolST > 0
-      ? (input.RemovalsCT * intermediate.HeightCT +
-          input.RemovalsSLT * intermediate.HeightSLT) /
-        intermediate.RemovalsST
+  intermediate.heightCT = input.volumeCT > 0 ? -20 + 24 * Math.sqrt(intermediate.dbhCT) : 0;
+  intermediate.heightSLT = input.volumeSLT > 0 ? -20 + 24 * Math.sqrt(intermediate.dbhSLT) : 0;
+  intermediate.heightLLT = input.volumeLLT > 0 ? -20 + 24 * Math.sqrt(intermediate.dbhLLT) : 0;
+  intermediate.heightST =
+    intermediate.volumeST > 0
+      ? (input.treesPerAcreCT * intermediate.heightCT +
+          input.treesPerAcreSLT * intermediate.heightSLT) /
+        intermediate.treesPerAcreST
       : 0;
-  intermediate.HeightALT =
-    intermediate.TreeVolALT > 0
-      ? (input.RemovalsSLT * intermediate.HeightSLT +
-          input.RemovalsLLT * intermediate.HeightLLT) /
-        intermediate.RemovalsALT
+  intermediate.heightALT =
+    intermediate.volumeALT > 0
+      ? (input.treesPerAcreSLT * intermediate.heightSLT +
+          input.treesPerAcreLLT * intermediate.heightLLT) /
+        intermediate.treesPerAcreALT
       : 0;
-  intermediate.Height =
-    intermediate.TreeVol > 0
-      ? (input.RemovalsCT * intermediate.HeightCT +
-          intermediate.RemovalsALT * intermediate.HeightALT) /
-        intermediate.Removals
+  intermediate.height =
+    intermediate.volume > 0
+      ? (input.treesPerAcreCT * intermediate.heightCT +
+          intermediate.treesPerAcreALT * intermediate.heightALT) /
+        intermediate.treesPerAcre
       : 0;
   // Wood Density
-  intermediate.WoodDensityCT = input.UserSpecWDCT > 0 ? input.UserSpecWDCT : 50;
-  intermediate.WoodDensitySLT =
-    input.UserSpecWDSLT > 0 ? input.UserSpecWDSLT : 50;
-  intermediate.WoodDensityLLT =
-    input.UserSpecWDLLT > 0 ? input.UserSpecWDLLT : 50;
-  intermediate.WoodDensityST =
-    intermediate.VolPerAcreST > 0
-      ? (intermediate.WoodDensityCT * intermediate.VolPerAcreCT +
-          intermediate.WoodDensitySLT * intermediate.VolPerAcreSLT) /
-        intermediate.VolPerAcreST
+  intermediate.woodDensityCT = input.woodDensityCT > 0 ? input.woodDensityCT : 50;
+  intermediate.woodDensitySLT = input.woodDensitySLT > 0 ? input.woodDensitySLT : 50;
+  intermediate.woodDensityLLT = input.woodDensityLLT > 0 ? input.woodDensityLLT : 50;
+  intermediate.woodDensityST =
+    intermediate.volPerAcreST > 0
+      ? (intermediate.woodDensityCT * intermediate.volPerAcreCT +
+          intermediate.woodDensitySLT * intermediate.volPerAcreSLT) /
+        intermediate.volPerAcreST
       : 0;
-  intermediate.WoodDensityALT =
-    intermediate.VolPerAcreALT > 0
-      ? (intermediate.WoodDensitySLT * intermediate.VolPerAcreSLT +
-          intermediate.WoodDensityLLT * intermediate.VolPerAcreLLT) /
-        intermediate.VolPerAcreALT
+  intermediate.woodDensityALT =
+    intermediate.volPerAcreALT > 0
+      ? (intermediate.woodDensitySLT * intermediate.volPerAcreSLT +
+          intermediate.woodDensityLLT * intermediate.volPerAcreLLT) /
+        intermediate.volPerAcreALT
       : 0;
-  intermediate.WoodDensity =
-    (intermediate.WoodDensityCT * intermediate.VolPerAcreCT +
-      intermediate.WoodDensityALT * intermediate.VolPerAcreALT) /
-    intermediate.VolPerAcre;
+  intermediate.woodDensity =
+    (intermediate.woodDensityCT * intermediate.volPerAcreCT +
+      intermediate.woodDensityALT * intermediate.volPerAcreALT) /
+    intermediate.volPerAcre;
   // Hardwood Fraction
-  intermediate.HdwdFractionCT = !isNaN(input.UserSpecHFCT)
-    ? input.UserSpecHFCT
+  intermediate.hardwoodFractionCT = !isNaN(input.hardwoodFractionCT) ? input.hardwoodFractionCT : 0;
+  intermediate.hardwoodFractionSLT = !isNaN(input.hardwoodFractionSLT)
+    ? input.hardwoodFractionSLT
     : 0;
-  intermediate.HdwdFractionSLT = !isNaN(input.UserSpecHFSLT)
-    ? input.UserSpecHFSLT
+  intermediate.hardwoodFractionLLT = !isNaN(input.hardwoodFractionLLT)
+    ? input.hardwoodFractionLLT
     : 0;
-  intermediate.HdwdFractionLLT = !isNaN(input.UserSpecHFLLT)
-    ? input.UserSpecHFLLT
-    : 0;
-  intermediate.HdwdFractionST =
-    intermediate.VolPerAcreST > 0
-      ? (intermediate.HdwdFractionCT * intermediate.VolPerAcreCT +
-          intermediate.HdwdFractionSLT * intermediate.VolPerAcreSLT) /
-        intermediate.VolPerAcreST
+  intermediate.hardwoodFractionST =
+    intermediate.volPerAcreST > 0
+      ? (intermediate.hardwoodFractionCT * intermediate.volPerAcreCT +
+          intermediate.hardwoodFractionSLT * intermediate.volPerAcreSLT) /
+        intermediate.volPerAcreST
       : 0;
-  intermediate.HdwdFractionALT =
-    intermediate.VolPerAcreALT > 0
-      ? (intermediate.HdwdFractionSLT * intermediate.VolPerAcreSLT +
-          intermediate.HdwdFractionLLT * intermediate.VolPerAcreLLT) /
-        intermediate.VolPerAcreALT
+  intermediate.hardwoodFractionALT =
+    intermediate.volPerAcreALT > 0
+      ? (intermediate.hardwoodFractionSLT * intermediate.volPerAcreSLT +
+          intermediate.hardwoodFractionLLT * intermediate.volPerAcreLLT) /
+        intermediate.volPerAcreALT
       : 0;
-  intermediate.HdwdFraction =
-    (intermediate.HdwdFractionCT * intermediate.VolPerAcreCT +
-      intermediate.HdwdFractionALT * intermediate.VolPerAcreALT) /
-    intermediate.VolPerAcre;
+  intermediate.hardwoodFraction =
+    (intermediate.hardwoodFractionCT * intermediate.volPerAcreCT +
+      intermediate.hardwoodFractionALT * intermediate.volPerAcreALT) /
+    intermediate.volPerAcre;
   // ButtDiam
-  intermediate.ButtDiamSLT = intermediate.DBHSLT + 3;
-  intermediate.ButtDiamST = intermediate.DBHST + 3;
-  intermediate.ButtDiam = intermediate.DBH + 3;
+  intermediate.buttDiamSLT = intermediate.dbhSLT + 3;
+  intermediate.buttDiamST = intermediate.dbhST + 3;
+  intermediate.buttDiam = intermediate.dbh + 3;
   // Logs Per Tree
-  intermediate.LogsPerTreeCT = 1;
-  intermediate.LogsPerTreeSLT = -0.43 + 0.678 * Math.sqrt(intermediate.DBHSLT);
-  intermediate.LogsPerTreeLLT = -0.43 + 0.678 * Math.sqrt(intermediate.DBHLLT);
-  intermediate.LogsPerTreeST =
-    (intermediate.LogsPerTreeCT * input.RemovalsCT +
-      intermediate.LogsPerTreeSLT * input.RemovalsSLT) /
-    intermediate.RemovalsST;
-  intermediate.LogsPerTreeALT =
-    intermediate.RemovalsALT === 0
+  intermediate.logsPerTreeCT = 1;
+  intermediate.logsPerTreeSLT = -0.43 + 0.678 * Math.sqrt(intermediate.dbhSLT);
+  intermediate.logsPerTreeLLT = -0.43 + 0.678 * Math.sqrt(intermediate.dbhLLT);
+  intermediate.logsPerTreeST =
+    (intermediate.logsPerTreeCT * input.treesPerAcreCT +
+      intermediate.logsPerTreeSLT * input.treesPerAcreSLT) /
+    intermediate.treesPerAcreST;
+  intermediate.logsPerTreeALT =
+    intermediate.treesPerAcreALT === 0
       ? 0
-      : (intermediate.LogsPerTreeSLT * input.RemovalsSLT +
-          intermediate.LogsPerTreeLLT * input.RemovalsLLT) /
-        intermediate.RemovalsALT;
-  intermediate.LogsPerTree =
-    (intermediate.LogsPerTreeCT * input.RemovalsCT +
-      intermediate.LogsPerTreeALT * intermediate.RemovalsALT) /
-    intermediate.Removals;
+      : (intermediate.logsPerTreeSLT * input.treesPerAcreSLT +
+          intermediate.logsPerTreeLLT * input.treesPerAcreLLT) /
+        intermediate.treesPerAcreALT;
+  intermediate.logsPerTree =
+    (intermediate.logsPerTreeCT * input.treesPerAcreCT +
+      intermediate.logsPerTreeALT * intermediate.treesPerAcreALT) /
+    intermediate.treesPerAcre;
   // Log Volume
-  intermediate.LogVolST = intermediate.TreeVolST / intermediate.LogsPerTreeST;
-  intermediate.LogVolALT =
-    intermediate.RemovalsALT === 0
-      ? 0
-      : intermediate.TreeVolALT / intermediate.LogsPerTreeALT;
-  intermediate.LogVol = intermediate.TreeVol / intermediate.LogsPerTree;
+  intermediate.logVolST = intermediate.volumeST / intermediate.logsPerTreeST;
+  intermediate.logVolALT =
+    intermediate.treesPerAcreALT === 0 ? 0 : intermediate.volumeALT / intermediate.logsPerTreeALT;
+  intermediate.logVol = intermediate.volume / intermediate.logsPerTree;
   // CTL Logs Per Tree
-  intermediate.CTLLogsPerTreeCT = Math.max(
-    1,
-    2 * (-0.43 + 0.678 * Math.sqrt(intermediate.DBHCT))
-  );
-  intermediate.CTLLogsPerTree = Math.max(
-    1,
-    2 * (-0.43 + 0.678 * Math.sqrt(intermediate.DBHST))
-  );
+  intermediate.ctlLogsPerTreeCT = Math.max(1, 2 * (-0.43 + 0.678 * Math.sqrt(intermediate.dbhCT)));
+  intermediate.ctlLogsPerTree = Math.max(1, 2 * (-0.43 + 0.678 * Math.sqrt(intermediate.dbhST)));
   // CTL Log Volume
-  intermediate.CTLLogVolCT = input.TreeVolCT / intermediate.CTLLogsPerTreeCT;
-  intermediate.CTLLogVol = intermediate.TreeVolST / intermediate.CTLLogsPerTree;
+  intermediate.ctlLogVolCT = input.volumeCT / intermediate.ctlLogsPerTreeCT;
+  intermediate.ctlLogVol = intermediate.volumeST / intermediate.ctlLogsPerTree;
   // BFperCF=5
-  intermediate.BFperCF = 5;
+  intermediate.bfPerCF = 5;
   // Bole Weight
-  intermediate.BoleWtCT =
-    (intermediate.WoodDensityCT * intermediate.VolPerAcreCT) / 2000;
-  intermediate.BoleWtSLT =
-    (intermediate.WoodDensitySLT * intermediate.VolPerAcreSLT) / 2000;
-  intermediate.BoleWtLLT =
-    (intermediate.WoodDensityLLT * intermediate.VolPerAcreLLT) / 2000;
-  intermediate.BoleWtST = intermediate.BoleWtCT + intermediate.BoleWtSLT;
-  intermediate.BoleWtALT = intermediate.BoleWtSLT + intermediate.BoleWtLLT;
-  intermediate.BoleWt = intermediate.BoleWtCT + intermediate.BoleWtALT;
+  intermediate.boleWeightCT = (intermediate.woodDensityCT * intermediate.volPerAcreCT) / 2000;
+  intermediate.boleWeightSLT = (intermediate.woodDensitySLT * intermediate.volPerAcreSLT) / 2000;
+  intermediate.boleWeightLLT = (intermediate.woodDensityLLT * intermediate.volPerAcreLLT) / 2000;
+  intermediate.boleWeightST = intermediate.boleWeightCT + intermediate.boleWeightSLT;
+  intermediate.boleWeightALT = intermediate.boleWeightSLT + intermediate.boleWeightLLT;
+  intermediate.boleWeight = intermediate.boleWeightCT + intermediate.boleWeightALT;
   // Residue Weight
-  intermediate.ResidueCT = input.UserSpecRFCT * intermediate.BoleWtCT;
-  intermediate.ResidueSLT = input.UserSpecRFSLT * intermediate.BoleWtSLT;
-  intermediate.ResidueLLT = input.UserSpecRFLLT * intermediate.BoleWtLLT;
-  intermediate.ResidueST = intermediate.ResidueCT + intermediate.ResidueSLT;
-  intermediate.ResidueALT = intermediate.ResidueSLT + intermediate.ResidueLLT;
-  intermediate.Residue = intermediate.ResidueCT + intermediate.ResidueALT;
+  intermediate.residueCT = input.residueFractionCT * intermediate.boleWeightCT;
+  intermediate.residueSLT = input.residueFractionSLT * intermediate.boleWeightSLT;
+  intermediate.residueLLT = input.residueFractionLLT * intermediate.boleWeightLLT;
+  intermediate.residueST = intermediate.residueCT + intermediate.residueSLT;
+  intermediate.residueALT = intermediate.residueSLT + intermediate.residueLLT;
+  intermediate.residue = intermediate.residueCT + intermediate.residueALT;
   // Manual Machine Size
-  intermediate.ManualMachineSizeALT = Math.min(
+  intermediate.manualMachineSizeALT = Math.min(
     1,
-    intermediate.TreeVolALT / assumption.MaxManualTreeVol
+    intermediate.volumeALT / assumption.MaxManualTreeVol
   );
-  intermediate.ManualMachineSize = Math.min(
-    1,
-    intermediate.TreeVol / assumption.MaxManualTreeVol
-  );
+  intermediate.manualMachineSize = Math.min(1, intermediate.volume / assumption.MaxManualTreeVol);
   // Mechanized Machine Size
-  intermediate.MechMachineSize = Math.min(
-    1,
-    intermediate.TreeVolST / assumption.MaxMechTreeVol
-  );
+  intermediate.mechMachineSize = Math.min(1, intermediate.volumeST / assumption.MaxMechTreeVol);
   // Chipper Size
-  intermediate.ChipperSize = Math.min(
-    1,
-    input.TreeVolCT / assumption.MaxMechTreeVol
-  );
+  intermediate.chipperSize = Math.min(1, input.volumeCT / assumption.MaxMechTreeVol);
   // NonSelfLevelCabDummy
-  intermediate.NonSelfLevelCabDummy =
-    input.Slope < 15 ? 1 : input.Slope < 35 ? 1.75 - 0.05 * input.Slope : 0;
+  intermediate.nonSelfLevelCabDummy =
+    input.slope < 15 ? 1 : input.slope < 35 ? 1.75 - 0.05 * input.slope : 0;
   // Cinput.SlopeFB&Harv (Mellgren 90)
-  intermediate.CSlopeFB_Harv =
-    0.00015 * Math.pow(input.Slope, 2) +
-    0.00359 * intermediate.NonSelfLevelCabDummy * input.Slope;
+  intermediate.cSlopeFBHarv =
+    0.00015 * Math.pow(input.slope, 2) + 0.00359 * intermediate.nonSelfLevelCabDummy * input.slope;
   // CRemovalsFB&Harv (Mellgren 90)
-  intermediate.CRemovalsFB_Harv = Math.max(
+  intermediate.cRemovalsFBHarv = Math.max(
     0,
     0.66 -
-      0.001193 * intermediate.RemovalsST * 2.47 +
-      5.357 * Math.pow(10, -7) * Math.pow(intermediate.RemovalsST * 2.47, 2)
+      0.001193 * intermediate.treesPerAcreST * 2.47 +
+      5.357 * Math.pow(10, -7) * Math.pow(intermediate.treesPerAcreST * 2.47, 2)
   );
   // Cinput.SlopeSkidForwLoadSize (Mellgren 90)
-  intermediate.CSlopeSkidForwLoadSize = 1 - 0.000127 * Math.pow(input.Slope, 2);
+  intermediate.cSlopeSkidForwLoadSize = 1 - 0.000127 * Math.pow(input.slope, 2);
   // Chardwood
-  intermediate.CHardwoodCT =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFractionCT;
-  intermediate.CHardwoodSLT =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFractionSLT;
-  intermediate.CHardwoodLLT =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFractionLLT;
-  intermediate.CHardwoodST =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFractionST;
-  intermediate.CHardwoodALT =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFractionALT;
-  intermediate.CHardwood =
-    1 + assumption.HdwdCostPremium * intermediate.HdwdFraction;
+  intermediate.cHardwoodCT = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFractionCT;
+  intermediate.cHardwoodSLT = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFractionSLT;
+  intermediate.cHardwoodLLT = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFractionLLT;
+  intermediate.cHardwoodST = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFractionST;
+  intermediate.cHardwoodALT = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFractionALT;
+  intermediate.cHardwood = 1 + assumption.HdwdCostPremium * intermediate.hardwoodFraction;
 
   return intermediate;
 }
 
 function calculateAmountsRecovered(
-  input: InputVar,
-  intermediate: IntermediateVarMod,
-  assumption: AssumptionMod
+  input: FrcsInputsDefault,
+  intermediate: IntermediateVariables,
+  assumption: Assumptions
 ) {
   // tslint:disable-next-line: one-variable-per-declaration
   let BoleVolCCF = 0,
@@ -530,98 +477,84 @@ function calculateAmountsRecovered(
     PrimaryProduct = 0,
     ResidueRecoveredOptional = 0,
     TotalPrimaryProductsAndOptionalResidues = 0;
-  switch (input.System) {
+  switch (input.system) {
     case 'Ground-Based Mech WT':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
-      ResidueRecoveredPrimary =
-        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
-      ResidueRecoveredOptional = input.CalcResidues
-        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+      BoleVolCCF = intermediate.volPerAcre / 100;
+      ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.includeCostsCollectChipResidues
+        ? assumption.ResidueRecovFracWT * intermediate.residueSLT
         : 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Ground-Based Manual WT':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
-      ResidueRecoveredPrimary =
-        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
-      ResidueRecoveredOptional = input.CalcResidues
-        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+      BoleVolCCF = intermediate.volPerAcre / 100;
+      ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.includeCostsCollectChipResidues
+        ? assumption.ResidueRecovFracWT * intermediate.residueSLT
         : 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Ground-Based Manual Log':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
+      BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Ground-Based CTL':
-      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
-      ResidueRecoveredOptional = input.CalcResidues
-        ? assumption.ResidueRecovFracCTL * intermediate.ResidueST
+      PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.includeCostsCollectChipResidues
+        ? assumption.ResidueRecovFracCTL * intermediate.residueST
         : 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Cable Manual WT/Log':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
-      ResidueRecoveredPrimary =
-        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      BoleVolCCF = intermediate.volPerAcre / 100;
+      ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Cable Manual WT':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
-      ResidueRecoveredPrimary =
-        assumption.ResidueRecovFracWT * intermediate.ResidueCT;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
-      ResidueRecoveredOptional = input.CalcResidues
-        ? assumption.ResidueRecovFracWT * intermediate.ResidueSLT
+      BoleVolCCF = intermediate.volPerAcre / 100;
+      ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
+      ResidueRecoveredOptional = input.includeCostsCollectChipResidues
+        ? assumption.ResidueRecovFracWT * intermediate.residueSLT
         : 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Cable Manual Log':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
+      BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Cable CTL':
-      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
+      PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Helicopter Manual Log':
-      BoleVolCCF = intermediate.VolPerAcre / 100;
+      BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWt + ResidueRecoveredPrimary;
+      PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
     case 'Helicopter CTL':
-      BoleVolCCF = intermediate.VolPerAcreST / 100;
+      BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
-      PrimaryProduct = intermediate.BoleWtST + ResidueRecoveredPrimary;
+      PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
-      TotalPrimaryProductsAndOptionalResidues =
-        PrimaryProduct + ResidueRecoveredOptional;
+      TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
   }
   return {
