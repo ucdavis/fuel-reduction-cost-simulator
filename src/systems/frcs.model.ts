@@ -12,198 +12,197 @@ export const SystemTypes = {
 };
 
 // if you add any parameters here, you must add it to the class below
-export interface InputVarMod {
-  System: string;
-  PartialCut: boolean; // if true, partial-cut; otherwise clear-cut.
-  DeliverDist: number;
-  Slope: number;
-  Elevation: number;
-  CalcLoad: boolean; // if include loading costs.
-  CalcMoveIn: boolean; // if include move-in costs
-  Area: number;
-  MoveInDist: number; // area treated and one-way move-in distance are needed when movein_cost is checked.
-  CalcResidues: boolean; // if include the costs of collecting and chipping residues
+// CT: chip trees; SLT: small log trees; LLT: large log trees
+export interface FrcsInputs {
+  system: string;
+  isPartialCut: boolean; // if true, partial-cut; otherwise clear-cut.
+  deliverToLandingDistance: number; // yard/skid/forward distance
+  slope: number;
+  elevation: number;
+  includeLoadingCosts: boolean; // if include loading costs.
+  includeMoveInCosts: boolean; // if include move-in costs
+  area: number;
+  moveInDistance: number; // area treated and one-way move-in distance are needed when movein_cost is checked.
+  includeCostsCollectChipResidues: boolean; // if include the costs of collecting and chipping residues
 
-  // ct: chip trees; slt: small log trees; llt: large log trees; rm: removals; tv: tree volume;
-  // gwd: green wood density; rf: residue fraction; hf: hardwood fraction
+  woodDensityCT: number; // green wood density of chip trees
+  woodDensitySLT: number;
+  woodDensityLLT: number;
+  residueFractionCT: number;
+  residueFractionSLT: number; // residue fraction of small log trees
+  residueFractionLLT: number;
+  hardwoodFractionCT: number;
+  hardwoodFractionSLT: number;
+  hardwoodFractionLLT: number; // hardwood fraction of large log trees
 
-  UserSpecWDCT: number; // green wood density of chip trees
-  UserSpecWDSLT: number;
-  UserSpecWDLLT: number;
-  UserSpecRFCT: number;
-  UserSpecRFSLT: number; // residue fraction of small log trees
-  UserSpecRFLLT: number;
-  UserSpecHFCT: number;
-  UserSpecHFSLT: number;
-  UserSpecHFLLT: number; // hardwood fraction of large log trees
+  treesPerAcreCT: number; // removals of chip trees
+  volumeCT: number; // volume per chip tree (ft3)
+  treesPerAcreSLT: number;
+  volumeSLT: number; // volume per small log tree (ft3)
+  treesPerAcreLLT: number;
+  volumeLLT: number; // volume per large log tree (ft3)
 
-  RemovalsCT: number; // removals of chip trees
-  TreeVolCT: number;
-  RemovalsSLT: number;
-  TreeVolSLT: number; // tree volume of small log trees
-  RemovalsLLT: number;
-  TreeVolLLT: number;
-
-  DieselFuelPrice: number;
-  MoistureContent: number;
-  ChipAll: boolean;
+  dieselFuelPrice: number;
+  moistureContent: number;
+  isBiomassSalvage: boolean; // indicate whether all trees are harvested for biomass
 }
 
-export class InputVar implements InputVar {
-  System = 'Cable Manual WT';
-  PartialCut = true;
-  DeliverDist = 400;
-  Slope = 30;
-  Elevation = 5000;
-  CalcLoad = true;
-  CalcMoveIn = true;
-  Area = 1;
-  MoveInDist = 2;
-  CalcResidues = true;
-  UserSpecWDCT = 60;
-  UserSpecWDSLT = 58.6235;
-  UserSpecWDLLT = 62.1225;
-  UserSpecRFCT = 0;
-  UserSpecRFSLT = 0.25;
-  UserSpecRFLLT = 0.38;
-  UserSpecHFCT = 0.2;
-  UserSpecHFSLT = 0;
-  UserSpecHFLLT = 0;
-  RemovalsCT = 20;
-  TreeVolCT = 50;
-  RemovalsSLT = 50;
-  TreeVolSLT = 70;
-  RemovalsLLT = 5;
-  TreeVolLLT = 100;
-  DieselFuelPrice = 3.356;
-  MoistureContent = 50;
-  ChipAll = false;
+export class FrcsInputsDefault implements FrcsInputs {
+  system = 'Cable Manual WT';
+  isPartialCut = true;
+  deliverToLandingDistance = 400;
+  slope = 30;
+  elevation = 5000;
+  includeLoadingCosts = true;
+  includeMoveInCosts = true;
+  area = 1;
+  moveInDistance = 2;
+  includeCostsCollectChipResidues = true;
+  woodDensityCT = 60;
+  woodDensitySLT = 58.6235;
+  woodDensityLLT = 62.1225;
+  residueFractionCT = 0;
+  residueFractionSLT = 0.25;
+  residueFractionLLT = 0.38;
+  hardwoodFractionCT = 0.2;
+  hardwoodFractionSLT = 0;
+  hardwoodFractionLLT = 0;
+  treesPerAcreCT = 20;
+  volumeCT = 50;
+  treesPerAcreSLT = 50;
+  volumeSLT = 70;
+  treesPerAcreLLT = 5;
+  volumeLLT = 100;
+  dieselFuelPrice = 3.356;
+  moistureContent = 50;
+  isBiomassSalvage = false;
   constructor() {}
 }
 
-export interface MoveInInputVarMod {
-  System: string;
-  MoveInDist: number;
-  DieselFuelPrice: number;
-  ChipAll: boolean;
+export interface MoveInInputs {
+  system: string;
+  moveInDistance: number;
+  dieselFuelPrice: number;
+  isBiomassSalvage: boolean;
 }
 
-export class MoveInInputVar implements MoveInInputVar {
-  System = 'Cable Manual WT';
+export class MoveInInputsDefault implements MoveInInputs {
+  system = 'Cable Manual WT';
   Area = 1;
-  MoveInDist = 2;
-  DieselFuelPrice = 3.356;
-  ChipAll = false;
+  moveInDistance = 2;
+  dieselFuelPrice = 3.356;
+  isBiomassSalvage = false;
   constructor() {}
 }
 
-export interface IntermediateVarMod {
-  RemovalsST: number;
-  RemovalsALT: number;
-  Removals: number;
-  TreeVolST: number;
-  TreeVolALT: number;
-  TreeVol: number;
-  VolPerAcreCT: number;
-  VolPerAcreSLT: number;
-  VolPerAcreLLT: number;
-  VolPerAcreST: number;
-  VolPerAcreALT: number;
-  VolPerAcre: number;
-  DBHCT: number;
-  DBHSLT: number;
-  DBHLLT: number;
-  DBHST: number;
-  DBHALT: number;
-  DBH: number;
-  HeightCT: number;
-  HeightSLT: number;
-  HeightLLT: number;
-  HeightST: number;
-  HeightALT: number;
-  Height: number;
-  WoodDensityCT: number;
-  WoodDensitySLT: number;
-  WoodDensityLLT: number;
-  WoodDensityST: number;
-  WoodDensityALT: number;
-  WoodDensity: number;
-  HdwdFractionCT: number;
-  HdwdFractionSLT: number;
-  HdwdFractionLLT: number;
-  HdwdFractionST: number;
-  HdwdFractionALT: number;
-  HdwdFraction: number;
-  ButtDiamSLT: number;
-  ButtDiamST: number;
-  ButtDiam: number;
-  LogsPerTreeCT: number;
-  LogsPerTreeSLT: number;
-  LogsPerTreeLLT: number;
-  LogsPerTreeST: number;
-  LogsPerTreeALT: number;
-  LogsPerTree: number;
-  LogVolST: number;
-  LogVolALT: number;
-  LogVol: number;
-  CTLLogsPerTreeCT: number;
-  CTLLogsPerTree: number;
-  CTLLogVolCT: number;
-  CTLLogVol: number;
-  BFperCF: number;
-  BoleWtCT: number;
-  BoleWtSLT: number;
-  BoleWtLLT: number;
-  BoleWtST: number;
-  BoleWtALT: number;
-  BoleWt: number;
-  ResidueCT: number;
-  ResidueSLT: number;
-  ResidueLLT: number;
-  ResidueST: number;
-  ResidueALT: number;
-  Residue: number;
-  ManualMachineSizeALT: number;
-  ManualMachineSize: number;
-  MechMachineSize: number;
-  ChipperSize: number;
-  NonSelfLevelCabDummy: number;
-  CSlopeFB_Harv: number;
-  CRemovalsFB_Harv: number;
-  CSlopeSkidForwLoadSize: number;
-  CHardwoodCT: number;
-  CHardwoodSLT: number;
-  CHardwoodLLT: number;
-  CHardwoodST: number;
-  CHardwoodALT: number;
-  CHardwood: number;
+// ST: small trees; ALT: all log trees
+export interface IntermediateVariables {
+  treesPerAcreST: number;
+  treesPerAcreALT: number;
+  treesPerAcre: number;
+  volumeST: number;
+  volumeALT: number;
+  volume: number;
+  volPerAcreCT: number;
+  volPerAcreSLT: number;
+  volPerAcreLLT: number;
+  volPerAcreST: number;
+  volPerAcreALT: number;
+  volPerAcre: number;
+  dbhCT: number;
+  dbhSLT: number;
+  dbhLLT: number;
+  dbhST: number;
+  dbhALT: number;
+  dbh: number;
+  heightCT: number;
+  heightSLT: number;
+  heightLLT: number;
+  heightST: number;
+  heightALT: number;
+  height: number;
+  woodDensityCT: number;
+  woodDensitySLT: number;
+  woodDensityLLT: number;
+  woodDensityST: number;
+  woodDensityALT: number;
+  woodDensity: number;
+  hardwoodFractionCT: number;
+  hardwoodFractionSLT: number;
+  hardwoodFractionLLT: number;
+  hardwoodFractionST: number;
+  hardwoodFractionALT: number;
+  hardwoodFraction: number;
+  buttDiamSLT: number;
+  buttDiamST: number;
+  buttDiam: number;
+  logsPerTreeCT: number;
+  logsPerTreeSLT: number;
+  logsPerTreeLLT: number;
+  logsPerTreeST: number;
+  logsPerTreeALT: number;
+  logsPerTree: number;
+  logVolST: number;
+  logVolALT: number;
+  logVol: number;
+  ctlLogsPerTreeCT: number;
+  ctlLogsPerTree: number;
+  ctlLogVolCT: number;
+  ctlLogVol: number;
+  bfPerCF: number;
+  boleWeightCT: number;
+  boleWeightSLT: number;
+  boleWeightLLT: number;
+  boleWeightST: number;
+  boleWeightALT: number;
+  boleWeight: number;
+  residueCT: number;
+  residueSLT: number;
+  residueLLT: number;
+  residueST: number;
+  residueALT: number;
+  residue: number;
+  manualMachineSizeALT: number;
+  manualMachineSize: number;
+  mechMachineSize: number;
+  chipperSize: number;
+  nonSelfLevelCabDummy: number;
+  cSlopeFBHarv: number;
+  cRemovalsFBHarv: number;
+  cSlopeSkidForwLoadSize: number;
+  cHardwoodCT: number;
+  cHardwoodSLT: number;
+  cHardwoodLLT: number;
+  cHardwoodST: number;
+  cHardwoodALT: number;
+  cHardwood: number;
 }
 
-export interface OutputVarMod {
-  Total: {
-    WeightPerAcre: number;
-    CostPerAcre: number;
-    CostPerBoleCCF: number;
-    CostPerGT: number;
-    DieselPerAcre: number;
-    DieselPerBoleCCF: number;
-    GasolinePerAcre: number;
-    GasolinePerBoleCCF: number;
-    JetFuelPerAcre: number;
-    JetFuelPerBoleCCF: number;
+export interface FrcsOutputs {
+  total: {
+    yieldPerAcre: number;
+    costPerAcre: number;
+    costPerBoleCCF: number;
+    costPerGT: number;
+    dieselPerAcre: number;
+    dieselPerBoleCCF: number;
+    gasolinePerAcre: number;
+    gasolinePerBoleCCF: number;
+    jetFuelPerAcre: number;
+    jetFuelPerBoleCCF: number;
   };
-  Residue: {
-    WeightPerAcre: number;
-    CostPerAcre: number;
-    CostPerBoleCCF: number;
-    CostPerGT: number;
-    DieselPerAcre: number;
-    GasolinePerAcre: number;
-    JetFuelPerAcre: number;
+  biomass: {
+    yieldPerAcre: number;
+    costPerAcre: number;
+    costPerBoleCCF: number;
+    costPerGT: number;
+    dieselPerAcre: number;
+    gasolinePerAcre: number;
+    jetFuelPerAcre: number;
   };
 }
 
-export interface AssumptionMod {
+export interface Assumptions {
   MaxManualTreeVol: number;
   MaxMechTreeVol: number;
   MoistureContent: number;
@@ -216,7 +215,7 @@ export interface AssumptionMod {
   ResidueRecovFracCTL: number;
 }
 
-export interface LimitMod {
+export interface Limits {
   MaxLLTperAcre: number;
   MaxLLTasPercentALT: number;
   AvgTreeSizeLimit4Chipping: number; // average tree size limit for chipping
@@ -228,7 +227,7 @@ export interface LimitMod {
   YardingDistLimit: number; // Yarding distance, ft
 }
 
-export interface MachineCostMod {
+export interface MachineCosts {
   PMH_Chainsaw: number;
   PMH_DriveToTree: number;
   PMH_SwingBoom: number;
