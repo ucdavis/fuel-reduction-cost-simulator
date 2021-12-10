@@ -1,4 +1,4 @@
-import { MachineCosts, MoveInInputs, MoveInOutputs } from './model';
+import { MachineCosts, MoveInInputs, MoveInOutputs, SystemTypes } from './model';
 import { calculateMachineCosts } from './systems/methods/machinecosts';
 
 export function calculateMoveIn(input: MoveInInputs) {
@@ -128,7 +128,7 @@ export function calculateMoveIn(input: MoveInInputs) {
     biomassCost: 0,
   };
   switch (input.system) {
-    case 'Ground-Based Mech WT':
+    case SystemTypes.groundBasedMechWt:
       const LowboyLoadsMechWT = 4 + 1;
       const totalFixedMechWT =
         fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
@@ -142,7 +142,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         BackhaulVariableMechWT;
       moveInOutputs.totalCost = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
       break;
-    case 'Ground-Based Manual WT':
+    case SystemTypes.groundBasedManualWt:
       const LowboyLoadsManualWT = 3 + 1;
       const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
@@ -154,7 +154,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         BackhaulVariableManualWT;
       moveInOutputs.totalCost = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
       break;
-    case 'Ground-Based Manual Log':
+    case SystemTypes.groundBasedManualLog:
       const LowboyLoadsManualLog = 2 + 1;
       const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
@@ -162,7 +162,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         skidderVariable + loaderVariable + chipperVariable + BackhaulVariableManualLog;
       moveInOutputs.totalCost = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
       break;
-    case 'Ground-Based CTL':
+    case SystemTypes.groundBasedCtl:
       const LowboyLoadsGroundCTL = 3 + 1;
       const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
@@ -185,7 +185,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.biomassCost = totalBundleResidues;
       moveInOutputs.totalCost += totalBundleResidues;
       break;
-    case 'Cable Manual WT/Log':
+    case SystemTypes.cableManualWtLog:
       const LowboyLoadsCableManualWTlog = 3 + 1;
       const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
@@ -194,7 +194,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalCost =
         totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
       break;
-    case 'Cable Manual WT':
+    case SystemTypes.cableManualWt:
       const LowboyLoadsCableManualWT = 4 + 1;
       const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
@@ -207,7 +207,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalCost =
         totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
       break;
-    case 'Cable Manual Log':
+    case SystemTypes.cableManualLog:
       const LowboyLoadsCableManualLog = 2 + 1;
       const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
@@ -216,7 +216,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalCost =
         totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
       break;
-    case 'Cable CTL':
+    case SystemTypes.cableCtl:
       const LowboyLoadsCableCTL = 3 + 1;
       const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
@@ -228,7 +228,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         BackhaulVariableCableCTL;
       moveInOutputs.totalCost = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
       break;
-    case 'Helicopter Manual Log':
+    case SystemTypes.helicopterManualLog:
       const LowboyLoadsHManualLog = 2 + 1;
       const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
@@ -237,7 +237,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalCost =
         totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
       break;
-    case 'Helicopter CTL':
+    case SystemTypes.helicopterCtl:
       const LowboyLoadsHeliCTL = 3 + 1;
       const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHeliCTL = BackhaulVariablefunc(LowboyLoadsHeliCTL);

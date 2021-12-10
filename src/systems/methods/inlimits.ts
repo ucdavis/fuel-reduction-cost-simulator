@@ -1,5 +1,5 @@
 // Outputs sheet - Limits part
-import { FrcsInputs, Limits } from '../../model';
+import { FrcsInputs, Limits, SystemTypes } from '../../model';
 
 function InLimits(input: FrcsInputs) {
   const limit: Limits = {
@@ -14,7 +14,7 @@ function InLimits(input: FrcsInputs) {
     YardingDistLimit: 0,
   };
   switch (input.system) {
-    case 'Ground-Based Mech WT':
+    case SystemTypes.groundBasedMechWt:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -23,7 +23,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case 'Ground-Based Manual WT':
+    case SystemTypes.groundBasedManualWt:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -32,7 +32,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case 'Ground-Based Manual Log':
+    case SystemTypes.groundBasedManualLog:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -41,7 +41,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case 'Ground-Based CTL':
+    case SystemTypes.groundBasedCtl:
       limit.MaxLLTperAcre = 10;
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -50,7 +50,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case 'Cable Manual WT/Log':
+    case SystemTypes.cableManualWtLog:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -59,7 +59,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
-    case 'Cable Manual WT':
+    case SystemTypes.cableManualWt:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -68,7 +68,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
-    case 'Cable Manual Log':
+    case SystemTypes.cableManualLog:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -77,7 +77,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 1300;
       break;
-    case 'Cable CTL':
+    case SystemTypes.cableCtl:
       limit.MaxLLTperAcre = 10;
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -86,7 +86,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 1300;
       break;
-    case 'Helicopter Manual Log':
+    case SystemTypes.helicopterManualLog:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -95,7 +95,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 100;
       limit.YardingDistLimit = 10000;
       break;
-    case 'Helicopter CTL':
+    case SystemTypes.helicopterCtl:
       limit.MaxLLTperAcre = 10;
       limit.MaxLLTasPercentALT = 10;
       limit.AvgTreeSizeLimit4Chipping = 80;
