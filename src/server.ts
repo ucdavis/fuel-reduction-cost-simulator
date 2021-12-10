@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3000;
 
 // api endpoint for running frcs
-app.post('/frcsrun', async (req, res) => {
+app.post('/runfrcs', async (req, res) => {
   const params: FrcsInputs = req.body;
   try {
     const result = await calculateHarvestCosts(params);
