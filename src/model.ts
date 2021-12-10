@@ -78,7 +78,7 @@ export class FrcsInputsDefault implements FrcsInputs {
   volumeSLT = 70;
   treesPerAcreLLT = 5;
   volumeLLT = 100;
-  dieselFuelPrice = 3.356;
+  dieselFuelPrice = 3.61;
   moistureContent = 50;
   isBiomassSalvage = false;
   wageFaller = 35.13; // CA FallBuckWage May 2020
