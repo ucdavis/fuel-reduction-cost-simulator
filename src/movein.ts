@@ -15,7 +15,13 @@ export function calculateMoveIn(input: MoveInInputs) {
   const BackhaulHrs = input.moveInDistance / SpeedBack;
   const LowboyCost = TruckMoveInCosts + TruckDriverMoveInCosts;
   // System Costs
-  const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
+  const machineCost: MachineCosts = calculateMachineCosts(
+    input.dieselFuelPrice,
+    input.wageFaller,
+    input.wageOther,
+    input.laborBenefits,
+    input.ppiCurrent
+  );
   const Harvester_OwnCost = machineCost.Harvester_OwnCost;
   const Forwarder_OwnCost = machineCost.Forwarder_OwnCost;
   const Yarder_OwnCost = machineCost.Yarder_OwnCost;

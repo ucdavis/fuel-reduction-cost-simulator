@@ -198,8 +198,8 @@ function calculateOutput(input: FrcsInputs) {
   assumption.LoadWeightChip = 25;
   assumption.CTLTrailSpacing = 50;
   assumption.HdwdCostPremium = 0.2;
-  assumption.ResidueRecovFracWT = 0.8;
-  assumption.ResidueRecovFracCTL = 0.5;
+  assumption.ResidueRecovFracWT = input.residueRecovFracWT / 100;
+  assumption.ResidueRecovFracCTL = input.residueRecovFracCTL / 100;
 
   // When TreeVolLLT > 250
   if (input.volumeLLT > 250) {

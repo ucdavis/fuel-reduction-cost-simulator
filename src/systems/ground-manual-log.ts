@@ -28,7 +28,13 @@ export function groundManualLog(
   const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
+  const machineCost: MachineCosts = calculateMachineCosts(
+    input.dieselFuelPrice,
+    input.wageFaller,
+    input.wageOther,
+    input.laborBenefits,
+    input.ppiCurrent
+  );
   // System Cost Elements-------
   const FellBunchResults = FellBunch(input, intermediate, machineCost);
   const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;

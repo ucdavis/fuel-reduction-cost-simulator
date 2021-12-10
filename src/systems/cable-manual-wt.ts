@@ -31,7 +31,13 @@ export function cableManualWT(
   const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
+  const machineCost: MachineCosts = calculateMachineCosts(
+    input.dieselFuelPrice,
+    input.wageFaller,
+    input.wageOther,
+    input.laborBenefits,
+    input.ppiCurrent
+  );
   // System Cost Elements-------
   const FellwtSmallLogOtherResults = FellwtSmallLogOther(input, intermediate, machineCost);
   const CostManFLBLLT2 = FellwtSmallLogOtherResults.CostManFLBLLT2;

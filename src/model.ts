@@ -24,7 +24,7 @@ export interface FrcsInputs {
   area: number;
   moveInDistance: number; // area treated and one-way move-in distance are needed when movein_cost is checked.
   includeCostsCollectChipResidues: boolean; // if include the costs of collecting and chipping residues
-
+  // tree characteristics
   woodDensityCT: number; // green wood density of chip trees
   woodDensitySLT: number;
   woodDensityLLT: number;
@@ -34,17 +34,22 @@ export interface FrcsInputs {
   hardwoodFractionCT: number;
   hardwoodFractionSLT: number;
   hardwoodFractionLLT: number; // hardwood fraction of large log trees
-
   treesPerAcreCT: number; // removals of chip trees
   volumeCT: number; // volume per chip tree (ft3)
   treesPerAcreSLT: number;
   volumeSLT: number; // volume per small log tree (ft3)
   treesPerAcreLLT: number;
   volumeLLT: number; // volume per large log tree (ft3)
-
+  // newly added variables
   dieselFuelPrice: number;
   moistureContent: number;
   isBiomassSalvage: boolean; // indicate whether all trees are harvested for biomass
+  wageFaller: number;
+  wageOther: number;
+  laborBenefits: number;
+  ppiCurrent: number;
+  residueRecovFracWT: number;
+  residueRecovFracCTL: number;
 }
 
 export class FrcsInputsDefault implements FrcsInputs {
@@ -76,6 +81,12 @@ export class FrcsInputsDefault implements FrcsInputs {
   dieselFuelPrice = 3.356;
   moistureContent = 50;
   isBiomassSalvage = false;
+  wageFaller = 35.13; // CA FallBuckWage May 2020
+  wageOther = 22.07; // CA AllOthersWage May 2020
+  laborBenefits = 35; // Assume a nationwide average of 35% for benefits and other payroll costs
+  ppiCurrent = 284.7; // Oct 2021
+  residueRecovFracWT = 80; // FRCS default 80%
+  residueRecovFracCTL = 50; // FRCS default 50%
   constructor() {}
 }
 
@@ -84,6 +95,10 @@ export interface MoveInInputs {
   moveInDistance: number;
   dieselFuelPrice: number;
   isBiomassSalvage: boolean;
+  wageFaller: number;
+  wageOther: number;
+  laborBenefits: number;
+  ppiCurrent: number;
 }
 
 export interface MoveInOutputs {
@@ -95,8 +110,12 @@ export class MoveInInputsDefault implements MoveInInputs {
   system = 'Cable Manual WT';
   Area = 1;
   moveInDistance = 2;
-  dieselFuelPrice = 3.356;
+  dieselFuelPrice = 3.61; // Oct 2021
   isBiomassSalvage = false;
+  wageFaller = 35.13; // CA FallBuckWage May 2020
+  wageOther = 22.07; // CA AllOthersWage May 2020
+  laborBenefits = 35; // Assume a nationwide average of 35% for benefits and other payroll costs
+  ppiCurrent = 284.7; // Oct 2021
   constructor() {}
 }
 

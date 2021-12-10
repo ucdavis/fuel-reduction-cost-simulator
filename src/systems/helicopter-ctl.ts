@@ -27,7 +27,13 @@ export function helicopterCTL(
   const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
 
   // Machine costs
-  const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
+  const machineCost: MachineCosts = calculateMachineCosts(
+    input.dieselFuelPrice,
+    input.wageFaller,
+    input.wageOther,
+    input.laborBenefits,
+    input.ppiCurrent
+  );
   // System Cost Elements-------
   const HarvestingResults = Harvesting(assumption, input, intermediate, machineCost);
   const CostHarvest = HarvestingResults.CostHarvest;
