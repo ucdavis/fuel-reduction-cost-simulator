@@ -1,10 +1,10 @@
 import { FrcsInputs, MoveInInputs } from './model';
 
-import { calculate } from './frcsrun';
 import { calculateMoveIn } from './movein';
+import { calculateHarvestCostsUnlimit } from './runfrcs';
 
 export const runFrcs = (params: FrcsInputs) => {
-  return calculate(params);
+  return calculateHarvestCostsUnlimit(params);
 };
 
 export const getMoveInCosts = (params: MoveInInputs) => {

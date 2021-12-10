@@ -53,7 +53,7 @@ export interface FrcsInputs {
 }
 
 export class FrcsInputsDefault implements FrcsInputs {
-  system = 'Cable Manual WT';
+  system = SystemTypes.cableManualWt;
   isPartialCut = true;
   deliverToLandingDistance = 400;
   slope = 30;
@@ -107,8 +107,7 @@ export interface MoveInOutputs {
 }
 
 export class MoveInInputsDefault implements MoveInInputs {
-  system = 'Cable Manual WT';
-  Area = 1;
+  system = SystemTypes.cableManualWt;
   moveInDistance = 2;
   dieselFuelPrice = 3.61; // Oct 2021
   isBiomassSalvage = false;
