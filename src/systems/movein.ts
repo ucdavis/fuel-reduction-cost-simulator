@@ -1,4 +1,4 @@
-import { MachineCosts, MoveInInputs } from './frcs.model';
+import { MachineCosts, MoveInInputs, MoveInOutputs } from './frcs.model';
 import { calculateMachineCosts } from './methods/machinecosts';
 
 export function calculateMoveIn(input: MoveInInputs) {
@@ -117,8 +117,10 @@ export function calculateMoveIn(input: MoveInInputs) {
   const bundlerVariable = bundlerVariablefunc();
   const helicopterVariable = helicopterVariablefunc();
 
-  let total = 0;
-  let residue = 0;
+  const moveInOutputs: MoveInOutputs = {
+    totalCost: 0,
+    biomassCost: 0,
+  };
   switch (input.system) {
     case 'Ground-Based Mech WT':
       const LowboyLoadsMechWT = 4 + 1;
@@ -132,7 +134,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         loaderVariable +
         chipperVariable +
         BackhaulVariableMechWT;
-      total = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
       break;
     case 'Ground-Based Manual WT':
       const LowboyLoadsManualWT = 3 + 1;
@@ -144,7 +146,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         loaderVariable +
         chipperVariable +
         BackhaulVariableManualWT;
-      total = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
       break;
     case 'Ground-Based Manual Log':
       const LowboyLoadsManualLog = 2 + 1;
@@ -152,7 +154,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
       const totalVariableManualLog =
         skidderVariable + loaderVariable + chipperVariable + BackhaulVariableManualLog;
-      total = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
       break;
     case 'Ground-Based CTL':
       const LowboyLoadsGroundCTL = 3 + 1;
@@ -164,7 +166,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         loaderVariable +
         chipperVariable +
         BackhaulVariableGroundCTL;
-      total = totalFixedGroundCTL + totalVariableGroundCTL * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedGroundCTL + totalVariableGroundCTL * input.moveInDistance;
       // Bundling Residues
       const LowboyLoadsBundleResidues = 2;
       const totalFixedBundleResidues = bundlerFixed + forwarderFixed;
@@ -174,8 +176,8 @@ export function calculateMoveIn(input: MoveInInputs) {
       // Total
       const totalBundleResidues =
         totalFixedBundleResidues + totalVariableBundleResidues * input.moveInDistance;
-      residue = totalBundleResidues;
-      total += totalBundleResidues;
+      moveInOutputs.biomassCost = totalBundleResidues;
+      moveInOutputs.totalCost += totalBundleResidues;
       break;
     case 'Cable Manual WT/Log':
       const LowboyLoadsCableManualWTlog = 3 + 1;
@@ -183,7 +185,8 @@ export function calculateMoveIn(input: MoveInInputs) {
       const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
       const totalVariableCableManualWTlog =
         yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualWTlog;
-      total = totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
+      moveInOutputs.totalCost =
+        totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
       break;
     case 'Cable Manual WT':
       const LowboyLoadsCableManualWT = 4 + 1;
@@ -195,7 +198,8 @@ export function calculateMoveIn(input: MoveInInputs) {
         loaderVariable +
         chipperVariable +
         BackhaulVariableCableManualWT;
-      total = totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
+      moveInOutputs.totalCost =
+        totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
       break;
     case 'Cable Manual Log':
       const LowboyLoadsCableManualLog = 2 + 1;
@@ -203,7 +207,8 @@ export function calculateMoveIn(input: MoveInInputs) {
       const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
       const totalVariableCableManualLog =
         yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualLog;
-      total = totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
+      moveInOutputs.totalCost =
+        totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
       break;
     case 'Cable CTL':
       const LowboyLoadsCableCTL = 3 + 1;
@@ -215,7 +220,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         loaderVariable +
         chipperVariable +
         BackhaulVariableCableCTL;
-      total = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
       break;
     case 'Helicopter Manual Log':
       const LowboyLoadsHManualLog = 2 + 1;
@@ -223,7 +228,8 @@ export function calculateMoveIn(input: MoveInInputs) {
       const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
       const totalVariableHManualLog =
         helicopterVariable + 2 * loaderVariable + chipperVariable + BackhaulVariableHManualLog;
-      total = totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
+      moveInOutputs.totalCost =
+        totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
       break;
     case 'Helicopter CTL':
       const LowboyLoadsHeliCTL = 3 + 1;
@@ -235,13 +241,13 @@ export function calculateMoveIn(input: MoveInInputs) {
         2 * loaderVariable +
         chipperVariable +
         BackhaulVariableHeliCTL;
-      total = totalFixedHeliCTL + totalVariableHeliCTL * input.moveInDistance;
+      moveInOutputs.totalCost = totalFixedHeliCTL + totalVariableHeliCTL * input.moveInDistance;
       break;
   }
 
   if (input.isBiomassSalvage) {
-    residue = total;
+    moveInOutputs.biomassCost = moveInOutputs.totalCost;
   }
 
-  return { total: total, biomass: residue };
+  return moveInOutputs;
 }

@@ -86,6 +86,11 @@ export interface MoveInInputs {
   isBiomassSalvage: boolean;
 }
 
+export interface MoveInOutputs {
+  totalCost: number;
+  biomassCost: number;
+}
+
 export class MoveInInputsDefault implements MoveInInputs {
   system = 'Cable Manual WT';
   Area = 1;
