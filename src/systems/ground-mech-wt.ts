@@ -163,8 +163,11 @@ export function groundMechWT(
       costPerBoleCCF: 0,
       costPerGT: 0,
       dieselPerAcre: 0,
+      dieselPerBoleCCF: 0,
       gasolinePerAcre: 0,
+      gasolinePerBoleCCF: 0,
       jetFuelPerAcre: 0,
+      jetFuelPerBoleCCF: 0,
     },
   };
 
@@ -197,6 +200,7 @@ export function groundMechWT(
   // Fuel
   frcsOutputs.biomass.dieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2 + ChipWholeTrees2;
+  frcsOutputs.biomass.dieselPerBoleCCF = frcsOutputs.biomass.dieselPerAcre / BoleVolCCF;
 
   if (input.isBiomassSalvage) {
     frcsOutputs.biomass = frcsOutputs.total;

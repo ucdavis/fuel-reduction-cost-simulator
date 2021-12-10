@@ -125,8 +125,11 @@ export function helicopterManualLog(
       costPerBoleCCF: 0,
       costPerGT: 0,
       dieselPerAcre: 0,
+      dieselPerBoleCCF: 0,
       gasolinePerAcre: 0,
+      gasolinePerBoleCCF: 0,
       jetFuelPerAcre: 0,
+      jetFuelPerBoleCCF: 0,
     },
   };
 
@@ -158,8 +161,11 @@ export function helicopterManualLog(
   frcsOutputs.biomass.costPerGT = frcsOutputs.biomass.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.biomass.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.biomass.dieselPerBoleCCF = frcsOutputs.biomass.dieselPerAcre / BoleVolCCF;
   frcsOutputs.biomass.gasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.biomass.gasolinePerBoleCCF = frcsOutputs.biomass.gasolinePerAcre / BoleVolCCF;
   frcsOutputs.biomass.jetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.biomass.jetFuelPerBoleCCF = frcsOutputs.biomass.jetFuelPerAcre / BoleVolCCF;
 
   if (input.isBiomassSalvage) {
     frcsOutputs.biomass = frcsOutputs.total;

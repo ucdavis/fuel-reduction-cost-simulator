@@ -181,8 +181,11 @@ function calculateOutput(input: FrcsInputs) {
       costPerBoleCCF: 0,
       costPerGT: 0,
       dieselPerAcre: 0,
+      dieselPerBoleCCF: 0,
       gasolinePerAcre: 0,
+      gasolinePerBoleCCF: 0,
       jetFuelPerAcre: 0,
+      jetFuelPerBoleCCF: 0,
     },
   };
 

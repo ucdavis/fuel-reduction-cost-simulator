@@ -202,8 +202,11 @@ export interface FrcsOutputs {
     costPerBoleCCF: number;
     costPerGT: number;
     dieselPerAcre: number;
+    dieselPerBoleCCF: number;
     gasolinePerAcre: number;
+    gasolinePerBoleCCF: number;
     jetFuelPerAcre: number;
+    jetFuelPerBoleCCF: number;
   };
 }
 
