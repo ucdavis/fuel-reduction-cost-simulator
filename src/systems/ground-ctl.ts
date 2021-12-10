@@ -1,9 +1,4 @@
 // Outputs sheet: Ground-Based CTL column
-import { Chipping } from '../methods/chipping';
-import { Harvesting } from '../methods/harvesting';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
 import {
   Assumptions,
   FrcsInputs,
@@ -12,7 +7,12 @@ import {
   MachineCosts,
 } from '../model';
 import { BundleForwardResidue } from './methods/bundleforwardresidue';
+import { Chipping } from './methods/chipping';
 import { Forwarding } from './methods/forwarding';
+import { Harvesting } from './methods/harvesting';
+import { Loading } from './methods/loading';
+import { calculateMachineCosts } from './methods/machinecosts';
+import { MoveInCosts } from './methods/moveincost';
 
 export function groundCTL(
   input: FrcsInputs,

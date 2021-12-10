@@ -1,5 +1,5 @@
 // MoveInCosts sheet
-import { FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function MoveInCosts(
   input: FrcsInputs,

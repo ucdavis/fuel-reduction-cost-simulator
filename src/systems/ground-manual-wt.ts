@@ -1,10 +1,4 @@
 // Outputs sheet: Ground-Based Manual WT column
-import { Chipping } from '../methods/chipping';
-import { FellwtSmallLogOther } from '../methods/fellwtsmalllogother';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
-import { Processing } from '../methods/processing';
 import {
   Assumptions,
   FrcsInputs,
@@ -12,7 +6,13 @@ import {
   IntermediateVariables,
   MachineCosts,
 } from '../model';
+import { Chipping } from './methods/chipping';
 import { FellBunch } from './methods/fellbunch';
+import { FellwtSmallLogOther } from './methods/fellwtsmalllogother';
+import { Loading } from './methods/loading';
+import { calculateMachineCosts } from './methods/machinecosts';
+import { MoveInCosts } from './methods/moveincost';
+import { Processing } from './methods/processing';
 import { Skidding } from './methods/skidding';
 
 export function groundManualWT(

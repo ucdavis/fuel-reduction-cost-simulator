@@ -2,9 +2,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { calculate } from './systems/frcsrun';
-import { FrcsInputs, MoveInInputs } from './systems/model';
-import { calculateMoveIn } from './systems/movein';
+import { calculate } from './frcsrun';
+import { FrcsInputs, MoveInInputs } from './model';
+import { calculateMoveIn } from './movein';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');

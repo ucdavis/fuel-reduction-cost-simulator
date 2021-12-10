@@ -1,10 +1,4 @@
-// Outputs sheet: Cable Manual WT column
-import { Chipping } from '../methods/chipping';
-import { FellwtSmallLogOther } from '../methods/fellwtsmalllogother';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
-import { Processing } from '../methods/processing';
+// Outputs sheet: Ground-Based Mech WT column
 import {
   Assumptions,
   FrcsInputs,
@@ -12,10 +6,16 @@ import {
   IntermediateVariables,
   MachineCosts,
 } from '../model';
-import { CYCCU } from './methods/cyccu';
-import { CYPCU } from './methods/cypcu';
+import { Chipping } from './methods/chipping';
+import { FellBunch } from './methods/fellbunch';
+import { FellLargeLogTrees } from './methods/felllargelogtrees';
+import { Loading } from './methods/loading';
+import { calculateMachineCosts } from './methods/machinecosts';
+import { MoveInCosts } from './methods/moveincost';
+import { Processing } from './methods/processing';
+import { Skidding } from './methods/skidding';
 
-export function cableManualWT(
+export function groundMechWT(
   input: FrcsInputs,
   intermediate: IntermediateVariables,
   assumption: Assumptions
@@ -29,17 +29,26 @@ export function cableManualWT(
     ? assumption.ResidueRecovFracWT * intermediate.residueSLT
     : 0;
   const TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
-
+  // Amounts Unrecovered and Left within the Stand Per Acre
+  const GroundFuel =
+    intermediate.residueLLT + intermediate.residueST * (1 - assumption.ResidueRecovFracWT);
+  // Amounts Unrecovered and Left at the Landing
+  const PiledFuel = input.includeCostsCollectChipResidues
+    ? 0
+    : intermediate.residueSLT * assumption.ResidueRecovFracWT;
+  // TotalResidues
+  const ResidueUncutTrees = 0;
+  const TotalResidues =
+    ResidueRecoveredPrimary + ResidueRecoveredOptional + ResidueUncutTrees + GroundFuel + PiledFuel;
   // Machine costs
   const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
   // System Cost Elements-------
-  const FellwtSmallLogOtherResults = FellwtSmallLogOther(input, intermediate, machineCost);
-  const CostManFLBLLT2 = FellwtSmallLogOtherResults.CostManFLBLLT2;
-  const CostManFellST2 = FellwtSmallLogOtherResults.CostManFellST2;
-  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
-  const CostYardPCUB = CYPCUresults.CostYardPCUB;
-  const CYCCUresults = CYCCU(input, intermediate, machineCost);
-  const CostYardCCUB = CYCCUresults.CostYardCCUB;
+  const FellBunchResults = FellBunch(input, intermediate, machineCost);
+  const CostFellBunch = FellBunchResults.CostFellBunch;
+  const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
+  const CostManFLBLLT = FellLargeLogTrees(input, intermediate, machineCost);
+  const SkiddingResults = Skidding(input, intermediate, machineCost, TreesPerCycleIIB);
+  const CostSkidBun = SkiddingResults.CostSkidBun;
   const ProcessingResults = Processing(input, intermediate, machineCost);
   const CostProcess = ProcessingResults.CostProcess;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
@@ -54,25 +63,18 @@ export function cableManualWT(
   );
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
+  const GalFellBunch = FellBunchResults.GalFellBunch;
   const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
-  const GalYardPCUB = CYPCUresults.GalYardPCUB;
-  const GalYardCCUB = CYCCUresults.GalYardCCUB;
+  const GalSkidBun = SkiddingResults.GalSkidBun;
   const GalProcess = ProcessingResults.GalProcess;
   const GalLoad = LoadingResults.GalLoad;
   const GalChipWT = ChippingResults.GalChipWT;
   const GalChipLooseRes = ChippingResults.GalChipLooseRes;
 
   // C. For All Products, $/ac
-  const ManualFellLimbBuckTreesLarger80cf = (CostManFLBLLT2 * intermediate.volPerAcreLLT) / 100;
-  const ManualFellTreesLess80cf = (CostManFellST2 * intermediate.volPerAcreST) / 100;
-  const CableYardUnbunchedAllTrees =
-    ((input.isPartialCut === true
-      ? CostYardPCUB
-      : input.isPartialCut === false
-      ? CostYardCCUB
-      : 0) *
-      intermediate.volPerAcre) /
-    100;
+  const FellAndBunchTreesLess80cf = (CostFellBunch * intermediate.volPerAcreST) / 100;
+  const ManualFellLimbBuckTreesLarger80cf = (CostManFLBLLT * intermediate.volPerAcreLLT) / 100;
+  const SkidBunchedAllTrees = (CostSkidBun * intermediate.volPerAcre) / 100;
   const ProcessLogTreesLess80cf = (CostProcess * intermediate.volPerAcreSLT) / 100;
   const LoadLogTrees = (CostLoad * intermediate.volPerAcreALT) / 100;
   const ChipWholeTrees =
@@ -81,22 +83,23 @@ export function cableManualWT(
     100;
 
   const Stump2Truck4PrimaryProductWithoutMovein =
+    FellAndBunchTreesLess80cf +
     ManualFellLimbBuckTreesLarger80cf +
-    ManualFellTreesLess80cf +
-    CableYardUnbunchedAllTrees +
+    SkidBunchedAllTrees +
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
-    ManualFellTreesLess80cf *
+    FellAndBunchTreesLess80cf *
       ((intermediate.boleWeightCT + intermediate.residueCT) /
         (intermediate.boleWeightST + intermediate.residueST)) +
-    CableYardUnbunchedAllTrees *
+    SkidBunchedAllTrees *
       ((intermediate.boleWeightCT + intermediate.residueCT) /
         (intermediate.boleWeight + intermediate.residue));
   const Movein4PrimaryProduct = input.includeMoveInCosts
-    ? MoveInCostsResults.CostPerCCFcableManualWT * BoleVolCCF
+    ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF
     : 0;
+
   const ChipLooseResiduesFromLogTreesLess80cf = input.includeCostsCollectChipResidues
     ? CostChipLooseRes * ResidueRecoveredOptional
     : 0;
@@ -107,12 +110,9 @@ export function cableManualWT(
       : 0;
 
   // D. For All Products, gal/ac
+  const FellAndBunchTreesLess80cf2 = (GalFellBunch * intermediate.volPerAcreST) / 100;
   const ManualFellLimbBuckTreesLarger80cf2 = (GalChainsaw * intermediate.volPerAcreLLT) / 100;
-  const ManualFellTreesLess80cf2 = (GalChainsaw * intermediate.volPerAcreST) / 100;
-  const CableYardUnbunchedAllTrees2 =
-    ((input.isPartialCut === true ? GalYardPCUB : input.isPartialCut === false ? GalYardCCUB : 0) *
-      intermediate.volPerAcre) /
-    100;
+  const SkidBunchedAllTrees2 = (GalSkidBun * intermediate.volPerAcre) / 100;
   const ProcessLogTreesLess80cf2 = (GalProcess * intermediate.volPerAcreSLT) / 100;
   const LoadLogTrees2 = (GalLoad * intermediate.volPerAcreALT) / 100;
   const ChipWholeTrees2 =
@@ -121,20 +121,18 @@ export function cableManualWT(
     100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    CableYardUnbunchedAllTrees2 +
+    FellAndBunchTreesLess80cf2 +
+    SkidBunchedAllTrees2 +
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf2 + LoadLogTrees2 : 0) +
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    CableYardUnbunchedAllTrees2 *
+    FellAndBunchTreesLess80cf2 *
       ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue)) +
-    ChipWholeTrees2;
-  const GasolineStump2Truck4PrimaryProductWithoutMovein =
-    ManualFellLimbBuckTreesLarger80cf2 + ManualFellTreesLess80cf2;
-  const GasolineStump2Truck4ResiduesWithoutMovein =
-    ManualFellTreesLess80cf2 *
-    ((intermediate.boleWeightCT + intermediate.residueCT) /
-      (intermediate.boleWeightST + intermediate.residueST));
+        (intermediate.boleWeightST + intermediate.residueST)) +
+    SkidBunchedAllTrees2 *
+      ((intermediate.boleWeightCT + intermediate.residueCT) /
+        (intermediate.boleWeight + intermediate.residue));
+  const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckTreesLarger80cf2;
   const LowboyLoads = 5;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
@@ -193,13 +191,12 @@ export function cableManualWT(
   // Cost
   frcsOutputs.biomass.yieldPerAcre =
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
-  frcsOutputs.biomass.costPerAcre = OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.biomass.costPerAcre = Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein;
   frcsOutputs.biomass.costPerBoleCCF = frcsOutputs.biomass.costPerAcre / BoleVolCCF;
   frcsOutputs.biomass.costPerGT = frcsOutputs.biomass.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.biomass.dieselPerAcre =
-    DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;
-  frcsOutputs.biomass.gasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
+    DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2 + ChipWholeTrees2;
 
   if (input.isBiomassSalvage) {
     frcsOutputs.biomass = frcsOutputs.total;

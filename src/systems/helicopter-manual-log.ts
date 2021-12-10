@@ -1,9 +1,4 @@
 // Outputs sheet: Helicopter Manual Log column
-import { Chipping } from '../methods/chipping';
-import { FellAllTrees } from '../methods/fellalltrees';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
 import {
   Assumptions,
   FrcsInputs,
@@ -11,7 +6,12 @@ import {
   IntermediateVariables,
   MachineCosts,
 } from '../model';
+import { Chipping } from './methods/chipping';
+import { FellAllTrees } from './methods/fellalltrees';
 import { HelicopterYarding } from './methods/helicopteryarding';
+import { Loading } from './methods/loading';
+import { calculateMachineCosts } from './methods/machinecosts';
+import { MoveInCosts } from './methods/moveincost';
 
 export function helicopterManualLog(
   input: FrcsInputs,

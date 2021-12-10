@@ -1,15 +1,4 @@
 // Inputs sheet
-import { cableCTL } from './cable/cable-ctl';
-import { cableManualLog } from './cable/cable-manual-log';
-import { cableManualWT } from './cable/cable-manual-wt';
-import { cableManualWTLog } from './cable/cable-manual-wt-log';
-import { groundCTL } from './ground/ground-ctl';
-import { groundManualLog } from './ground/ground-manual-log';
-import { groundManualWT } from './ground/ground-manual-wt';
-import { groundMechWT } from './ground/ground-mech-wt';
-import { helicopterCTL } from './helicopter/helicopter-ctl';
-import { helicopterManualLog } from './helicopter/helicopter-manual-log';
-import { InLimits } from './methods/inlimits';
 import {
   Assumptions,
   FrcsInputs,
@@ -18,6 +7,17 @@ import {
   IntermediateVariables,
   SystemTypes,
 } from './model';
+import { cableCTL } from './systems/cable-ctl';
+import { cableManualLog } from './systems/cable-manual-log';
+import { cableManualWT } from './systems/cable-manual-wt';
+import { cableManualWTLog } from './systems/cable-manual-wt-log';
+import { groundCTL } from './systems/ground-ctl';
+import { groundManualLog } from './systems/ground-manual-log';
+import { groundManualWT } from './systems/ground-manual-wt';
+import { groundMechWT } from './systems/ground-mech-wt';
+import { helicopterCTL } from './systems/helicopter-ctl';
+import { helicopterManualLog } from './systems/helicopter-manual-log';
+import { InLimits } from './systems/methods/inlimits';
 
 export function calculate(input: FrcsInputs) {
   const message = createErrorMessages(input);

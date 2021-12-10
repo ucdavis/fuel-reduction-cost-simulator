@@ -1,9 +1,4 @@
-// Outputs sheet: Ground-Based Manual Log column
-import { Chipping } from '../methods/chipping';
-import { FellAllTrees } from '../methods/fellalltrees';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
+// Outputs sheet: Cable Manual Log column
 import {
   Assumptions,
   FrcsInputs,
@@ -11,10 +6,15 @@ import {
   IntermediateVariables,
   MachineCosts,
 } from '../model';
-import { FellBunch } from './methods/fellbunch';
-import { Skidding } from './methods/skidding';
+import { Chipping } from './methods/chipping';
+import { CYCCU } from './methods/cyccu';
+import { CYPCU } from './methods/cypcu';
+import { FellAllTrees } from './methods/fellalltrees';
+import { Loading } from './methods/loading';
+import { calculateMachineCosts } from './methods/machinecosts';
+import { MoveInCosts } from './methods/moveincost';
 
-export function groundManualLog(
+export function cableManualLog(
   input: FrcsInputs,
   intermediate: IntermediateVariables,
   assumption: Assumptions
@@ -30,10 +30,12 @@ export function groundManualLog(
   // Machine costs
   const machineCost: MachineCosts = calculateMachineCosts(input.dieselFuelPrice);
   // System Cost Elements-------
-  const FellBunchResults = FellBunch(input, intermediate, machineCost);
-  const TreesPerCycleIIB = FellBunchResults.TreesPerCycleIIB;
-  const SkiddingResults = Skidding(input, intermediate, machineCost, TreesPerCycleIIB);
-  const CostSkidUB = SkiddingResults.CostSkidUB;
+  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
+  const CostManFLB = FellAllTreesResults.CostManFLB;
+  const CYPCUresults = CYPCU(assumption, input, intermediate, machineCost);
+  const CostYardPCUB = CYPCUresults.CostYardPCUB;
+  const CYCCUresults = CYCCU(input, intermediate, machineCost);
+  const CostYardCCUB = CYCCUresults.CostYardCCUB;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const CostLoad = LoadingResults.CostLoad;
   const ChippingResults = Chipping(assumption, input, intermediate, machineCost);
@@ -45,17 +47,23 @@ export function groundManualLog(
     assumption.ResidueRecovFracCTL
   );
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
-  const FellAllTreesResults = FellAllTrees(input, intermediate, machineCost);
-  const CostManFLB = FellAllTreesResults.CostManFLB;
 
   const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
-  const GalSkidUB = SkiddingResults.GalSkidUB;
+  const GalYardPCUB = CYPCUresults.GalYardPCUB;
+  const GalYardCCUB = CYCCUresults.GalYardCCUB;
   const GalLoad = LoadingResults.GalLoad;
   const GalChipWT = ChippingResults.GalChipWT;
 
   // C. For All Products, $/ac
   const ManualFellLimbBuckAllTrees = (CostManFLB * intermediate.volPerAcre) / 100;
-  const SkidUnbunchedAllTrees = (CostSkidUB * intermediate.volPerAcre) / 100;
+  const CableYardUnbunchedAllTrees =
+    ((input.isPartialCut === true
+      ? CostYardPCUB
+      : input.isPartialCut === false
+      ? CostYardCCUB
+      : 0) *
+      intermediate.volPerAcre) /
+    100;
   const LoadLogTrees = (CostLoad * intermediate.volPerAcreALT) / 100;
   const ChipTreeBoles =
     (CostChipWT *
@@ -64,20 +72,31 @@ export function groundManualLog(
 
   const Stump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllTrees +
-    SkidUnbunchedAllTrees +
+    CableYardUnbunchedAllTrees +
     (input.isBiomassSalvage === false ? LoadLogTrees : 0) +
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (ManualFellLimbBuckAllTrees + SkidUnbunchedAllTrees) *
+    (ManualFellLimbBuckAllTrees + CableYardUnbunchedAllTrees) *
       (intermediate.boleWeightCT / intermediate.boleWeight);
   const Movein4PrimaryProduct = input.includeMoveInCosts
-    ? MoveInCostsResults.CostPerCCFmanualLog * BoleVolCCF
+    ? MoveInCostsResults.CostPerCCFcableManualLog * BoleVolCCF
     : 0;
+  const ChipLooseResiduesFromLogTreesLess80cf = input.includeCostsCollectChipResidues
+    ? CostChipLooseRes * ResidueRecoveredOptional
+    : 0;
+  const OntoTruck4ResiduesWoMovein = ChipLooseResiduesFromLogTreesLess80cf;
+  const Movein4Residues =
+    input.includeMoveInCosts && input.includeCostsCollectChipResidues
+      ? 0 * ResidueRecoveredOptional
+      : 0;
 
   // D. For All Products, gal/ac
   const ManualFellLimbBuckAllTrees2 = (GalChainsaw * intermediate.volPerAcre) / 100;
-  const SkidUnbunchedAllTrees2 = (GalSkidUB * intermediate.volPerAcre) / 100;
+  const CableYardUnbunchedAllTrees2 =
+    ((input.isPartialCut === true ? GalYardPCUB : input.isPartialCut === false ? GalYardCCUB : 0) *
+      intermediate.volPerAcre) /
+    100;
   const LoadLogTrees2 = (GalLoad * intermediate.volPerAcreALT) / 100;
   const ChipTreeBoles2 =
     (GalChipWT *
@@ -85,11 +104,12 @@ export function groundManualLog(
     100;
 
   const DieselStump2Truck4PrimaryProductWithoutMovein =
-    SkidUnbunchedAllTrees2 +
+    CableYardUnbunchedAllTrees2 +
     (input.isBiomassSalvage === false ? LoadLogTrees2 : 0) +
     +ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    SkidUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight) + ChipTreeBoles2;
+    CableYardUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight) +
+    ChipTreeBoles2;
   const LowboyLoads = 3;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts

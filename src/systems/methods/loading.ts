@@ -1,5 +1,5 @@
 // Loading sheet
-import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function Loading(
   assumption: Assumptions,

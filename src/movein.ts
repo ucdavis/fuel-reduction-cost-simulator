@@ -1,5 +1,5 @@
-import { calculateMachineCosts } from './methods/machinecosts';
 import { MachineCosts, MoveInInputs, MoveInOutputs } from './model';
+import { calculateMachineCosts } from './systems/methods/machinecosts';
 
 export function calculateMoveIn(input: MoveInInputs) {
   // Move-In Assumptions

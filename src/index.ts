@@ -1,7 +1,7 @@
-import { FrcsInputs, MoveInInputs } from './systems/model';
+import { FrcsInputs, MoveInInputs } from './model';
 
-import { calculate } from './systems/frcsrun';
-import { calculateMoveIn } from './systems/movein';
+import { calculate } from './frcsrun';
+import { calculateMoveIn } from './movein';
 
 export const runFrcs = (params: FrcsInputs) => {
   return calculate(params);

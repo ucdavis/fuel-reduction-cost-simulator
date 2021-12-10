@@ -1,5 +1,5 @@
 // Outputs sheet - Limits part
-import { FrcsInputs, Limits } from '../model';
+import { FrcsInputs, Limits } from '../../model';
 
 function InLimits(input: FrcsInputs) {
   const limit: Limits = {
