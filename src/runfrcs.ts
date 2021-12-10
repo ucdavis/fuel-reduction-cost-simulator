@@ -19,12 +19,12 @@ import { helicopterCTL } from './systems/helicopter-ctl';
 import { helicopterManualLog } from './systems/helicopter-manual-log';
 import { InLimits } from './systems/methods/inlimits';
 
-export function calculateHarvestCostsUnlimit(input: FrcsInputs) {
+export function calculateHarvestCosts(input: FrcsInputs) {
   const message = createErrorMessages(input);
   if (message) {
     throw new Error(message);
   }
-  return calculateHarvestCosts(input);
+  return calculate(input);
 }
 
 function createErrorMessages(params: FrcsInputs) {
@@ -68,7 +68,7 @@ function createErrorMessages(params: FrcsInputs) {
   return message;
 }
 
-function calculateHarvestCosts(input: FrcsInputs) {
+function calculate(input: FrcsInputs) {
   let intermediate: IntermediateVariables = {
     treesPerAcreST: 0,
     treesPerAcreALT: 0,
@@ -205,7 +205,7 @@ function calculateHarvestCosts(input: FrcsInputs) {
   if (input.volumeLLT > 250) {
     const originalTreeVolLLT = input.volumeLLT;
     input.volumeLLT = 250;
-    output = calculateHarvestCosts(input);
+    output = calculate(input);
     const costCCF = output.total.costPerBoleCCF;
     const dieselCCF = output.total.dieselPerBoleCCF;
     const gasolineCCF = output.total.gasolinePerBoleCCF;
