@@ -1,16 +1,16 @@
 // Outputs sheet: Cable CTL column
+import { Chipping } from '../methods/chipping';
+import { Harvesting } from '../methods/harvesting';
+import { Loading } from '../methods/loading';
+import { calculateMachineCosts } from '../methods/machinecosts';
+import { MoveInCosts } from '../methods/moveincost';
 import {
   Assumptions,
   FrcsInputs,
   FrcsOutputs,
   IntermediateVariables,
   MachineCosts,
-} from '../frcs.model';
-import { Chipping } from '../methods/chipping';
-import { Harvesting } from '../methods/harvesting';
-import { Loading } from '../methods/loading';
-import { calculateMachineCosts } from '../methods/machinecosts';
-import { MoveInCosts } from '../methods/moveincost';
+} from '../model';
 import { CYCTL } from './methods/cyctl';
 
 export function cableCTL(

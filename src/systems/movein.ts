@@ -1,5 +1,5 @@
-import { MachineCosts, MoveInInputs, MoveInOutputs } from './frcs.model';
 import { calculateMachineCosts } from './methods/machinecosts';
+import { MachineCosts, MoveInInputs, MoveInOutputs } from './model';
 
 export function calculateMoveIn(input: MoveInInputs) {
   // Move-In Assumptions

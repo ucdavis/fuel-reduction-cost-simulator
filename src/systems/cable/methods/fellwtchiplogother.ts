@@ -1,5 +1,5 @@
 // Felling (WT chip, log other) sheet
-import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../frcs.model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function FellwtChipLogOther(
   input: FrcsInputs,

@@ -1,5 +1,5 @@
 // CableYarding sheet: I. Cable Yarding, Clearcut, Unbunched (CYCCU)
-import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../frcs.model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function CYCCU(input: FrcsInputs, intermediate: IntermediateVariables, machineCost: MachineCosts) {
   // Cable Yarding Inputs

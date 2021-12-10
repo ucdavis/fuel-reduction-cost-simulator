@@ -2,8 +2,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { FrcsInputs, MoveInInputs } from './systems/frcs.model';
 import { calculate } from './systems/frcsrun';
+import { FrcsInputs, MoveInInputs } from './systems/model';
 import { calculateMoveIn } from './systems/movein';
 
 // tslint:disable-next-line: no-var-requires

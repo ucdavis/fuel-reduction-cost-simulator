@@ -1,5 +1,5 @@
 // Chipping sheet
-import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../frcs.model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
 
 function Chipping(
   assumption: Assumptions,

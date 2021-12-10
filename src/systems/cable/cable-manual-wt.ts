@@ -1,17 +1,17 @@
 // Outputs sheet: Cable Manual WT column
-import {
-  Assumptions,
-  FrcsInputs,
-  FrcsOutputs,
-  IntermediateVariables,
-  MachineCosts,
-} from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellwtSmallLogOther } from '../methods/fellwtsmalllogother';
 import { Loading } from '../methods/loading';
 import { calculateMachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
 import { Processing } from '../methods/processing';
+import {
+  Assumptions,
+  FrcsInputs,
+  FrcsOutputs,
+  IntermediateVariables,
+  MachineCosts,
+} from '../model';
 import { CYCCU } from './methods/cyccu';
 import { CYPCU } from './methods/cypcu';
 

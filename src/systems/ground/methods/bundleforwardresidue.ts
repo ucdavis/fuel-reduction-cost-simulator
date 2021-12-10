@@ -1,4 +1,4 @@
-import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../frcs.model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function BundleForwardResidue(
   assumption: Assumptions,

@@ -1,5 +1,5 @@
 // Felling (all trees) sheet
-import { FrcsInputs, IntermediateVariables, MachineCosts } from '../frcs.model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
 
 function FellAllTrees(
   input: FrcsInputs,

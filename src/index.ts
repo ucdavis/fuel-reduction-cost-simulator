@@ -1,4 +1,4 @@
-import { FrcsInputs, MoveInInputs } from './systems/frcs.model';
+import { FrcsInputs, MoveInInputs } from './systems/model';
 
 import { calculate } from './systems/frcsrun';
 import { calculateMoveIn } from './systems/movein';

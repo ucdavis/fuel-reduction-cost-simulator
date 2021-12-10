@@ -1,5 +1,5 @@
 // CableYarding sheet: III. Cable Yarding, Bunched CTL Logs (CYCTL)
-import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../frcs.model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function CYCTL(
   assumption: Assumptions,

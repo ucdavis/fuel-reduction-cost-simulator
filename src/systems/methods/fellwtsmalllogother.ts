@@ -1,5 +1,5 @@
 // Felling (WT small, log other) sheet
-import { FrcsInputs, IntermediateVariables, MachineCosts } from '../frcs.model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
 import { FellAllTrees } from './fellalltrees';
 
 function FellwtSmallLogOther(

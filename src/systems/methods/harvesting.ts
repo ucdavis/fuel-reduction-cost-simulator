@@ -1,5 +1,5 @@
 // Harvesting sheet
-import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../frcs.model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../model';
 
 function Harvesting(
   assumption: Assumptions,

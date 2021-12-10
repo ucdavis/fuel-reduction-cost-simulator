@@ -1,17 +1,17 @@
 // Outputs sheet: Ground-Based Mech WT column
-import {
-  Assumptions,
-  FrcsInputs,
-  FrcsOutputs,
-  IntermediateVariables,
-  MachineCosts,
-} from '../frcs.model';
 import { Chipping } from '../methods/chipping';
 import { FellLargeLogTrees } from '../methods/felllargelogtrees';
 import { Loading } from '../methods/loading';
 import { calculateMachineCosts } from '../methods/machinecosts';
 import { MoveInCosts } from '../methods/moveincost';
 import { Processing } from '../methods/processing';
+import {
+  Assumptions,
+  FrcsInputs,
+  FrcsOutputs,
+  IntermediateVariables,
+  MachineCosts,
+} from '../model';
 import { FellBunch } from './methods/fellbunch';
 import { Skidding } from './methods/skidding';
 

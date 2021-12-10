@@ -3,14 +3,6 @@ import { cableCTL } from './cable/cable-ctl';
 import { cableManualLog } from './cable/cable-manual-log';
 import { cableManualWT } from './cable/cable-manual-wt';
 import { cableManualWTLog } from './cable/cable-manual-wt-log';
-import {
-  Assumptions,
-  FrcsInputs,
-  FrcsInputsDefault,
-  FrcsOutputs,
-  IntermediateVariables,
-  SystemTypes,
-} from './frcs.model';
 import { groundCTL } from './ground/ground-ctl';
 import { groundManualLog } from './ground/ground-manual-log';
 import { groundManualWT } from './ground/ground-manual-wt';
@@ -18,6 +10,14 @@ import { groundMechWT } from './ground/ground-mech-wt';
 import { helicopterCTL } from './helicopter/helicopter-ctl';
 import { helicopterManualLog } from './helicopter/helicopter-manual-log';
 import { InLimits } from './methods/inlimits';
+import {
+  Assumptions,
+  FrcsInputs,
+  FrcsInputsDefault,
+  FrcsOutputs,
+  IntermediateVariables,
+  SystemTypes,
+} from './model';
 
 export function calculate(input: FrcsInputs) {
   const message = createErrorMessages(input);

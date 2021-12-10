@@ -1,5 +1,5 @@
 // HelicopterYarding sheet
-import { FrcsInputs, IntermediateVariables } from '../../frcs.model';
+import { FrcsInputs, IntermediateVariables } from '../../model';
 
 function HelicopterYarding(input: FrcsInputs, intermediate: IntermediateVariables) {
   const HookAreaDiam = 75;
