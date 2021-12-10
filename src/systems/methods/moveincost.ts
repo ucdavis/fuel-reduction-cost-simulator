@@ -1,10 +1,10 @@
 // MoveInCosts sheet
-import { InputVarMod, IntermediateVarMod, MachineCostMod } from '../frcs.model';
+import { FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function MoveInCosts(
-  input: InputVarMod,
-  intermediate: IntermediateVarMod,
-  machineCost: MachineCostMod,
+  input: FrcsInputs,
+  intermediate: IntermediateVariables,
+  machineCost: MachineCosts,
   ResidueRecovFracCTL: number
 ) {
   // Move-In Assumptions
@@ -16,8 +16,8 @@ function MoveInCosts(
   const TruckMoveInCosts = 35;
   const TruckDriverMoveInCosts = 18;
   // Move-In Calculated Values
-  const TravLoadedHrs = input.MoveInDist / SpeedLoaded;
-  const BackhaulHrs = input.MoveInDist / SpeedBack;
+  const TravLoadedHrs = input.moveInDistance / SpeedLoaded;
+  const BackhaulHrs = input.moveInDistance / SpeedBack;
   const LowboyCost = TruckMoveInCosts + TruckDriverMoveInCosts;
   // System Costs
   const Harvester_OwnCost = machineCost.Harvester_OwnCost;
@@ -44,7 +44,7 @@ function MoveInCosts(
     return (LowboyCost + Loader_OwnCost + MoveInLabor) * LoadHrs;
   }
   function chipperFixedfunc() {
-    return intermediate.VolPerAcreCT > 0
+    return intermediate.volPerAcreCT > 0
       ? (LowboyCost + Chipper_OwnCost + MoveInLabor) * LoadHrs
       : 0;
   }
@@ -60,8 +60,7 @@ function MoveInCosts(
   function bundlerFixedfunc() {
     return (LowboyCost + Bundler_OwnCost + MoveInLabor) * LoadHrs;
   }
-  const HeliMoveInCostPerHr =
-    (3700 / 6 + 340 + 7580 / 6.76 + 1052 + 6750 / 8.5 + 840) / 3;
+  const HeliMoveInCostPerHr = (3700 / 6 + 340 + 7580 / 6.76 + 1052 + 6750 / 8.5 + 840) / 3;
   function helicopterFixedfunc() {
     return 1 * HeliMoveInCostPerHr;
   }
@@ -91,9 +90,7 @@ function MoveInCosts(
     return (LowboyCost + Loader_OwnCost) / SpeedLoaded;
   }
   function chipperVariablefunc() {
-    return intermediate.VolPerAcreCT > 0
-      ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded
-      : 0;
+    return intermediate.volPerAcreCT > 0 ? (LowboyCost + Chipper_OwnCost) / SpeedLoaded : 0;
   }
   function BackhaulVariablefunc(LowboyLoads: number) {
     return (LowboyCost * LowboyLoads) / SpeedBack;
@@ -127,13 +124,9 @@ function MoveInCosts(
   const helicopterVariable = helicopterVariablefunc();
 
   // Mech WT
-  const LowboyLoadsMechWT = 4 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsMechWT = 4 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
   const totalFixedMechWT =
-    fellerbuncherFixed +
-    skidderFixed +
-    processorFixed +
-    loaderFixed +
-    chipperFixed;
+    fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
   const BackhaulVariableMechWT = BackhaulVariablefunc(LowboyLoadsMechWT);
   const totalVariableMechWT =
     fellerbuncherVariable +
@@ -143,15 +136,13 @@ function MoveInCosts(
     chipperVariable +
     BackhaulVariableMechWT;
   // Total
-  const totalMechWT = totalFixedMechWT + totalVariableMechWT * input.MoveInDist;
+  const totalMechWT = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
   const CostPerCCFmechWT =
-    (totalMechWT * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalMechWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Manual WT
-  const LowboyLoadsManualWT = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
-  const totalFixedManualWT =
-    skidderFixed + processorFixed + loaderFixed + chipperFixed;
+  const LowboyLoadsManualWT = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
   const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
   const totalVariableManualWT =
     skidderVariable +
@@ -160,32 +151,24 @@ function MoveInCosts(
     chipperVariable +
     BackhaulVariableManualWT;
   // Total
-  const totalManualWT =
-    totalFixedManualWT + totalVariableManualWT * input.MoveInDist;
+  const totalManualWT = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
   const CostPerCCFmanualWT =
-    (totalManualWT * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalManualWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Manual Log
-  const LowboyLoadsManualLog = 2 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
   const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
   const totalVariableManualLog =
-    skidderVariable +
-    loaderVariable +
-    chipperVariable +
-    BackhaulVariableManualLog;
+    skidderVariable + loaderVariable + chipperVariable + BackhaulVariableManualLog;
   // Total
-  const totalManualLog =
-    totalFixedManualLog + totalVariableManualLog * input.MoveInDist;
+  const totalManualLog = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
   const CostPerCCFmanualLog =
-    (totalManualLog * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Ground CTL
-  const LowboyLoadsGroundCTL = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
-  const totalFixedGroundCTL =
-    harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
+  const LowboyLoadsGroundCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
   const totalVariableGroundCTL =
     harvesterVariable +
@@ -194,39 +177,26 @@ function MoveInCosts(
     chipperVariable +
     BackhaulVariableGroundCTL;
   // Total
-  const totalGroundCTL =
-    totalFixedGroundCTL + totalVariableGroundCTL * input.MoveInDist;
+  const totalGroundCTL = totalFixedGroundCTL + totalVariableGroundCTL * input.moveInDistance;
   const CostPerCCFgroundCTL =
-    (totalGroundCTL * 100) /
-    (input.Area * intermediate.TreeVolST * intermediate.RemovalsST);
+    (totalGroundCTL * 100) / (input.area * intermediate.volumeST * intermediate.treesPerAcreST);
 
   // Cable Manual WT/Log
-  const LowboyLoadsCableManualWTlog =
-    3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableManualWTlog = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
   const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
-  const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(
-    LowboyLoadsCableManualWTlog
-  );
+  const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
   const totalVariableCableManualWTlog =
-    yarderVariable +
-    loaderVariable +
-    chipperVariable +
-    BackhaulVariableCableManualWTlog;
+    yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualWTlog;
   // Total
   const totalCableManualWTlog =
-    totalFixedCableManualWTlog +
-    totalVariableCableManualWTlog * input.MoveInDist;
+    totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
   const CostPerCCFcableManualWTLog =
-    (totalCableManualWTlog * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalCableManualWTlog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable Manual WT
-  const LowboyLoadsCableManualWT = 4 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
-  const totalFixedCableManualWT =
-    yarderFixed + processorFixed + loaderFixed + chipperFixed;
-  const BackhaulVariableCableManualWT = BackhaulVariablefunc(
-    LowboyLoadsCableManualWT
-  );
+  const LowboyLoadsCableManualWT = 4 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
+  const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
   const totalVariableCableManualWT =
     yarderVariable +
     processorVariable +
@@ -235,33 +205,25 @@ function MoveInCosts(
     BackhaulVariableCableManualWT;
   // Total
   const totalCableManualWT =
-    totalFixedCableManualWT + totalVariableCableManualWT * input.MoveInDist;
+    totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
   const CostPerCCFcableManualWT =
-    (totalCableManualWT * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalCableManualWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable Manual Log
-  const LowboyLoadsCableManualLog = 2 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
   const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
-  const BackhaulVariableCableManualLog = BackhaulVariablefunc(
-    LowboyLoadsCableManualLog
-  );
+  const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
   const totalVariableCableManualLog =
-    yarderVariable +
-    loaderVariable +
-    chipperVariable +
-    BackhaulVariableCableManualLog;
+    yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualLog;
   // Total
   const totalCableManualLog =
-    totalFixedCableManualLog + totalVariableCableManualLog * input.MoveInDist;
+    totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
   const CostPerCCFcableManualLog =
-    (totalCableManualLog * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalCableManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable CTL
-  const LowboyLoadsCableCTL = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
-  const totalFixedCableCTL =
-    harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
+  const LowboyLoadsCableCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
   const totalVariableCableCTL =
     harvesterVariable +
@@ -270,34 +232,24 @@ function MoveInCosts(
     chipperVariable +
     BackhaulVariableCableCTL;
   // Total
-  const totalCableCTL =
-    totalFixedCableCTL + totalVariableCableCTL * input.MoveInDist;
+  const totalCableCTL = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
   const CostPerCCFcableCTL =
-    (totalCableCTL * 100) /
-    (input.Area * intermediate.TreeVolST * intermediate.RemovalsST);
+    (totalCableCTL * 100) / (input.area * intermediate.volumeST * intermediate.treesPerAcreST);
 
   // Helicopter Manual Log
-  const LowboyLoadsHManualLog = 2 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsHManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
   const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
-  const BackhaulVariableHManualLog = BackhaulVariablefunc(
-    LowboyLoadsHManualLog
-  );
+  const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
   const totalVariableHManualLog =
-    helicopterVariable +
-    2 * loaderVariable +
-    chipperVariable +
-    BackhaulVariableHManualLog;
+    helicopterVariable + 2 * loaderVariable + chipperVariable + BackhaulVariableHManualLog;
   // Total
-  const totalHManualLog =
-    totalFixedHManualLog + totalVariableHManualLog * input.MoveInDist;
+  const totalHManualLog = totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
   const CostPerCCFhManualLog =
-    (totalHManualLog * 100) /
-    (input.Area * intermediate.TreeVol * intermediate.Removals);
+    (totalHManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Helicopter CTL
-  const LowboyLoadsHeliCTL = 3 + (intermediate.VolPerAcreCT > 0 ? 1 : 0);
-  const totalFixedHeliCTL =
-    harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
+  const LowboyLoadsHeliCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
   const BackhaulVariableHeliCTL = BackhaulVariablefunc(LowboyLoadsHeliCTL);
   const totalVariableHeliCTL =
     harvesterVariable +
@@ -306,25 +258,20 @@ function MoveInCosts(
     chipperVariable +
     BackhaulVariableHeliCTL;
   // Total
-  const totalHeliCTL =
-    totalFixedHeliCTL + totalVariableHeliCTL * input.MoveInDist;
+  const totalHeliCTL = totalFixedHeliCTL + totalVariableHeliCTL * input.moveInDistance;
   const CostPerCCFheliCTL =
-    (totalHeliCTL * 100) /
-    (input.Area * intermediate.TreeVolST * intermediate.RemovalsST);
+    (totalHeliCTL * 100) / (input.area * intermediate.volumeST * intermediate.treesPerAcreST);
 
   // Bundling Residues
   const LowboyLoadsBundleResidues = 2;
   const totalFixedBundleResidues = bundlerFixed + forwarderFixed;
-  const BackhaulBundleResidues = BackhaulVariablefunc(
-    LowboyLoadsBundleResidues
-  );
-  const totalVariableBundleResidues =
-    bundlerVariable + forwarderVariable + BackhaulBundleResidues;
+  const BackhaulBundleResidues = BackhaulVariablefunc(LowboyLoadsBundleResidues);
+  const totalVariableBundleResidues = bundlerVariable + forwarderVariable + BackhaulBundleResidues;
   // Total
   const totalBundleResidues =
-    totalFixedBundleResidues + totalVariableBundleResidues * input.MoveInDist;
+    totalFixedBundleResidues + totalVariableBundleResidues * input.moveInDistance;
   const CostPerCCFbundleResidues =
-    totalBundleResidues / (input.Area * intermediate.ResidueST * ResidueRecovFracCTL);
+    totalBundleResidues / (input.area * intermediate.residueST * ResidueRecovFracCTL);
 
   return {
     CostPerCCFmechWT: CostPerCCFmechWT,
@@ -337,7 +284,7 @@ function MoveInCosts(
     CostPerCCFcableManualLog: CostPerCCFcableManualLog,
     CostPerCCFcableCTL: CostPerCCFcableCTL,
     CostPerCCFhManualLog: CostPerCCFhManualLog,
-    CostPerCCFheliCTL: CostPerCCFheliCTL
+    CostPerCCFheliCTL: CostPerCCFheliCTL,
   };
 }
 

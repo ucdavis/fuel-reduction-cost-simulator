@@ -1,16 +1,11 @@
 // Chipping sheet
-import {
-  AssumptionMod,
-  InputVarMod,
-  IntermediateVarMod,
-  MachineCostMod
-} from '../frcs.model';
+import { Assumptions, FrcsInputs, IntermediateVariables, MachineCosts } from '../../model';
 
 function Chipping(
-  assumption: AssumptionMod,
-  input: InputVarMod,
-  intermediate: IntermediateVarMod,
-  machineCost: MachineCostMod
+  assumption: Assumptions,
+  input: FrcsInputs,
+  intermediate: IntermediateVariables,
+  machineCost: MachineCosts
 ) {
   const ExchangeVans = 5.3;
 
@@ -18,52 +13,37 @@ function Chipping(
   const PMH_LoaderS = machineCost.PMH_LoaderS;
   const PMH_ChipperS = machineCost.PMH_ChipperS;
   const PMH_ChipperB = machineCost.PMH_ChipperB;
-  const LoadWeightDry =
-    assumption.LoadWeightChip * (1 - assumption.MoistureContent);
+  const LoadWeightDry = assumption.LoadWeightChip * (1 - assumption.MoistureContent);
   const TreeWeightDry =
-    input.TreeVolCT *
-    intermediate.WoodDensityCT *
-    (1 - assumption.MoistureContent);
-  const CTLLogWeight = intermediate.CTLLogVolCT * intermediate.WoodDensityCT;
+    input.volumeCT * intermediate.woodDensityCT * (1 - assumption.MoistureContent);
+  const CTLLogWeight = intermediate.ctlLogVolCT * intermediate.woodDensityCT;
   const CTLLogWeightDry = CTLLogWeight * (1 - assumption.MoistureContent);
   const ChipperHourlyCost =
-    PMH_ChipperS * (1 - intermediate.ChipperSize) +
-    PMH_ChipperB * intermediate.ChipperSize;
+    PMH_ChipperS * (1 - intermediate.chipperSize) + PMH_ChipperB * intermediate.chipperSize;
 
   // I. Chip Whole Trees
   // A) (Johnson, 89)
-  const ChipperHP1A = Math.min(
-    700,
-    Math.max(200, 100 + 100 * Math.sqrt(input.TreeVolCT))
-  );
+  const ChipperHP1A = Math.min(700, Math.max(200, 100 + 100 * Math.sqrt(input.volumeCT)));
   const GTperPMHchippingIA = -17 + ChipperHP1A / 6;
-  const VolPerPMHchippingIA =
-    (GTperPMHchippingIA * 2000) / intermediate.WoodDensityCT;
+  const VolPerPMHchippingIA = (GTperPMHchippingIA * 2000) / intermediate.woodDensityCT;
   const CostPerCCFchippingIA = (100 * ChipperHourlyCost) / VolPerPMHchippingIA;
   const RelevanceChippingIA = 1;
   // B) Morbark 22 (Hartsough, unpublished)
-  const VolPerPMHchippingIB = Math.min(
-    4000,
-    463 * Math.pow(input.TreeVolCT, 0.668)
-  );
+  const VolPerPMHchippingIB = Math.min(4000, 463 * Math.pow(input.volumeCT, 0.668));
   const CostPerCCFchippingIB = (100 * ChipperHourlyCost) / VolPerPMHchippingIB;
   const RelevanceChippingIB = 1;
   // C) Morbark 60/36 (Hartsough et al, 97)
   const ProbDelayFractionIC = 0.038;
   const LogsPerSwingIC = 1.2 + 338 / TreeWeightDry;
-  const ChipTimePerSwingIC =
-    0.25 + 0.0264 * LogsPerSwingIC + 0.000498 * TreeWeightDry;
+  const ChipTimePerSwingIC = 0.25 + 0.0264 * LogsPerSwingIC + 0.000498 * TreeWeightDry;
   const SlashIC = 0.93;
   const TimePerVanIC =
-    ((ChipTimePerSwingIC * (1 + ProbDelayFractionIC)) /
-      (TreeWeightDry * LogsPerSwingIC)) *
+    ((ChipTimePerSwingIC * (1 + ProbDelayFractionIC)) / (TreeWeightDry * LogsPerSwingIC)) *
       2000 *
       LoadWeightDry +
     (SlashIC + ExchangeVans);
   const VolPerPMHchippingIC =
-    assumption.LoadWeightChip /
-    (intermediate.WoodDensityCT / 2000) /
-    (TimePerVanIC / 60);
+    assumption.LoadWeightChip / (intermediate.woodDensityCT / 2000) / (TimePerVanIC / 60);
   const CostPerCCFchippingIC = (100 * ChipperHourlyCost) / VolPerPMHchippingIC;
   const RelevanceChippingIC =
     TreeWeightDry < 400 ? 1 : TreeWeightDry < 800 ? 2 - TreeWeightDry / 400 : 0;
@@ -76,8 +56,7 @@ function Chipping(
 
   // B) User-Defined Chain Flail DDC WT
   const VolPerPMHchippingIIB = 0.001;
-  const CostPerCCFchippingIIB =
-    (100 * ChipperHourlyCost) / VolPerPMHchippingIIB;
+  const CostPerCCFchippingIIB = (100 * ChipperHourlyCost) / VolPerPMHchippingIIB;
   const RelevanceChippingIIB = 0;
 
   // III. Chip CTL Logs
@@ -87,14 +66,10 @@ function Chipping(
     0.8,
     (2.05 - 0.00541 * CTLLogWeight) * (1 + ProbDelayFractionIIIA)
   );
-  const TimePerVanIIIA =
-    TimePerGTchippingIIIA * assumption.LoadWeightChip + ExchangeVans;
+  const TimePerVanIIIA = TimePerGTchippingIIIA * assumption.LoadWeightChip + ExchangeVans;
   const VolPerPMHchippingIIIA =
-    assumption.LoadWeightChip /
-    (intermediate.WoodDensityCT / 2000) /
-    (TimePerVanIIIA / 60);
-  const CostPerCCFchippingIIIA =
-    (100 * ChipperHourlyCost) / VolPerPMHchippingIIIA;
+    assumption.LoadWeightChip / (intermediate.woodDensityCT / 2000) / (TimePerVanIIIA / 60);
+  const CostPerCCFchippingIIIA = (100 * ChipperHourlyCost) / VolPerPMHchippingIIIA;
   const RelevanceChippingIIIA = Math.max(
     0.1,
     CTLLogWeight < 100 ? 1 : CTLLogWeight < 200 ? 2 - CTLLogWeight / 100 : 0
@@ -102,31 +77,21 @@ function Chipping(
   // B) Morbark 60/36 (Hartsough et al, 97)
   const ProdDelayFractionIIIB = 0.038;
   const LogsPerSwingIIIB = 1.2 + 338 / CTLLogWeightDry;
-  const ChipTimePerSwingIIIB =
-    0.25 + 0.0264 * LogsPerSwingIIIB + 0.000498 * CTLLogWeightDry;
+  const ChipTimePerSwingIIIB = 0.25 + 0.0264 * LogsPerSwingIIIB + 0.000498 * CTLLogWeightDry;
   const SlashIIIB = 0.93;
   const TimePerVanIIIB =
-    ((ChipTimePerSwingIIIB * (1 + ProdDelayFractionIIIB)) /
-      (CTLLogWeightDry * LogsPerSwingIIIB)) *
+    ((ChipTimePerSwingIIIB * (1 + ProdDelayFractionIIIB)) / (CTLLogWeightDry * LogsPerSwingIIIB)) *
       2000 *
       LoadWeightDry +
     (SlashIIIB + ExchangeVans);
   const VolPerPMHchippingIIIB =
-    assumption.LoadWeightChip /
-    (intermediate.WoodDensityCT / 2000) /
-    (TimePerVanIIIB / 60);
-  const CostPerCCFchippingIIIB =
-    (100 * ChipperHourlyCost) / VolPerPMHchippingIIIB;
+    assumption.LoadWeightChip / (intermediate.woodDensityCT / 2000) / (TimePerVanIIIB / 60);
+  const CostPerCCFchippingIIIB = (100 * ChipperHourlyCost) / VolPerPMHchippingIIIB;
   const RelevanceChippingIIIB =
-    CTLLogWeightDry < 400
-      ? 1
-      : CTLLogWeightDry < 800
-      ? 2 - CTLLogWeightDry / 400
-      : 0;
+    CTLLogWeightDry < 400 ? 1 : CTLLogWeightDry < 800 ? 2 - CTLLogWeightDry / 400 : 0;
   // C) User-Defined Chip CTL Logs
   const VolPerPMHchippingIIIC = 0.001;
-  const CostPerCCFchippingIIIC =
-    (100 * ChipperHourlyCost) / VolPerPMHchippingIIIC;
+  const CostPerCCFchippingIIIC = (100 * ChipperHourlyCost) / VolPerPMHchippingIIIC;
   const RelevanceChippingIIIC = 0;
 
   // IV. Chip Piled Loose Residues at Landing
@@ -134,10 +99,8 @@ function Chipping(
   // Recovery of roadside residues using drum chippers. FERIC Technical Report TR-111)
   const BDTperPMHchippingIVA = 13.5;
   const BDTperPMHchippingIVA2 = 31;
-  const BDTperPMHchippingIVAavg =
-    (BDTperPMHchippingIVA + BDTperPMHchippingIVA2) / 2;
-  const GTperPMHchippingIVA =
-    BDTperPMHchippingIVAavg / assumption.MoistureContent;
+  const BDTperPMHchippingIVAavg = (BDTperPMHchippingIVA + BDTperPMHchippingIVA2) / 2;
+  const GTperPMHchippingIVA = BDTperPMHchippingIVAavg / assumption.MoistureContent;
   const CostPerPMHchippingIVA = ChipperHourlyCost + PMH_LoaderS;
   const CostPerGTchippingIVA = CostPerPMHchippingIVA / GTperPMHchippingIVA;
   const RelevanceChippingIVA = 1;
@@ -159,8 +122,8 @@ function Chipping(
   // Chipping Summary
   // I. Chip Whole Trees
   const CostChipWT =
-    input.TreeVolCT > 0
-      ? (intermediate.CHardwoodCT *
+    input.volumeCT > 0
+      ? (intermediate.cHardwoodCT *
           100 *
           (ChipperHourlyCost * RelevanceChippingIA +
             ChipperHourlyCost * RelevanceChippingIB +
@@ -176,8 +139,8 @@ function Chipping(
   const HorsepowerChipperB = 700;
   const fcrChipper = 0.023;
   const WeightedGalPMH =
-    HorsepowerChipperS * fcrChipper * (1 - intermediate.ChipperSize) +
-    HorsepowerChipperB * fcrChipper * intermediate.ChipperSize;
+    HorsepowerChipperS * fcrChipper * (1 - intermediate.chipperSize) +
+    HorsepowerChipperB * fcrChipper * intermediate.chipperSize;
   const GalChipWT = (WeightedGalPMH * CostChipWT) / ChipperHourlyCost;
   // II. Chain Flail DDC WT
   // A) adjusted from Chip Whole Trees
@@ -185,10 +148,8 @@ function Chipping(
   const FlailHrlyCostAdjustmentIIA = 1.1;
   const CostPerPMHchippingIIA = FlailHrlyCostAdjustmentIIA * ChipperHourlyCost;
   // need CostChipWT to calculate CostPerCCFchippingIIA
-  const CostPerCCFchippingIIA =
-    (FlailHrlyCostAdjustmentIIA / FlailProdAdjustmentIIA) * CostChipWT;
-  const VolPerPMHchippingIIA =
-    (100 * CostPerPMHchippingIIA) / CostPerCCFchippingIIA;
+  const CostPerCCFchippingIIA = (FlailHrlyCostAdjustmentIIA / FlailProdAdjustmentIIA) * CostChipWT;
+  const VolPerPMHchippingIIA = (100 * CostPerPMHchippingIIA) / CostPerCCFchippingIIA;
   const RelevanceChippingIIA = Math.max(
     RelevanceChippingIA,
     RelevanceChippingIB,
@@ -196,20 +157,19 @@ function Chipping(
   );
   // result
   const CostDDChipWT =
-    input.TreeVolCT > 0
-      ? (intermediate.CHardwoodCT *
+    input.volumeCT > 0
+      ? (intermediate.cHardwoodCT *
           100 *
           (CostPerPMHchippingIIA * RelevanceChippingIIA +
             ChipperHourlyCost * RelevanceChippingIIB)) /
-        (RelevanceChippingIIA * VolPerPMHchippingIIA +
-          RelevanceChippingIIB * VolPerPMHchippingIIB)
+        (RelevanceChippingIIA * VolPerPMHchippingIIA + RelevanceChippingIIB * VolPerPMHchippingIIB)
       : 0;
   // GalDDChipWT
   const GalDDChipWT = (WeightedGalPMH * CostDDChipWT) / ChipperHourlyCost;
   // III. Chip CTL Logs
   const CostChipCTL =
-    input.TreeVolCT > 0
-      ? (intermediate.CHardwoodCT *
+    input.volumeCT > 0
+      ? (intermediate.cHardwoodCT *
           100 *
           (ChipperHourlyCost * RelevanceChippingIIIA +
             ChipperHourlyCost * RelevanceChippingIIIB +
@@ -222,32 +182,26 @@ function Chipping(
   const GalChipCTL = (WeightedGalPMH * CostChipCTL) / ChipperHourlyCost;
   // IV. Chip Piled Loose Residues at Landing
   const CostChipLooseRes =
-    (CostPerPMHchippingIVA * RelevanceChippingIVA +
-      CostPerPMHchippingIVA * RelevanceChippingIVB) /
-    (RelevanceChippingIVA * GTperPMHchippingIVA +
-      RelevanceChippingIVB * GTperPMHchippingIVB);
+    (CostPerPMHchippingIVA * RelevanceChippingIVA + CostPerPMHchippingIVA * RelevanceChippingIVB) /
+    (RelevanceChippingIVA * GTperPMHchippingIVA + RelevanceChippingIVB * GTperPMHchippingIVB);
   // GalChipLooseRes
   const HorsepowerLoaderS = 120;
   const fcrLoader = 0.022;
   const WeightedGalPMH2 =
-    HorsepowerChipperS * fcrChipper * (1 - intermediate.ChipperSize) +
-    HorsepowerChipperB * fcrChipper * intermediate.ChipperSize +
+    HorsepowerChipperS * fcrChipper * (1 - intermediate.chipperSize) +
+    HorsepowerChipperB * fcrChipper * intermediate.chipperSize +
     HorsepowerLoaderS * fcrLoader;
   const WeightedCostPMH2 =
-    PMH_ChipperS * (1 - intermediate.ChipperSize) +
-    PMH_ChipperB * intermediate.ChipperSize +
+    PMH_ChipperS * (1 - intermediate.chipperSize) +
+    PMH_ChipperB * intermediate.chipperSize +
     PMH_LoaderS;
-  const GalChipLooseRes =
-    (WeightedGalPMH2 * CostChipLooseRes) / WeightedCostPMH2;
+  const GalChipLooseRes = (WeightedGalPMH2 * CostChipLooseRes) / WeightedCostPMH2;
   // V. Chip Bundles of Residue at Landing
   const CostChipBundledRes =
-    (CostPerPMHchippingIVA * RelevanceChippingVA +
-      CostPerPMHchippingIVA * RelevanceChippingVB) /
-    (RelevanceChippingVA * GTperPMHchippingVA +
-      RelevanceChippingVB * GTperPMHchippingVB);
+    (CostPerPMHchippingIVA * RelevanceChippingVA + CostPerPMHchippingIVA * RelevanceChippingVB) /
+    (RelevanceChippingVA * GTperPMHchippingVA + RelevanceChippingVB * GTperPMHchippingVB);
   // GalChipBundledRes
-  const GalChipBundledRes =
-    (WeightedGalPMH2 * CostChipBundledRes) / WeightedCostPMH2;
+  const GalChipBundledRes = (WeightedGalPMH2 * CostChipBundledRes) / WeightedCostPMH2;
 
   const results = {
     CostChipWT: CostChipWT,
@@ -259,7 +213,7 @@ function Chipping(
     GalDDChipWT: GalDDChipWT,
     GalChipCTL: GalChipCTL,
     GalChipLooseRes: GalChipLooseRes,
-    GalChipBundledRes: GalChipBundledRes
+    GalChipBundledRes: GalChipBundledRes,
   };
 
   return results;

@@ -1,12 +1,12 @@
-import { InputVarMod, MoveInInputVarMod } from './systems/frcs.model';
+import { FrcsInputs, MoveInInputs } from './model';
 
-import { calculate } from './systems/frcsrun';
-import { calculateMoveIn } from './systems/movein';
+import { calculateMoveIn } from './movein';
+import { calculateHarvestCosts } from './runfrcs';
 
-export const runFrcs = (params: InputVarMod) => {
-  return calculate(params);
+export const runFrcs = (params: FrcsInputs) => {
+  return calculateHarvestCosts(params);
 };
 
-export const getMoveInCosts = (params: MoveInInputVarMod) => {
+export const getMoveInCosts = (params: MoveInInputs) => {
   return calculateMoveIn(params);
 };

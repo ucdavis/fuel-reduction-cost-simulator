@@ -2,9 +2,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { InputVarMod, MoveInInputVarMod } from './systems/frcs.model';
-import { calculate } from './systems/frcsrun';
-import { calculateMoveIn } from './systems/movein';
+import { FrcsInputs, MoveInInputs } from './model';
+import { calculateMoveIn } from './movein';
+import { calculateHarvestCosts } from './runfrcs';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
@@ -16,10 +16,10 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3000;
 
 // api endpoint for running frcs
-app.post('/frcsrun', async (req, res) => {
-  const params: InputVarMod = req.body;
+app.post('/runfrcs', async (req, res) => {
+  const params: FrcsInputs = req.body;
   try {
-    const result = await calculate(params);
+    const result = await calculateHarvestCosts(params);
     res.status(200).json(result);
   } catch (e) {
     res.status(400).send(e.message);
@@ -29,7 +29,7 @@ app.post('/frcsrun', async (req, res) => {
 
 // api endpoint for calculating move-in costs
 app.post('/movein', async (req, res) => {
-  const params: MoveInInputVarMod = req.body;
+  const params: MoveInInputs = req.body;
   try {
     const result = await calculateMoveIn(params);
     res.status(200).json(result);
