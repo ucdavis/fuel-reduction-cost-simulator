@@ -53,7 +53,7 @@ function createErrorMessages(params: FrcsInputs) {
     message += 'unidentified System type\n';
   } else if (
     (params.system === SystemTypes.helicopterCtl ||
-      params.system === SystemTypes.helicopterManualWt) &&
+      params.system === SystemTypes.helicopterManualLog) &&
     params.elevation < 0
   ) {
     message += 'elevation is required to be a valid number for the system you have selected\n';
@@ -252,7 +252,7 @@ function calculateOutput(input: FrcsInputs) {
     case SystemTypes.cableCtl:
       output = cableCTL(input, intermediate, assumption);
       break;
-    case SystemTypes.helicopterManualWt:
+    case SystemTypes.helicopterManualLog:
       output = helicopterManualLog(input, intermediate, assumption);
       break;
     case SystemTypes.helicopterCtl:
@@ -467,18 +467,17 @@ function calculateIntermediate(
 }
 
 function calculateAmountsRecovered(
-  input: FrcsInputsDefault,
+  input: FrcsInputs,
   intermediate: IntermediateVariables,
   assumption: Assumptions
 ) {
-  // tslint:disable-next-line: one-variable-per-declaration
-  let BoleVolCCF = 0,
-    ResidueRecoveredPrimary = 0,
-    PrimaryProduct = 0,
-    ResidueRecoveredOptional = 0,
-    TotalPrimaryProductsAndOptionalResidues = 0;
+  let BoleVolCCF = 0;
+  let ResidueRecoveredPrimary = 0;
+  let PrimaryProduct = 0;
+  let ResidueRecoveredOptional = 0;
+  let TotalPrimaryProductsAndOptionalResidues = 0;
   switch (input.system) {
-    case 'Ground-Based Mech WT':
+    case SystemTypes.groundBasedMechWt:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
@@ -487,7 +486,7 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Ground-Based Manual WT':
+    case SystemTypes.groundBasedManualWt:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
@@ -496,14 +495,14 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Ground-Based Manual Log':
+    case SystemTypes.groundBasedManualLog:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Ground-Based CTL':
+    case SystemTypes.groundBasedCtl:
       BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
@@ -512,14 +511,14 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Cable Manual WT/Log':
+    case SystemTypes.cableManualWtLog:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Cable Manual WT':
+    case SystemTypes.cableManualWt:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
@@ -528,28 +527,28 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Cable Manual Log':
+    case SystemTypes.cableManualLog:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Cable CTL':
+    case SystemTypes.cableCtl:
       BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Helicopter Manual Log':
+    case SystemTypes.helicopterManualLog:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case 'Helicopter CTL':
+    case SystemTypes.helicopterCtl:
       BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;
