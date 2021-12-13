@@ -60,7 +60,7 @@ export function groundManualWT(
   );
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
-  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
+  const GalChainsaw = 0.077797403;
   const GalSkidUB = SkiddingResults.GalSkidUB;
   const GalProcess = ProcessingResults.GalProcess;
   const GalLoad = LoadingResults.GalLoad;

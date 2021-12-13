@@ -50,7 +50,7 @@ export function helicopterManualLog(
   );
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
-  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
+  const GalChainsaw = 0.077797403;
   const GalHeliYardML = HelicopterYardingResults.GalHeliYardML;
   const LoadingResults = Loading(assumption, input, intermediate, machineCost);
   const GalLoad = LoadingResults.GalLoad;
