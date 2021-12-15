@@ -157,9 +157,9 @@ export function groundCTL(
   const OntoTruck4ResiduesWoMovein2 =
     BundleCTLResidues2 + ForwardCTLResidues2 + ChipBundledResiduesFromTreesLess80cf2;
   const Movein4Residues2 =
-    input.includeMoveInCosts && input.includeCostsCollectChipResidues
+    input.includeMoveInCosts || input.includeCostsCollectChipResidues
       ? (2 * input.moveInDistance) / mpg / input.area
-      : 0;
+      : 0; // two equipment: a bundler and a forwarder
 
   // III. Summaries
   const frcsOutputs: FrcsOutputs = {
@@ -213,7 +213,8 @@ export function groundCTL(
   frcsOutputs.residual.costPerAcre =
     Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein + Movein4Residues;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2 + Movein4Residues2;
