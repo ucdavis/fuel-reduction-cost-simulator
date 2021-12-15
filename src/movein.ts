@@ -125,7 +125,7 @@ export function calculateMoveIn(input: MoveInInputs) {
 
   const moveInOutputs: MoveInOutputs = {
     totalCost: 0,
-    biomassCost: 0,
+    residualCost: 0,
   };
   switch (input.system) {
     case SystemTypes.groundBasedMechWt:
@@ -182,7 +182,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       // Total
       const totalBundleResidues =
         totalFixedBundleResidues + totalVariableBundleResidues * input.moveInDistance;
-      moveInOutputs.biomassCost = totalBundleResidues;
+      moveInOutputs.residualCost = totalBundleResidues;
       moveInOutputs.totalCost += totalBundleResidues;
       break;
     case SystemTypes.cableManualWtLog:
@@ -252,7 +252,7 @@ export function calculateMoveIn(input: MoveInInputs) {
   }
 
   if (input.isBiomassSalvage) {
-    moveInOutputs.biomassCost = moveInOutputs.totalCost;
+    moveInOutputs.residualCost = moveInOutputs.totalCost;
   }
 
   return moveInOutputs;

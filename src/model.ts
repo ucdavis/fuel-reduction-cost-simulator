@@ -103,7 +103,7 @@ export interface MoveInInputs {
 
 export interface MoveInOutputs {
   totalCost: number;
-  biomassCost: number;
+  residualCost: number;
 }
 
 export class MoveInInputsDefault implements MoveInInputs {
