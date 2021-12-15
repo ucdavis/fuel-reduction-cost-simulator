@@ -306,8 +306,8 @@
         "total": {
           "$ref": "#/definitions/Total"
         },
-        "biomass": {
-          "$ref": "#/definitions/Biomass"
+        "residual": {
+          "$ref": "#/definitions/Residual"
         }
       },
       "xml": {
@@ -379,10 +379,10 @@
         }
       },
       "xml": {
-        "name": "total"
+        "name": "Total"
       }
     },
-    "Biomass": {
+    "Residual": {
       "type": "object",
       "properties": {
         "yieldPerAcre": {
@@ -447,7 +447,7 @@
         }
       },
       "xml": {
-        "name": "biomass"
+        "name": "Residual"
       }
     }
   },

@@ -175,7 +175,7 @@ function calculate(input: FrcsInputs) {
       jetFuelPerAcre: 0,
       jetFuelPerBoleCCF: 0,
     },
-    biomass: {
+    residual: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,

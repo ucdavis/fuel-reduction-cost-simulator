@@ -214,7 +214,7 @@ export interface FrcsOutputs {
     jetFuelPerAcre: number;
     jetFuelPerBoleCCF: number;
   };
-  biomass: {
+  residual: {
     yieldPerAcre: number;
     costPerAcre: number;
     costPerBoleCCF: number;

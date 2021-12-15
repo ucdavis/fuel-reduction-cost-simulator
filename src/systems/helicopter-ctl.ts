@@ -124,7 +124,7 @@ export function helicopterCTL(
       jetFuelPerAcre: 0,
       jetFuelPerBoleCCF: 0,
     },
-    biomass: {
+    residual: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,
@@ -157,20 +157,20 @@ export function helicopterCTL(
 
   // System Summaries - Residue
   // Cost
-  frcsOutputs.biomass.yieldPerAcre =
+  frcsOutputs.residual.yieldPerAcre =
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
-  frcsOutputs.biomass.costPerAcre =
+  frcsOutputs.residual.costPerAcre =
     Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein + Movein4Residues;
-  frcsOutputs.biomass.costPerBoleCCF = frcsOutputs.biomass.costPerAcre / BoleVolCCF;
-  frcsOutputs.biomass.costPerGT = frcsOutputs.biomass.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
+  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
-  frcsOutputs.biomass.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
-  frcsOutputs.biomass.dieselPerBoleCCF = frcsOutputs.biomass.dieselPerAcre / BoleVolCCF;
-  frcsOutputs.biomass.jetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
-  frcsOutputs.biomass.jetFuelPerBoleCCF = frcsOutputs.biomass.jetFuelPerAcre / BoleVolCCF;
+  frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;
+  frcsOutputs.residual.jetFuelPerAcre = JetFuelStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.residual.jetFuelPerBoleCCF = frcsOutputs.residual.jetFuelPerAcre / BoleVolCCF;
 
   if (input.isBiomassSalvage) {
-    frcsOutputs.biomass = frcsOutputs.total;
+    frcsOutputs.residual = frcsOutputs.total;
   }
 
   return frcsOutputs;
