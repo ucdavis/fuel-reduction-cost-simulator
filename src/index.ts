@@ -7,6 +7,6 @@ export const runFrcs = (params: FrcsInputs) => {
   return calculateHarvestCosts(params);
 };
 
-export const getMoveInCosts = (params: MoveInInputs) => {
+export const getMoveInOutputs = (params: MoveInInputs) => {
   return calculateMoveIn(params);
 };
