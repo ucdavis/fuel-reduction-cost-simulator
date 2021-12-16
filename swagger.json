@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is a service for running FRCS on a harvest unit in California, funded by California Energy Commission.",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "title": "Fuel Reduction Cost Simulator Web Service",
     "contact": {
       "email": "kkyli@ucdavis.edu"
@@ -15,15 +15,11 @@
   "paths": {
     "/frcs": {
       "post": {
-        "tags": [
-          "FRCS"
-        ],
+        "tags": ["FRCS"],
         "summary": "Get FRCS Outputs",
         "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual Log | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max LLT, ft3 | 250 |  | 250 | 250 | 250 | 250 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
         "operationId": "getFrcsOutputs",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -390,19 +386,19 @@
           "format": "float",
           "example": 50.518225,
           "description": "Yield of Residual Woody Biomass in Green Tons per Acre."
-        }, 
+        },
         "costPerAcre": {
           "type": "number",
           "format": "float",
           "example": 534.2228831,
           "description": "Cost of Harvesting Residual Woody Biomass in US dollars per Acre."
-        }, 
+        },
         "costPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 10.68445766,
           "description": "Cost of Harvesting Residual Woody Biomass in US dollars per Hundred Cubic Feet."
-        }, 
+        },
         "costPerGT": {
           "type": "number",
           "format": "float",
