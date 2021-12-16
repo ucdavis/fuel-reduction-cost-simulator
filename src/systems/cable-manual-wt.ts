@@ -144,7 +144,7 @@ export function cableManualWT(
   const LowboyLoads = 5;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
   const ChipLooseResiduesFromLogTreesLess80cf2 = input.includeCostsCollectChipResidues
     ? GalChipLooseRes * ResidueRecoveredOptional
@@ -204,7 +204,8 @@ export function cableManualWT(
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
   frcsOutputs.residual.costPerAcre = OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2;

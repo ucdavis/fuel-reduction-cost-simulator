@@ -141,6 +141,7 @@ export function groundCTL(
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
     ? ((LowboyLoads + (input.includeCostsCollectChipResidues ? LowboyLoadsResidues : 0)) *
+        2 *
         input.moveInDistance) /
       mpg /
       input.area
@@ -157,8 +158,8 @@ export function groundCTL(
   const OntoTruck4ResiduesWoMovein2 =
     BundleCTLResidues2 + ForwardCTLResidues2 + ChipBundledResiduesFromTreesLess80cf2;
   const Movein4Residues2 =
-    input.includeMoveInCosts || input.includeCostsCollectChipResidues
-      ? (2 * input.moveInDistance) / mpg / input.area
+    input.includeMoveInCosts && input.includeCostsCollectChipResidues
+      ? (LowboyLoadsResidues * 2 * input.moveInDistance) / mpg / input.area
       : 0; // two equipment: a bundler and a forwarder
 
   // III. Summaries

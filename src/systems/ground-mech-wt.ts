@@ -142,7 +142,7 @@ export function groundMechWT(
   const LowboyLoads = 5;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
   const ChipLooseResiduesFromLogTreesLess80cf2 = input.includeCostsCollectChipResidues
     ? GalChipLooseRes * ResidueRecoveredOptional

@@ -104,7 +104,7 @@ export function helicopterCTL(
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
   const JetFuelStump2Truck4PrimaryProductWithoutMovein = HeliYardCTLtreesLess80cf2;
   const JetFuelStump2Truck4ResiduesWithoutMovein =

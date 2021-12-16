@@ -99,7 +99,7 @@ export function groundManualLog(
   const LowboyLoads = 3;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
   const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckAllTrees2;
 
@@ -150,7 +150,8 @@ export function groundManualLog(
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
   frcsOutputs.residual.costPerAcre = Stump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;

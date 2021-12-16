@@ -107,7 +107,7 @@ export function cableCTL(
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
 
   // III. Summaries
@@ -160,7 +160,8 @@ export function cableCTL(
   frcsOutputs.residual.costPerAcre =
     Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein + Movein4Residues;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;
