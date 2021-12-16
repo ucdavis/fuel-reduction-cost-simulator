@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 
-// api endpoint for running frcs
-app.post('/runfrcs', async (req, res) => {
+// api endpoint for getting frcs outputs
+app.post('/frcs', async (req, res) => {
   const params: FrcsInputs = req.body;
   try {
     const result = await calculateFrcsOutputs(params);
@@ -27,7 +27,7 @@ app.post('/runfrcs', async (req, res) => {
   }
 });
 
-// api endpoint for calculating move-in costs
+// api endpoint for getting move-in outputs
 app.post('/movein', async (req, res) => {
   const params: MoveInInputs = req.body;
   try {
