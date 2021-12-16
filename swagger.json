@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is a service for running FRCS on a harvest unit in California, funded by California Energy Commission.",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "title": "Fuel Reduction Cost Simulator Web Service",
     "contact": {
       "email": "kkyli@ucdavis.edu"
