@@ -99,7 +99,7 @@ export interface MoveInInputs {
   wageOther: number;
   laborBenefits: number;
   ppiCurrent: number;
-  volPerAcreCT: number;
+  harvestChipTrees: boolean; // indicate whether chip trees exist in the harvest unit and will be harvested
   includeCostsCollectChipResidues: boolean;
 }
 
@@ -119,7 +119,7 @@ export class MoveInInputsDefault implements MoveInInputs {
   wageOther = 22.07; // CA AllOthersWage May 2020
   laborBenefits = 35; // Assume a nationwide average of 35% for benefits and other payroll costs
   ppiCurrent = 284.7; // Oct 2021
-  volPerAcreCT = 1000;
+  harvestChipTrees = true;
   includeCostsCollectChipResidues = true;
   constructor() {}
 }
