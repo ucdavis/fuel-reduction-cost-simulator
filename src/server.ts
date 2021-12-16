@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import { FrcsInputs, MoveInInputs } from './model';
 import { calculateMoveIn } from './movein';
-import { calculateHarvestCosts } from './runfrcs';
+import { calculateFrcsOutputs } from './runfrcs';
 
 // tslint:disable-next-line: no-var-requires
 const swaggerDocument = require('../swagger.json');
@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 app.post('/runfrcs', async (req, res) => {
   const params: FrcsInputs = req.body;
   try {
-    const result = await calculateHarvestCosts(params);
+    const result = await calculateFrcsOutputs(params);
     res.status(200).json(result);
   } catch (e) {
     res.status(400).send(e.message);

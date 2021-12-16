@@ -19,7 +19,7 @@ import { helicopterCTL } from './systems/helicopter-ctl';
 import { helicopterManualLog } from './systems/helicopter-manual-log';
 import { InLimits } from './systems/methods/inlimits';
 
-export function calculateHarvestCosts(input: FrcsInputs) {
+export function calculateFrcsOutputs(input: FrcsInputs) {
   const message = createErrorMessages(input);
   if (message) {
     throw new Error(message);
