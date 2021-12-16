@@ -14,6 +14,7 @@ export function calculateMoveIn(input: MoveInInputs) {
   const TravLoadedHrs = input.moveInDistance / SpeedLoaded;
   const BackhaulHrs = input.moveInDistance / SpeedBack;
   const LowboyCost = TruckMoveInCosts + TruckDriverMoveInCosts;
+  const MPG = 6;
   // System Costs
   const machineCost: MachineCosts = calculateMachineCosts(
     input.dieselFuelPrice,
@@ -125,11 +126,14 @@ export function calculateMoveIn(input: MoveInInputs) {
 
   const moveInOutputs: MoveInOutputs = {
     totalCost: 0,
-    biomassCost: 0,
+    residualCost: 0,
+    totalDiesel: 0,
+    residualDiesel: 0,
   };
   switch (input.system) {
     case SystemTypes.groundBasedMechWt:
-      const LowboyLoadsMechWT = 4 + 1;
+      const LowboyLoadsMechWT =
+        4 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedMechWT =
         fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableMechWT = BackhaulVariablefunc(LowboyLoadsMechWT);
@@ -141,9 +145,11 @@ export function calculateMoveIn(input: MoveInInputs) {
         chipperVariable +
         BackhaulVariableMechWT;
       moveInOutputs.totalCost = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsMechWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualWt:
-      const LowboyLoadsManualWT = 3 + 1;
+      const LowboyLoadsManualWT =
+        3 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
       const totalVariableManualWT =
@@ -153,17 +159,21 @@ export function calculateMoveIn(input: MoveInInputs) {
         chipperVariable +
         BackhaulVariableManualWT;
       moveInOutputs.totalCost = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualLog:
-      const LowboyLoadsManualLog = 2 + 1;
+      const LowboyLoadsManualLog =
+        2 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
       const totalVariableManualLog =
         skidderVariable + loaderVariable + chipperVariable + BackhaulVariableManualLog;
       moveInOutputs.totalCost = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedCtl:
-      const LowboyLoadsGroundCTL = 3 + 1;
+      const LowboyLoadsGroundCTL =
+        3 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
       const totalVariableGroundCTL =
@@ -182,20 +192,34 @@ export function calculateMoveIn(input: MoveInInputs) {
       // Total
       const totalBundleResidues =
         totalFixedBundleResidues + totalVariableBundleResidues * input.moveInDistance;
-      moveInOutputs.biomassCost = totalBundleResidues;
+      moveInOutputs.residualCost = totalBundleResidues;
       moveInOutputs.totalCost += totalBundleResidues;
+      moveInOutputs.totalDiesel =
+        ((LowboyLoadsGroundCTL +
+          (input.includeCostsCollectChipResidues ? LowboyLoadsBundleResidues : 0)) *
+          2 *
+          input.moveInDistance) /
+        MPG;
+      moveInOutputs.residualDiesel =
+        ((input.includeCostsCollectChipResidues ? LowboyLoadsBundleResidues : 0) *
+          2 *
+          input.moveInDistance) /
+        MPG;
       break;
     case SystemTypes.cableManualWtLog:
-      const LowboyLoadsCableManualWTlog = 3 + 1;
+      const LowboyLoadsCableManualWTlog =
+        3 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
       const totalVariableCableManualWTlog =
         yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualWTlog;
       moveInOutputs.totalCost =
         totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsCableManualWTlog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualWt:
-      const LowboyLoadsCableManualWT = 4 + 1;
+      const LowboyLoadsCableManualWT =
+        4 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
       const totalVariableCableManualWT =
@@ -206,18 +230,22 @@ export function calculateMoveIn(input: MoveInInputs) {
         BackhaulVariableCableManualWT;
       moveInOutputs.totalCost =
         totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsCableManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualLog:
-      const LowboyLoadsCableManualLog = 2 + 1;
+      const LowboyLoadsCableManualLog =
+        2 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
       const totalVariableCableManualLog =
         yarderVariable + loaderVariable + chipperVariable + BackhaulVariableCableManualLog;
       moveInOutputs.totalCost =
         totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsCableManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableCtl:
-      const LowboyLoadsCableCTL = 3 + 1;
+      const LowboyLoadsCableCTL =
+        3 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
       const totalVariableCableCTL =
@@ -227,18 +255,22 @@ export function calculateMoveIn(input: MoveInInputs) {
         chipperVariable +
         BackhaulVariableCableCTL;
       moveInOutputs.totalCost = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsCableCTL * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterManualLog:
-      const LowboyLoadsHManualLog = 2 + 1;
+      const LowboyLoadsHManualLog =
+        2 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
       const totalVariableHManualLog =
         helicopterVariable + 2 * loaderVariable + chipperVariable + BackhaulVariableHManualLog;
       moveInOutputs.totalCost =
         totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsHManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterCtl:
-      const LowboyLoadsHeliCTL = 3 + 1;
+      const LowboyLoadsHeliCTL =
+        3 + (input.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
       const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHeliCTL = BackhaulVariablefunc(LowboyLoadsHeliCTL);
       const totalVariableHeliCTL =
@@ -248,11 +280,13 @@ export function calculateMoveIn(input: MoveInInputs) {
         chipperVariable +
         BackhaulVariableHeliCTL;
       moveInOutputs.totalCost = totalFixedHeliCTL + totalVariableHeliCTL * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsHeliCTL * 2 * input.moveInDistance) / MPG;
       break;
   }
 
   if (input.isBiomassSalvage) {
-    moveInOutputs.biomassCost = moveInOutputs.totalCost;
+    moveInOutputs.residualCost = moveInOutputs.totalCost;
+    moveInOutputs.residualDiesel = moveInOutputs.totalDiesel;
   }
 
   return moveInOutputs;

@@ -19,7 +19,7 @@ import { helicopterCTL } from './systems/helicopter-ctl';
 import { helicopterManualLog } from './systems/helicopter-manual-log';
 import { InLimits } from './systems/methods/inlimits';
 
-export function calculateHarvestCosts(input: FrcsInputs) {
+export function calculateFrcsOutputs(input: FrcsInputs) {
   const message = createErrorMessages(input);
   if (message) {
     throw new Error(message);
@@ -175,7 +175,7 @@ function calculate(input: FrcsInputs) {
       jetFuelPerAcre: 0,
       jetFuelPerBoleCCF: 0,
     },
-    biomass: {
+    residual: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,

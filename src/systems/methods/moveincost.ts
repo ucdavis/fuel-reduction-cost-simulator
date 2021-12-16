@@ -124,7 +124,8 @@ function MoveInCosts(
   const helicopterVariable = helicopterVariablefunc();
 
   // Mech WT
-  const LowboyLoadsMechWT = 4 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsMechWT =
+    4 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedMechWT =
     fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
   const BackhaulVariableMechWT = BackhaulVariablefunc(LowboyLoadsMechWT);
@@ -141,7 +142,8 @@ function MoveInCosts(
     (totalMechWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Manual WT
-  const LowboyLoadsManualWT = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsManualWT =
+    3 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
   const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
   const totalVariableManualWT =
@@ -156,7 +158,8 @@ function MoveInCosts(
     (totalManualWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Manual Log
-  const LowboyLoadsManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsManualLog =
+    2 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
   const totalVariableManualLog =
@@ -167,7 +170,8 @@ function MoveInCosts(
     (totalManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Ground CTL
-  const LowboyLoadsGroundCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsGroundCTL =
+    3 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
   const totalVariableGroundCTL =
@@ -182,7 +186,8 @@ function MoveInCosts(
     (totalGroundCTL * 100) / (input.area * intermediate.volumeST * intermediate.treesPerAcreST);
 
   // Cable Manual WT/Log
-  const LowboyLoadsCableManualWTlog = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableManualWTlog =
+    3 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
   const totalVariableCableManualWTlog =
@@ -194,7 +199,8 @@ function MoveInCosts(
     (totalCableManualWTlog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable Manual WT
-  const LowboyLoadsCableManualWT = 4 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableManualWT =
+    4 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
   const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
   const totalVariableCableManualWT =
@@ -210,7 +216,8 @@ function MoveInCosts(
     (totalCableManualWT * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable Manual Log
-  const LowboyLoadsCableManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableManualLog =
+    2 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
   const totalVariableCableManualLog =
@@ -222,7 +229,8 @@ function MoveInCosts(
     (totalCableManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Cable CTL
-  const LowboyLoadsCableCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsCableCTL =
+    3 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
   const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
   const totalVariableCableCTL =
@@ -237,7 +245,8 @@ function MoveInCosts(
     (totalCableCTL * 100) / (input.area * intermediate.volumeST * intermediate.treesPerAcreST);
 
   // Helicopter Manual Log
-  const LowboyLoadsHManualLog = 2 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsHManualLog =
+    2 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
   const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
   const totalVariableHManualLog =
@@ -248,7 +257,8 @@ function MoveInCosts(
     (totalHManualLog * 100) / (input.area * intermediate.volume * intermediate.treesPerAcre);
 
   // Helicopter CTL
-  const LowboyLoadsHeliCTL = 3 + (intermediate.volPerAcreCT > 0 ? 1 : 0);
+  const LowboyLoadsHeliCTL =
+    3 + (intermediate.volPerAcreCT > 0 || input.includeCostsCollectChipResidues ? 1 : 0);
   const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
   const BackhaulVariableHeliCTL = BackhaulVariablefunc(LowboyLoadsHeliCTL);
   const totalVariableHeliCTL =

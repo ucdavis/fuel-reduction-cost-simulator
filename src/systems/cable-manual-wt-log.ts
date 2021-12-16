@@ -63,7 +63,7 @@ export function cableManualWTLog(
   );
   const CostChipLooseRes = ChippingResults.CostChipLooseRes;
 
-  const GalChainsaw = 0.0104 * 2.83168 * 0.264172; // 0.0104 L/m3 => gal/CCF
+  const GalChainsaw = 0.077797403;
   const GalYardPCUB = CYPCUresults.GalYardPCUB;
   const GalYardCCUB = CYCCUresults.GalYardCCUB;
   const GalLoad = LoadingResults.GalLoad;
@@ -139,7 +139,7 @@ export function cableManualWTLog(
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
-    ? (LowboyLoads * input.moveInDistance) / mpg / input.area
+    ? (LowboyLoads * 2 * input.moveInDistance) / mpg / input.area
     : 0;
 
   // III. Summaries
@@ -156,7 +156,7 @@ export function cableManualWTLog(
       jetFuelPerAcre: 0,
       jetFuelPerBoleCCF: 0,
     },
-    biomass: {
+    residual: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,
@@ -189,19 +189,20 @@ export function cableManualWTLog(
 
   // System Summaries - Residue
   // Cost
-  frcsOutputs.biomass.yieldPerAcre =
+  frcsOutputs.residual.yieldPerAcre =
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
-  frcsOutputs.biomass.costPerAcre = OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
-  frcsOutputs.biomass.costPerBoleCCF = frcsOutputs.biomass.costPerAcre / BoleVolCCF;
-  frcsOutputs.biomass.costPerGT = frcsOutputs.biomass.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerAcre = OntoTruck4ResiduesWoMovein + Stump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
-  frcsOutputs.biomass.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
-  frcsOutputs.biomass.dieselPerBoleCCF = frcsOutputs.biomass.dieselPerAcre / BoleVolCCF;
-  frcsOutputs.biomass.gasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
-  frcsOutputs.biomass.gasolinePerBoleCCF = frcsOutputs.biomass.gasolinePerAcre / BoleVolCCF;
+  frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;
+  frcsOutputs.residual.gasolinePerAcre = GasolineStump2Truck4ResiduesWithoutMovein;
+  frcsOutputs.residual.gasolinePerBoleCCF = frcsOutputs.residual.gasolinePerAcre / BoleVolCCF;
 
   if (input.isBiomassSalvage) {
-    frcsOutputs.biomass = frcsOutputs.total;
+    frcsOutputs.residual = frcsOutputs.total;
   }
 
   return frcsOutputs;
