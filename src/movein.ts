@@ -130,10 +130,10 @@ export function calculateMoveIn(input: MoveInInputs) {
     totalDiesel: 0,
     residualDiesel: 0,
   };
+  const numChipper = input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0;
   switch (input.system) {
     case SystemTypes.groundBasedMechWt:
-      const LowboyLoadsMechWT =
-        4 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsMechWT = 4 + numChipper;
       const totalFixedMechWT =
         fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableMechWT = BackhaulVariablefunc(LowboyLoadsMechWT);
@@ -148,8 +148,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsMechWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualWt:
-      const LowboyLoadsManualWT =
-        3 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsManualWT = 3 + numChipper;
       const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualWT = BackhaulVariablefunc(LowboyLoadsManualWT);
       const totalVariableManualWT =
@@ -162,8 +161,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualLog:
-      const LowboyLoadsManualLog =
-        2 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsManualLog = 2 + numChipper;
       const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableManualLog = BackhaulVariablefunc(LowboyLoadsManualLog);
       const totalVariableManualLog =
@@ -172,8 +170,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedCtl:
-      const LowboyLoadsGroundCTL =
-        3 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsGroundCTL = 3 + numChipper;
       const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableGroundCTL = BackhaulVariablefunc(LowboyLoadsGroundCTL);
       const totalVariableGroundCTL =
@@ -207,8 +204,7 @@ export function calculateMoveIn(input: MoveInInputs) {
         MPG;
       break;
     case SystemTypes.cableManualWtLog:
-      const LowboyLoadsCableManualWTlog =
-        3 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsCableManualWTlog = 3 + numChipper;
       const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWTlog = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
       const totalVariableCableManualWTlog =
@@ -218,8 +214,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualWTlog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualWt:
-      const LowboyLoadsCableManualWT =
-        4 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsCableManualWT = 4 + numChipper;
       const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualWT = BackhaulVariablefunc(LowboyLoadsCableManualWT);
       const totalVariableCableManualWT =
@@ -233,8 +228,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualLog:
-      const LowboyLoadsCableManualLog =
-        2 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsCableManualLog = 2 + numChipper;
       const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableManualLog = BackhaulVariablefunc(LowboyLoadsCableManualLog);
       const totalVariableCableManualLog =
@@ -244,8 +238,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableCtl:
-      const LowboyLoadsCableCTL =
-        3 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsCableCTL = 3 + numChipper;
       const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
       const BackhaulVariableCableCTL = BackhaulVariablefunc(LowboyLoadsCableCTL);
       const totalVariableCableCTL =
@@ -258,8 +251,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsCableCTL * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterManualLog:
-      const LowboyLoadsHManualLog =
-        2 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsHManualLog = 2 + numChipper;
       const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHManualLog = BackhaulVariablefunc(LowboyLoadsHManualLog);
       const totalVariableHManualLog =
@@ -269,8 +261,7 @@ export function calculateMoveIn(input: MoveInInputs) {
       moveInOutputs.totalDiesel = (LowboyLoadsHManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterCtl:
-      const LowboyLoadsHeliCTL =
-        3 + (input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0);
+      const LowboyLoadsHeliCTL = 3 + numChipper;
       const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
       const BackhaulVariableHeliCTL = BackhaulVariablefunc(LowboyLoadsHeliCTL);
       const totalVariableHeliCTL =
