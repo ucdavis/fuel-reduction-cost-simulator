@@ -132,6 +132,11 @@ export function calculateMoveIn(input: MoveInInputs) {
     residualDiesel: 0,
   };
   const numChipper = input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0;
+  moveInOutputs.residualCost =
+    numChipper * (chipperFixed + chipperVariable) +
+    BackhaulVariablefunc(numChipper) * input.moveInDistance;
+  moveInOutputs.residualDiesel = (numChipper * 2 * input.moveInDistance) / MPG;
+
   switch (input.system) {
     case SystemTypes.groundBasedMechWt:
       const LowboyLoadsMechWT = 4 + numChipper;
@@ -187,27 +192,21 @@ export function calculateMoveIn(input: MoveInInputs) {
         numChipper * chipperVariable +
         backhaulVariable;
       moveInOutputs.totalCost = totalFixedGroundCTL + totalVariableGroundCTL * input.moveInDistance;
+      moveInOutputs.totalDiesel = (LowboyLoadsGroundCTL * 2 * input.moveInDistance) / MPG;
       // Bundling Residues
       const LowboyLoadsBundleResidues = 2;
       const totalFixedBundleResidues = bundlerFixed + forwarderFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsBundleResidues);
       const totalVariableBundleResidues = bundlerVariable + forwarderVariable + backhaulVariable;
-      // Total
       const totalBundleResidues =
         totalFixedBundleResidues + totalVariableBundleResidues * input.moveInDistance;
-      moveInOutputs.residualCost = totalBundleResidues;
-      moveInOutputs.totalCost += totalBundleResidues;
-      moveInOutputs.totalDiesel =
-        ((LowboyLoadsGroundCTL +
-          (input.includeCostsCollectChipResidues ? LowboyLoadsBundleResidues : 0)) *
-          2 *
-          input.moveInDistance) /
-        MPG;
-      moveInOutputs.residualDiesel =
-        ((input.includeCostsCollectChipResidues ? LowboyLoadsBundleResidues : 0) *
-          2 *
-          input.moveInDistance) /
-        MPG;
+      if (input.includeCostsCollectChipResidues) {
+        moveInOutputs.totalCost += totalBundleResidues;
+        moveInOutputs.totalDiesel += (LowboyLoadsBundleResidues * 2 * input.moveInDistance) / MPG;
+        moveInOutputs.residualCost += totalBundleResidues;
+        moveInOutputs.residualDiesel +=
+          (LowboyLoadsBundleResidues * 2 * input.moveInDistance) / MPG;
+      }
       break;
     case SystemTypes.cableManualWtLog:
       const LowboyLoadsCableManualWTlog = 3 + numChipper;
