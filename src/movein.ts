@@ -136,42 +136,56 @@ export function calculateMoveIn(input: MoveInInputs) {
     case SystemTypes.groundBasedMechWt:
       const LowboyLoadsMechWT = 4 + numChipper;
       const totalFixedMechWT =
-        fellerbuncherFixed + skidderFixed + processorFixed + loaderFixed + chipperFixed;
+        fellerbuncherFixed +
+        skidderFixed +
+        processorFixed +
+        loaderFixed +
+        numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsMechWT);
       const totalVariableMechWT =
         fellerbuncherVariable +
         skidderVariable +
         processorVariable +
         loaderVariable +
-        chipperVariable +
+        numChipper * chipperVariable +
         backhaulVariable;
       moveInOutputs.totalCost = totalFixedMechWT + totalVariableMechWT * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsMechWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualWt:
       const LowboyLoadsManualWT = 3 + numChipper;
-      const totalFixedManualWT = skidderFixed + processorFixed + loaderFixed + chipperFixed;
+      const totalFixedManualWT =
+        skidderFixed + processorFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsManualWT);
       const totalVariableManualWT =
-        skidderVariable + processorVariable + loaderVariable + chipperVariable + backhaulVariable;
+        skidderVariable +
+        processorVariable +
+        loaderVariable +
+        numChipper * chipperVariable +
+        backhaulVariable;
       moveInOutputs.totalCost = totalFixedManualWT + totalVariableManualWT * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedManualLog:
       const LowboyLoadsManualLog = 2 + numChipper;
-      const totalFixedManualLog = skidderFixed + loaderFixed + chipperFixed;
+      const totalFixedManualLog = skidderFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsManualLog);
       const totalVariableManualLog =
-        skidderVariable + loaderVariable + chipperVariable + backhaulVariable;
+        skidderVariable + loaderVariable + numChipper * chipperVariable + backhaulVariable;
       moveInOutputs.totalCost = totalFixedManualLog + totalVariableManualLog * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.groundBasedCtl:
       const LowboyLoadsGroundCTL = 3 + numChipper;
-      const totalFixedGroundCTL = harvesterFixed + forwarderFixed + loaderFixed + chipperFixed;
+      const totalFixedGroundCTL =
+        harvesterFixed + forwarderFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsGroundCTL);
       const totalVariableGroundCTL =
-        harvesterVariable + forwarderVariable + loaderVariable + chipperVariable + backhaulVariable;
+        harvesterVariable +
+        forwarderVariable +
+        loaderVariable +
+        numChipper * chipperVariable +
+        backhaulVariable;
       moveInOutputs.totalCost = totalFixedGroundCTL + totalVariableGroundCTL * input.moveInDistance;
       // Bundling Residues
       const LowboyLoadsBundleResidues = 2;
@@ -197,62 +211,73 @@ export function calculateMoveIn(input: MoveInInputs) {
       break;
     case SystemTypes.cableManualWtLog:
       const LowboyLoadsCableManualWTlog = 3 + numChipper;
-      const totalFixedCableManualWTlog = yarderFixed + loaderFixed + chipperFixed;
+      const totalFixedCableManualWTlog = yarderFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsCableManualWTlog);
       const totalVariableCableManualWTlog =
-        yarderVariable + loaderVariable + chipperVariable + backhaulVariable;
+        yarderVariable + loaderVariable + numChipper * chipperVariable + backhaulVariable;
       moveInOutputs.totalCost =
         totalFixedCableManualWTlog + totalVariableCableManualWTlog * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualWTlog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualWt:
       const LowboyLoadsCableManualWT = 4 + numChipper;
-      const totalFixedCableManualWT = yarderFixed + processorFixed + loaderFixed + chipperFixed;
+      const totalFixedCableManualWT =
+        yarderFixed + processorFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsCableManualWT);
       const totalVariableCableManualWT =
-        yarderVariable + processorVariable + loaderVariable + chipperVariable + backhaulVariable;
+        yarderVariable +
+        processorVariable +
+        loaderVariable +
+        numChipper * chipperVariable +
+        backhaulVariable;
       moveInOutputs.totalCost =
         totalFixedCableManualWT + totalVariableCableManualWT * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualWT * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableManualLog:
       const LowboyLoadsCableManualLog = 2 + numChipper;
-      const totalFixedCableManualLog = yarderFixed + loaderFixed + chipperFixed;
+      const totalFixedCableManualLog = yarderFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsCableManualLog);
       const totalVariableCableManualLog =
-        yarderVariable + loaderVariable + chipperVariable + backhaulVariable;
+        yarderVariable + loaderVariable + numChipper * chipperVariable + backhaulVariable;
       moveInOutputs.totalCost =
         totalFixedCableManualLog + totalVariableCableManualLog * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsCableManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.cableCtl:
       const LowboyLoadsCableCTL = 3 + numChipper;
-      const totalFixedCableCTL = harvesterFixed + yarderFixed + loaderFixed + chipperFixed;
+      const totalFixedCableCTL =
+        harvesterFixed + yarderFixed + loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsCableCTL);
       const totalVariableCableCTL =
-        harvesterVariable + yarderVariable + loaderVariable + chipperVariable + backhaulVariable;
+        harvesterVariable +
+        yarderVariable +
+        loaderVariable +
+        numChipper * chipperVariable +
+        backhaulVariable;
       moveInOutputs.totalCost = totalFixedCableCTL + totalVariableCableCTL * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsCableCTL * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterManualLog:
       const LowboyLoadsHManualLog = 2 + numChipper;
-      const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + chipperFixed;
+      const totalFixedHManualLog = helicopterFixed + 2 * loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsHManualLog);
       const totalVariableHManualLog =
-        helicopterVariable + 2 * loaderVariable + chipperVariable + backhaulVariable;
+        helicopterVariable + 2 * loaderVariable + numChipper * chipperVariable + backhaulVariable;
       moveInOutputs.totalCost =
         totalFixedHManualLog + totalVariableHManualLog * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsHManualLog * 2 * input.moveInDistance) / MPG;
       break;
     case SystemTypes.helicopterCtl:
       const LowboyLoadsHeliCTL = 3 + numChipper;
-      const totalFixedHeliCTL = harvesterFixed + helicopterFixed + 2 * loaderFixed + chipperFixed;
+      const totalFixedHeliCTL =
+        harvesterFixed + helicopterFixed + 2 * loaderFixed + numChipper * chipperFixed;
       backhaulVariable = BackhaulVariablefunc(LowboyLoadsHeliCTL);
       const totalVariableHeliCTL =
         harvesterVariable +
         helicopterVariable +
         2 * loaderVariable +
-        chipperVariable +
+        numChipper * chipperVariable +
         backhaulVariable;
       moveInOutputs.totalCost = totalFixedHeliCTL + totalVariableHeliCTL * input.moveInDistance;
       moveInOutputs.totalDiesel = (LowboyLoadsHeliCTL * 2 * input.moveInDistance) / MPG;
