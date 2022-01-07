@@ -42,8 +42,8 @@ function InLimits(input: FrcsInputs) {
       limit.YardingDistLimit = 0;
       break;
     case SystemTypes.groundBasedCtl:
-      limit.MaxLLTperAcre = 10;
-      limit.MaxLLTasPercentALT = 10;
+      limit.MaxLLTperAcre = 0;
+      limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
       limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
@@ -78,8 +78,8 @@ function InLimits(input: FrcsInputs) {
       limit.YardingDistLimit = 1300;
       break;
     case SystemTypes.cableCtl:
-      limit.MaxLLTperAcre = 10;
-      limit.MaxLLTasPercentALT = 10;
+      limit.MaxLLTperAcre = 0;
+      limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
       limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
@@ -96,8 +96,8 @@ function InLimits(input: FrcsInputs) {
       limit.YardingDistLimit = 10000;
       break;
     case SystemTypes.helicopterCtl:
-      limit.MaxLLTperAcre = 10;
-      limit.MaxLLTasPercentALT = 10;
+      limit.MaxLLTperAcre = 0;
+      limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
       limit.AvgTreeSizeLimit4Processing = 80;
       limit.AvgTreeSizeLimit4ManualFellLimbBuck = 0;
