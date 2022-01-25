@@ -123,9 +123,8 @@ export function groundManualWT(
     (weightAT > 0 ? SkidUnbunchedAllTrees2 * (weightCT / weightAT) : 0) + ChipWholeTrees2;
   const GasolineStump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf2 + ManualFellTreesLess80cf2;
-  const GasolineStump2Truck4ResiduesWithoutMovein = weightST
-    ? ManualFellTreesLess80cf2 * (weightCT / weightST)
-    : 0;
+  const GasolineStump2Truck4ResiduesWithoutMovein =
+    weightST > 0 ? ManualFellTreesLess80cf2 * (weightCT / weightST) : 0;
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
