@@ -83,8 +83,10 @@ export function cableManualLog(
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (ManualFellLimbBuckAllTrees + CableYardUnbunchedAllTrees) *
-      (intermediate.boleWeightCT / intermediate.boleWeight);
+    (intermediate.boleWeight > 0
+      ? (ManualFellLimbBuckAllTrees + CableYardUnbunchedAllTrees) *
+        (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFcableManualLog * BoleVolCCF
     : 0;
@@ -114,8 +116,9 @@ export function cableManualLog(
     (input.isBiomassSalvage === false ? LoadLogTrees2 : 0) +
     +ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    CableYardUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight) +
-    ChipTreeBoles2;
+    (intermediate.boleWeight > 0
+      ? CableYardUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0) + ChipTreeBoles2;
   const LowboyLoads = 3;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts
@@ -176,7 +179,9 @@ export function cableManualLog(
   frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;
   frcsOutputs.residual.gasolinePerAcre =
-    ManualFellLimbBuckAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight);
+    intermediate.boleWeight > 0
+      ? ManualFellLimbBuckAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0;
   frcsOutputs.residual.gasolinePerBoleCCF = frcsOutputs.residual.gasolinePerAcre / BoleVolCCF;
 
   if (input.isBiomassSalvage) {

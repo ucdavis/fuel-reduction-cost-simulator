@@ -97,8 +97,10 @@ export function groundCTL(
     ChipCTLChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipCTLChipTreeBoles +
-    (HarvestTreesLess80cf + ForwardTreesLess80cf) *
-      (intermediate.boleWeightCT / intermediate.boleWeightST);
+    (intermediate.boleWeightST > 0
+      ? (HarvestTreesLess80cf + ForwardTreesLess80cf) *
+        (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFgroundCTL * BoleVolCCF
     : 0;
@@ -133,9 +135,10 @@ export function groundCTL(
     (input.isBiomassSalvage === false ? LoadCTLlogTreesLess80cf2 : 0) +
     ChipCTLChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
-      (intermediate.boleWeightCT / intermediate.boleWeightST) +
-    ChipCTLChipTreeBoles2;
+    (intermediate.boleWeightST > 0
+      ? (HarvestTreesLess80cf2 + ForwardTreesLess80cf2) *
+        (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0) + ChipCTLChipTreeBoles2;
   const LowboyLoads = 4;
   const LowboyLoadsResidues = 2; // bundler and forwarder used to collect residues
   const mpg = 6;

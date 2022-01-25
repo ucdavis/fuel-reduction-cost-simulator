@@ -84,14 +84,13 @@ export function groundManualWT(
     SkidUnbunchedAllTrees +
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
+  const weightCT = intermediate.boleWeightCT + intermediate.residueCT;
+  const weightST = intermediate.boleWeightST + intermediate.residueST;
+  const weightAT = intermediate.boleWeight + intermediate.residue;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
-    ManualFellTreesLess80cf *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeightST + intermediate.residueST)) +
-    SkidUnbunchedAllTrees *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue));
+    (weightST > 0 ? ManualFellTreesLess80cf * (weightCT / weightST) : 0) +
+    (weightAT > 0 ? SkidUnbunchedAllTrees * (weightCT / weightAT) : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFmanualWT * BoleVolCCF
     : 0;
@@ -121,16 +120,12 @@ export function groundManualWT(
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf2 + LoadLogTrees2 : 0) +
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    SkidUnbunchedAllTrees2 *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue)) +
-    ChipWholeTrees2;
+    (weightAT > 0 ? SkidUnbunchedAllTrees2 * (weightCT / weightAT) : 0) + ChipWholeTrees2;
   const GasolineStump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckTreesLarger80cf2 + ManualFellTreesLess80cf2;
-  const GasolineStump2Truck4ResiduesWithoutMovein =
-    ManualFellTreesLess80cf2 *
-    ((intermediate.boleWeightCT + intermediate.residueCT) /
-      (intermediate.boleWeightST + intermediate.residueST));
+  const GasolineStump2Truck4ResiduesWithoutMovein = weightST
+    ? ManualFellTreesLess80cf2 * (weightCT / weightST)
+    : 0;
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts

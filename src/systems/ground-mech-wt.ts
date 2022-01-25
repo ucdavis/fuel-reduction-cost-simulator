@@ -94,14 +94,13 @@ export function groundMechWT(
     SkidBunchedAllTrees +
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf + LoadLogTrees : 0) +
     ChipWholeTrees;
+  const weightCT = intermediate.boleWeightCT + intermediate.residueCT;
+  const weightST = intermediate.boleWeightST + intermediate.residueST;
+  const weightAT = intermediate.boleWeight + intermediate.residue;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
-    FellAndBunchTreesLess80cf *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeightST + intermediate.residueST)) +
-    SkidBunchedAllTrees *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue));
+    (weightST > 0 ? FellAndBunchTreesLess80cf * (weightCT / weightST) : 0) +
+    (weightAT > 0 ? SkidBunchedAllTrees * (weightCT / weightAT) : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFmechWT * BoleVolCCF
     : 0;
@@ -132,12 +131,8 @@ export function groundMechWT(
     (input.isBiomassSalvage === false ? ProcessLogTreesLess80cf2 + LoadLogTrees2 : 0) +
     ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    FellAndBunchTreesLess80cf2 *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeightST + intermediate.residueST)) +
-    SkidBunchedAllTrees2 *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue));
+    (weightST > 0 ? FellAndBunchTreesLess80cf2 * (weightCT / weightST) : 0) +
+    (weightAT > 0 ? SkidBunchedAllTrees2 * (weightCT / weightAT) : 0);
   const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckTreesLarger80cf2;
   const LowboyLoads = 5;
   const mpg = 6;
@@ -202,7 +197,8 @@ export function groundMechWT(
     ResidueRecoveredOptional + intermediate.boleWeightCT + ResidueRecoveredPrimary;
   frcsOutputs.residual.costPerAcre = Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre =
     DieselStump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein2 + ChipWholeTrees2;

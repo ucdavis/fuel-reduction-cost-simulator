@@ -73,8 +73,10 @@ export function helicopterManualLog(
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (ManualFellLimbBuckAllTrees + HeliYardUnbunchedAllTrees) *
-      (intermediate.boleWeightCT / intermediate.boleWeight);
+    (intermediate.boleWeight > 0
+      ? (ManualFellLimbBuckAllTrees + HeliYardUnbunchedAllTrees) *
+        (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFhManualLog * BoleVolCCF
     : 0;
@@ -106,10 +108,14 @@ export function helicopterManualLog(
     : 0;
   const GasolineStump2Truck4PrimaryProductWithoutMovein = ManualFellLimbBuckAllTrees2;
   const GasolineStump2Truck4ResiduesWithoutMovein =
-    ManualFellLimbBuckAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight);
+    intermediate.boleWeight > 0
+      ? ManualFellLimbBuckAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0;
   const JetFuelStump2Truck4PrimaryProductWithoutMovein = HeliYardUnbunchedAllTrees2;
   const JetFuelStump2Truck4ResiduesWithoutMovein =
-    HeliYardUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight);
+    intermediate.boleWeight > 0
+      ? HeliYardUnbunchedAllTrees2 * (intermediate.boleWeightCT / intermediate.boleWeight)
+      : 0;
 
   // III. Summaries
   const frcsOutputs: FrcsOutputs = {
