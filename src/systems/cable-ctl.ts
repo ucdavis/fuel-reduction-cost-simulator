@@ -72,8 +72,10 @@ export function cableCTL(
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (HarvestTreesLess80cf + CableYardCTLtreesLess80cf) *
-      (intermediate.boleWeightCT / intermediate.boleWeightST);
+    (intermediate.boleWeightST > 0
+      ? (HarvestTreesLess80cf + CableYardCTLtreesLess80cf) *
+        (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFcableCTL * BoleVolCCF
     : 0;
@@ -101,9 +103,10 @@ export function cableCTL(
     (input.isBiomassSalvage === false ? LoadCTLlogTreesLess80cf2 : 0) +
     ChipTreeBoles2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    (HarvestTreesLess80cf2 + CableYardCTLtreesLess80cf2) *
-      (intermediate.boleWeightCT / intermediate.boleWeightST) +
-    ChipTreeBoles2;
+    (intermediate.boleWeightST > 0
+      ? (HarvestTreesLess80cf2 + CableYardCTLtreesLess80cf2) *
+        (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0) + ChipTreeBoles2;
   const LowboyLoads = 4;
   const mpg = 6;
   const Movein4PrimaryProduct2 = input.includeMoveInCosts

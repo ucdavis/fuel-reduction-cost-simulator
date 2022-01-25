@@ -92,12 +92,12 @@ export function cableManualWTLog(
     CableYardUnbunchedAllTrees +
     (input.isBiomassSalvage === false ? LoadLogTrees : 0) +
     ChipWholeTrees;
+  const weightCT = intermediate.boleWeightCT + intermediate.residueCT;
+  const weightAT = intermediate.boleWeight + intermediate.residue;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipWholeTrees +
     ManualFellChipTrees +
-    CableYardUnbunchedAllTrees *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue));
+    (weightAT > 0 ? CableYardUnbunchedAllTrees * (weightCT / weightAT) : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFcableManualWTLog * BoleVolCCF
     : 0;
@@ -129,10 +129,7 @@ export function cableManualWTLog(
     (input.isBiomassSalvage === false ? LoadLogTrees2 : 0) +
     +ChipWholeTrees2;
   const DieselStump2Truck4ResiduesWithoutMovein =
-    CableYardUnbunchedAllTrees2 *
-      ((intermediate.boleWeightCT + intermediate.residueCT) /
-        (intermediate.boleWeight + intermediate.residue)) +
-    ChipWholeTrees2;
+    (weightAT > 0 ? CableYardUnbunchedAllTrees2 * (weightCT / weightAT) : 0) + ChipWholeTrees2;
   const GasolineStump2Truck4PrimaryProductWithoutMovein =
     ManualFellLimbBuckAllLogTrees2 + ManualFellChipTrees2;
   const GasolineStump2Truck4ResiduesWithoutMovein = ManualFellChipTrees2;

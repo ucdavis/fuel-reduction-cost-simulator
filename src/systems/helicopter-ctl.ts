@@ -73,8 +73,10 @@ export function helicopterCTL(
     ChipTreeBoles;
   const Stump2Truck4ResiduesWithoutMovein =
     ChipTreeBoles +
-    (HarvestTreesLess80cf + HeliYardCTLtreesLess80cf) *
-      (intermediate.boleWeightCT / intermediate.boleWeightST);
+    (intermediate.boleWeightST > 0
+      ? (HarvestTreesLess80cf + HeliYardCTLtreesLess80cf) *
+        (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0);
   const Movein4PrimaryProduct = input.includeMoveInCosts
     ? MoveInCostsResults.CostPerCCFheliCTL * BoleVolCCF
     : 0;
@@ -108,7 +110,9 @@ export function helicopterCTL(
     : 0;
   const JetFuelStump2Truck4PrimaryProductWithoutMovein = HeliYardCTLtreesLess80cf2;
   const JetFuelStump2Truck4ResiduesWithoutMovein =
-    HeliYardCTLtreesLess80cf2 * (intermediate.boleWeightCT / intermediate.boleWeightST);
+    intermediate.boleWeightST > 0
+      ? HeliYardCTLtreesLess80cf2 * (intermediate.boleWeightCT / intermediate.boleWeightST)
+      : 0;
 
   // III. Summaries
   const frcsOutputs: FrcsOutputs = {
@@ -162,7 +166,8 @@ export function helicopterCTL(
   frcsOutputs.residual.costPerAcre =
     Stump2Truck4ResiduesWithoutMovein + OntoTruck4ResiduesWoMovein + Movein4Residues;
   frcsOutputs.residual.costPerBoleCCF = frcsOutputs.residual.costPerAcre / BoleVolCCF;
-  frcsOutputs.residual.costPerGT = frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
+  frcsOutputs.residual.costPerGT =
+    frcsOutputs.residual.costPerAcre / frcsOutputs.total.yieldPerAcre;
   // Fuel
   frcsOutputs.residual.dieselPerAcre = DieselStump2Truck4ResiduesWithoutMovein;
   frcsOutputs.residual.dieselPerBoleCCF = frcsOutputs.residual.dieselPerAcre / BoleVolCCF;
