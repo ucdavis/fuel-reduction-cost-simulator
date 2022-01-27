@@ -133,8 +133,8 @@ export function calculateMoveIn(input: MoveInInputs) {
   };
   const numChipper = input.harvestChipTrees || input.includeCostsCollectChipResidues ? 1 : 0;
   moveInOutputs.residualCost =
-    numChipper * (chipperFixed + chipperVariable) +
-    backhaulVariablefunc(numChipper) * input.moveInDistance;
+    numChipper *
+    (chipperFixed + (chipperVariable + backhaulVariablefunc(numChipper)) * input.moveInDistance);
   moveInOutputs.residualDiesel = (numChipper * 2 * input.moveInDistance) / MPG;
 
   switch (input.system) {
