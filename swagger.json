@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a service for running FRCS on a harvest unit in California, funded by California Energy Commission.",
+    "description": "FRCS is used for estimating costs for fuel reduction treatments involving removal of trees of mixed sizes in the form of whole trees, logs, or chips from a forest. It was originally a spreadsheet application published by U.S. Forest Service.",
     "version": "1.2.9",
     "title": "Fuel Reduction Cost Simulator Web Service",
     "contact": {
