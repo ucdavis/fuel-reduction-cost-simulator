@@ -81,6 +81,11 @@ const testBiomassSalvage: FrcsInputs = {
   isBiomassSalvage: true,
 };
 
+const testExcludeLoadingCosts: FrcsInputs = {
+  ...testGroundMechWt,
+  includeLoadingCosts: false,
+};
+
 export {
   testGroundMechWt,
   testGroundManualWt,
@@ -95,4 +100,5 @@ export {
   testMoveIn,
   testPartialCut,
   testBiomassSalvage,
+  testExcludeLoadingCosts,
 };
