@@ -8,6 +8,7 @@ import {
   testGroundManualLog,
   testGroundManualWt,
   testGroundMechWt,
+  testHelicopterCtl,
   testHelicopterManualLog,
 } from './test.data';
 
@@ -243,4 +244,30 @@ test('testHelicopterManualLog', () => {
   expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(9))).toBe(0.015323016);
   expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(9))).toBe(8.581076139);
   expect(parseFloat(res.residual.jetFuelPerBoleCCF.toFixed(9))).toBe(0.861782216);
+});
+
+test('testHelicopterCtl', () => {
+  const res = getFrcsOutputs(testHelicopterCtl);
+
+  expect(parseFloat(res.total.yieldPerAcre.toFixed(8))).toBe(22.06948616);
+  expect(parseFloat(res.total.costPerAcre.toFixed(6))).toBe(1301.274018);
+  expect(parseFloat(res.total.costPerBoleCCF.toFixed(7))).toBe(208.4941128);
+  expect(parseFloat(res.total.costPerGT.toFixed(8))).toBe(58.96258792);
+  expect(parseFloat(res.total.dieselPerAcre.toFixed(9))).toBe(8.937338816);
+  expect(parseFloat(res.total.dieselPerBoleCCF.toFixed(9))).toBe(1.431967827);
+  expect(parseFloat(res.total.gasolinePerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.total.gasolinePerBoleCCF.toFixed(0))).toBe(0);
+  expect(parseFloat(res.total.jetFuelPerAcre.toFixed(8))).toBe(39.91362045);
+  expect(parseFloat(res.total.jetFuelPerBoleCCF.toFixed(9))).toBe(6.395082643);
+
+  expect(parseFloat(res.residual.yieldPerAcre.toFixed(9))).toBe(6.456291679);
+  expect(parseFloat(res.residual.costPerAcre.toFixed(7))).toBe(385.9430324);
+  expect(parseFloat(res.residual.costPerBoleCCF.toFixed(8))).toBe(61.83697596);
+  expect(parseFloat(res.residual.costPerGT.toFixed(7))).toBe(17.4876311);
+  expect(parseFloat(res.residual.dieselPerAcre.toFixed(9))).toBe(1.642562703);
+  expect(parseFloat(res.residual.dieselPerBoleCCF.toFixed(9))).toBe(0.263176432);
+  expect(parseFloat(res.residual.gasolinePerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(7))).toBe(11.6764828);
+  expect(parseFloat(res.residual.jetFuelPerBoleCCF.toFixed(9))).toBe(1.870841875);
 });
