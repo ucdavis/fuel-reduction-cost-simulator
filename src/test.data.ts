@@ -37,9 +37,26 @@ const testGroundMechWt: FrcsInputs = {
   residueRecovFracCTL: 50,
 };
 
-const testGroundManualWt: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.groundBasedManualWt };
-const testGroundManualLog: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.groundBasedManualLog };
-const testCableManualWtLog: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableManualWtLog };
+const testGroundManualWt: FrcsInputs = {
+  ...testGroundMechWt,
+  system: SystemTypes.groundBasedManualWt,
+};
+const testGroundManualLog: FrcsInputs = {
+  ...testGroundMechWt,
+  system: SystemTypes.groundBasedManualLog,
+};
+const testCableManualWtLog: FrcsInputs = {
+  ...testGroundMechWt,
+  system: SystemTypes.cableManualWtLog,
+};
 const testCableManualWt: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableManualWt };
+const testCableManualLog: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableManualLog };
 
-export { testGroundMechWt, testGroundManualWt, testGroundManualLog, testCableManualWtLog, testCableManualWt };
+export {
+  testGroundMechWt,
+  testGroundManualWt,
+  testGroundManualLog,
+  testCableManualWtLog,
+  testCableManualWt,
+  testCableManualLog,
+};
