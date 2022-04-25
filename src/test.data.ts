@@ -65,6 +65,12 @@ const testHelicopterCtl: FrcsInputs = {
   system: SystemTypes.helicopterCtl,
 };
 
+const testMoveIn: FrcsInputs = {
+  ...testGroundMechWt,
+  includeMoveInCosts: true,
+  moveInDistance: 50,
+};
+
 export {
   testGroundMechWt,
   testGroundManualWt,
@@ -76,4 +82,5 @@ export {
   testCableCTL,
   testHelicopterManualLog,
   testHelicopterCtl,
+  testMoveIn,
 };

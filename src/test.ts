@@ -10,6 +10,7 @@ import {
   testGroundMechWt,
   testHelicopterCtl,
   testHelicopterManualLog,
+  testMoveIn,
 } from './test.data';
 
 test('testGroundMechWt', () => {
@@ -270,4 +271,30 @@ test('testHelicopterCtl', () => {
   expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(0))).toBe(0);
   expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(7))).toBe(11.6764828);
   expect(parseFloat(res.residual.jetFuelPerBoleCCF.toFixed(9))).toBe(1.870841875);
+});
+
+test('testMoveIn', () => {
+  const res = getFrcsOutputs(testMoveIn);
+
+  expect(parseFloat(res.total.yieldPerAcre.toFixed(8))).toBe(37.87998061);
+  expect(parseFloat(res.total.costPerAcre.toFixed(7))).toBe(734.8941541);
+  expect(parseFloat(res.total.costPerBoleCCF.toFixed(8))).toBe(73.80411299);
+  expect(parseFloat(res.total.costPerGT.toFixed(8))).toBe(19.40059478);
+  expect(parseFloat(res.total.dieselPerAcre.toFixed(7))).toBe(15.2506596);
+  expect(parseFloat(res.total.dieselPerBoleCCF.toFixed(9))).toBe(1.531596622);
+  expect(parseFloat(res.total.gasolinePerAcre.toFixed(9))).toBe(0.289099958);
+  expect(parseFloat(res.total.gasolinePerBoleCCF.toFixed(9))).toBe(0.029033795);
+  expect(parseFloat(res.total.jetFuelPerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.total.jetFuelPerBoleCCF.toFixed(0))).toBe(0);
+
+  expect(parseFloat(res.residual.yieldPerAcre.toFixed(8))).toBe(11.55664724);
+  expect(parseFloat(res.residual.costPerAcre.toFixed(7))).toBe(153.2614717);
+  expect(parseFloat(res.residual.costPerBoleCCF.toFixed(8))).toBe(15.39177705);
+  expect(parseFloat(res.residual.costPerGT.toFixed(9))).toBe(4.045975452);
+  expect(parseFloat(res.residual.dieselPerAcre.toFixed(9))).toBe(4.409948082);
+  expect(parseFloat(res.residual.dieselPerBoleCCF.toFixed(9))).toBe(0.442883243);
+  expect(parseFloat(res.residual.gasolinePerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.jetFuelPerBoleCCF.toFixed(0))).toBe(0);
 });
