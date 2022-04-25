@@ -45,6 +45,10 @@ const testGroundManualLog: FrcsInputs = {
   ...testGroundMechWt,
   system: SystemTypes.groundBasedManualLog,
 };
+const testGroundBasedCtl: FrcsInputs = {
+  ...testGroundMechWt,
+  system: SystemTypes.groundBasedCtl,
+};
 const testCableManualWtLog: FrcsInputs = {
   ...testGroundMechWt,
   system: SystemTypes.cableManualWtLog,
@@ -60,6 +64,7 @@ export {
   testGroundMechWt,
   testGroundManualWt,
   testGroundManualLog,
+  testGroundBasedCtl,
   testCableManualWtLog,
   testCableManualWt,
   testCableManualLog,
