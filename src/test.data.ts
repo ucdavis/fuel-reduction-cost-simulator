@@ -55,6 +55,7 @@ const testCableManualWtLog: FrcsInputs = {
 };
 const testCableManualWt: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableManualWt };
 const testCableManualLog: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableManualLog };
+const testCableCTL: FrcsInputs = { ...testGroundMechWt, system: SystemTypes.cableCtl };
 const testHelicopterManualLog: FrcsInputs = {
   ...testGroundMechWt,
   system: SystemTypes.helicopterManualLog,
@@ -68,5 +69,6 @@ export {
   testCableManualWtLog,
   testCableManualWt,
   testCableManualLog,
+  testCableCTL,
   testHelicopterManualLog,
 };
