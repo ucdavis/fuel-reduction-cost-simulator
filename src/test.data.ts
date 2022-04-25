@@ -76,6 +76,11 @@ const testPartialCut: FrcsInputs = {
   isPartialCut: true,
 };
 
+const testBiomassSalvage: FrcsInputs = {
+  ...testGroundMechWt,
+  isBiomassSalvage: true,
+};
+
 export {
   testGroundMechWt,
   testGroundManualWt,
@@ -89,4 +94,5 @@ export {
   testHelicopterCtl,
   testMoveIn,
   testPartialCut,
+  testBiomassSalvage,
 };
