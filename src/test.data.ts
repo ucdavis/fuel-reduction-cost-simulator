@@ -71,6 +71,11 @@ const testMoveIn: FrcsInputs = {
   moveInDistance: 50,
 };
 
+const testPartialCut: FrcsInputs = {
+  ...testGroundMechWt,
+  isPartialCut: true,
+};
+
 export {
   testGroundMechWt,
   testGroundManualWt,
@@ -83,4 +88,5 @@ export {
   testHelicopterManualLog,
   testHelicopterCtl,
   testMoveIn,
+  testPartialCut,
 };

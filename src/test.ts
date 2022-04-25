@@ -11,6 +11,7 @@ import {
   testHelicopterCtl,
   testHelicopterManualLog,
   testMoveIn,
+  testPartialCut,
 } from './test.data';
 
 test('testGroundMechWt', () => {
@@ -293,6 +294,32 @@ test('testMoveIn', () => {
   expect(parseFloat(res.residual.costPerGT.toFixed(9))).toBe(4.045975452);
   expect(parseFloat(res.residual.dieselPerAcre.toFixed(9))).toBe(4.409948082);
   expect(parseFloat(res.residual.dieselPerBoleCCF.toFixed(9))).toBe(0.442883243);
+  expect(parseFloat(res.residual.gasolinePerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.residual.jetFuelPerBoleCCF.toFixed(0))).toBe(0);
+});
+
+test('testPartialCut', () => {
+  const res = getFrcsOutputs(testPartialCut);
+
+  expect(parseFloat(res.total.yieldPerAcre.toFixed(8))).toBe(37.87998061);
+  expect(parseFloat(res.total.costPerAcre.toFixed(7))).toBe(696.5580064);
+  expect(parseFloat(res.total.costPerBoleCCF.toFixed(8))).toBe(69.95408184);
+  expect(parseFloat(res.total.costPerGT.toFixed(8))).toBe(18.38855235);
+  expect(parseFloat(res.total.dieselPerAcre.toFixed(8))).toBe(14.30636276);
+  expect(parseFloat(res.total.dieselPerBoleCCF.toFixed(8))).toBe(1.43676257);
+  expect(parseFloat(res.total.gasolinePerAcre.toFixed(9))).toBe(0.289099958);
+  expect(parseFloat(res.total.gasolinePerBoleCCF.toFixed(9))).toBe(0.029033795);
+  expect(parseFloat(res.total.jetFuelPerAcre.toFixed(0))).toBe(0);
+  expect(parseFloat(res.total.jetFuelPerBoleCCF.toFixed(0))).toBe(0);
+
+  expect(parseFloat(res.residual.yieldPerAcre.toFixed(8))).toBe(11.55664724);
+  expect(parseFloat(res.residual.costPerAcre.toFixed(7))).toBe(166.9937862);
+  expect(parseFloat(res.residual.costPerBoleCCF.toFixed(8))).toBe(16.77088897);
+  expect(parseFloat(res.residual.costPerGT.toFixed(9))).toBe(4.408497141);
+  expect(parseFloat(res.residual.dieselPerAcre.toFixed(9))).toBe(4.733662234);
+  expect(parseFloat(res.residual.dieselPerBoleCCF.toFixed(9))).toBe(0.47539328);
   expect(parseFloat(res.residual.gasolinePerAcre.toFixed(0))).toBe(0);
   expect(parseFloat(res.residual.gasolinePerBoleCCF.toFixed(0))).toBe(0);
   expect(parseFloat(res.residual.jetFuelPerAcre.toFixed(0))).toBe(0);
