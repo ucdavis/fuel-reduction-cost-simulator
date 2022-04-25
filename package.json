@@ -17,7 +17,7 @@
     "dev": "npm run build && node ./out/server.js",
     "watch": "nodemon --watch . -i out -e ts --exec npm run dev",
     "start": "node ./out/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run build && jest ./out",
     "prepublishOnly": "tsc -p ./ --outDir out/"
   },
   "dependencies": {
