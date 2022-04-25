@@ -86,6 +86,11 @@ const testExcludeLoadingCosts: FrcsInputs = {
   includeLoadingCosts: false,
 };
 
+const testExcludeCollectChipResiduesCosts: FrcsInputs = {
+  ...testGroundMechWt,
+  includeCostsCollectChipResidues: false,
+};
+
 export {
   testGroundMechWt,
   testGroundManualWt,
@@ -101,4 +106,5 @@ export {
   testPartialCut,
   testBiomassSalvage,
   testExcludeLoadingCosts,
+  testExcludeCollectChipResiduesCosts,
 };
