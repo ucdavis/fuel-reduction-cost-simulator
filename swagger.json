@@ -1,14 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "FRCS is used for estimating costs for fuel reduction treatments involving removal of trees of mixed sizes in the form of whole trees, logs, or chips from a forest. It was originally a spreadsheet application published by U.S. Forest Service.",
     "version": "1.2.9",
     "title": "Fuel Reduction Cost Simulator Web Service",
     "contact": {
       "email": "kkyli@ucdavis.edu"
     },
     "license": {
-      "name": "MIT License",
+      "name": "MIT license",
       "url": "https://github.com/ucdavis/fuel-reduction-cost-simulator/blob/master/LICENSE"
     }
   },
@@ -17,7 +16,7 @@
       "post": {
         "tags": ["FRCS"],
         "summary": "Get FRCS Outputs",
-        "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual Log | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Max CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max SLT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Max LLT, ft3 | 250 |  | 250 | 250 | 250 | 250 | 250 |  | 250 |  |\n| Max LLT/ac |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max LLT as % of ALT |  | 10 |  |  |  |  |  | 10 |  | 10 |\n| Max slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Max Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
+        "description": "| Limits | Ground-Based Mech WT | Ground-Based CTL | Ground-Based Manual WT | Ground-Based Manual Log | Cable Manual WT/Log | Cable Manual WT | Cable Manual Log | Cable CTL | Helicopter Manual Log | Helicopter CTL |\n|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| TreeVol Maximum CT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Maximum SLT, ft3 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 | 80 |\n| TreeVol Maximum LLT, ft3 | 250 |  | 250 | 250 | 250 | 250 | 250 |  | 250 |  |\n| Maximum slope, % | 40 | 40 | 40 | 40 | 100 | 100 | 100 | 40 | 100 | 40 |\n| Maximum Yarding Dist, ft |  |  |  |  | 1300 | 1300 | 1300 | 1300 | 10000 | 10000 |\n",
         "operationId": "getFrcsOutputs",
         "produces": ["application/json"],
         "parameters": [
@@ -49,7 +48,7 @@
       "properties": {
         "system": {
           "type": "string",
-          "example": "Cable Manual WT",
+          "example": "Ground-Based Mech WT",
           "description": "Selected from the ten harvesting systems including four ground-based systems, four cable-yarding systems, and two helicopter systems.",
           "enum": [
             "Ground-Based Mech WT",
@@ -66,25 +65,25 @@
         },
         "isPartialCut": {
           "type": "boolean",
-          "example": true,
+          "example": false,
           "description": "Indicate the type of harvest: if true, partial-cut; otherwise clear-cut."
         },
         "deliverToLandingDistance": {
           "type": "number",
           "format": "float",
-          "example": 400,
+          "example": 553.905970179181,
           "description": "Distance that trees or logs are moved from the stump to be delivered to the landing. Subject to the selected harvesting system, trees or logs can be yarded, skidded, or forwarded to the landing."
         },
         "slope": {
           "type": "number",
           "format": "float",
-          "example": 30,
+          "example": 12.4204116232628,
           "description": "Average fall-line slope (%) of the harvest unit"
         },
         "elevation": {
           "type": "number",
           "format": "float",
-          "example": 5000,
+          "example": 1586.29244594638,
           "description": "Elevation (ft) is required for helicopter systems."
         },
         "includeLoadingCosts": {
@@ -94,19 +93,19 @@
         },
         "includeMoveInCosts": {
           "type": "boolean",
-          "example": true,
+          "example": false,
           "description": "Indicate whether to include the costs of moving equipment to the harvest unit."
         },
         "area": {
           "type": "number",
           "format": "float",
-          "example": 1,
+          "example": 32.025456,
           "description": "Area (acres) of the harvest unit"
         },
         "moveInDistance": {
           "type": "number",
           "format": "float",
-          "example": 2,
+          "example": 0,
           "description": "One-way distance (miles) of moving harvesting equipment to the harvest unit"
         },
         "includeCostsCollectChipResidues": {
@@ -117,106 +116,97 @@
         "woodDensityCT": {
           "type": "number",
           "format": "float",
-          "default": 60,
-          "example": 60,
+          "example": 81.08754477475162,
           "description": "Ratio (%) of chip tree green weight to green volume (pounds per cubic foot)"
         },
         "woodDensitySLT": {
           "type": "number",
           "format": "float",
-          "default": 60,
-          "example": 58.6235,
+          "example": 67.169795406641,
           "description": "Ratio (%) of small log tree green weight to green volume (pounds per cubic foot)"
         },
         "woodDensityLLT": {
           "type": "number",
           "format": "float",
-          "default": 60,
-          "example": 62.1225,
+          "example": 57.64241518721146,
           "description": "Ratio (%) of large log tree green weight to green volume (pounds per cubic foot)"
         },
         "residueFractionCT": {
           "type": "number",
           "format": "float",
-          "default": 0,
-          "example": 0,
+          "example": 0.2695949034364167,
           "description": "Ratio of the green weight of chip tree tops and limbs to the green weight of the tree bole"
         },
         "residueFractionSLT": {
           "type": "number",
           "format": "float",
-          "default": 0,
-          "example": 0.25,
+          "example": 0.2968554014193552,
           "description": "Ratio of the green weight of small log tree tops and limbs to the green weight of the tree bole"
         },
         "residueFractionLLT": {
           "type": "number",
           "format": "float",
-          "default": 0,
-          "example": 0.38,
+          "example": 0.2635482997321487,
           "description": "Ratio of the green weight of large log tree tops and limbs to the green weight of the tree bole"
         },
         "hardwoodFractionCT": {
           "type": "number",
           "format": "float",
-          "default": 0,
           "example": 0.2,
           "description": "Ratio of the green volume of hardwood to the total green volume of chip trees in the harvest unit"
         },
         "hardwoodFractionSLT": {
           "type": "number",
           "format": "float",
-          "default": 0,
           "example": 0,
           "description": "Ratio of the green volume of hardwood to the total green volume of small log trees in the harvest unit"
         },
         "hardwoodFractionLLT": {
           "type": "number",
           "format": "float",
-          "default": 0,
           "example": 0,
           "description": "Ratio of the green volume of hardwood to the total green volume of large log trees in the harvest unit"
         },
         "treesPerAcreCT": {
           "type": "number",
           "format": "float",
-          "example": 20,
+          "example": 77.4143957724794,
           "description": "Number of chip trees/acre"
         },
         "volumeCT": {
           "type": "number",
           "format": "float",
-          "example": 50,
+          "example": 2.05701405451453,
           "description": "Volume of chip trees (cf/tree)"
         },
         "treesPerAcreSLT": {
           "type": "number",
           "format": "float",
-          "example": 50,
+          "example": 19.6966665842466,
           "description": "Number of small log trees/acre"
         },
         "volumeSLT": {
           "type": "number",
           "format": "float",
-          "example": 70,
+          "example": 23.6023369439501,
           "description": "Volume of small log trees (cf/tree)"
         },
         "treesPerAcreLLT": {
           "type": "number",
           "format": "float",
-          "example": 5,
+          "example": 2.69861110290771,
           "description": "Number of large log trees/acre"
         },
         "volumeLLT": {
           "type": "number",
           "format": "float",
-          "example": 100,
+          "example": 137.702754194984,
           "description": "Volume of large log trees (cf/tree)"
         },
         "dieselFuelPrice": {
           "type": "number",
           "format": "float",
-          "example": 3.61,
+          "example": 2.24,
           "description": "Current wholesale price ($/gallon) of low-sulfur diesel fuel in the California"
         },
         "moistureContent": {
@@ -272,11 +262,21 @@
         "isPartialCut",
         "deliverToLandingDistance",
         "slope",
+        "elevation",
         "includeLoadingCosts",
         "includeMoveInCosts",
         "area",
         "moveInDistance",
         "includeCostsCollectChipResidues",
+        "woodDensityCT",
+        "woodDensitySLT",
+        "woodDensityLLT",
+        "residueFractionCT",
+        "residueFractionSLT",
+        "residueFractionLLT",
+        "hardwoodFractionCT",
+        "hardwoodFractionSLT",
+        "hardwoodFractionLLT",
         "treesPerAcreCT",
         "volumeCT",
         "treesPerAcreSLT",
@@ -284,6 +284,7 @@
         "treesPerAcreLLT",
         "volumeLLT",
         "dieselFuelPrice",
+        "moistureContent",
         "isBiomassSalvage",
         "wageFaller",
         "wageOther",
@@ -316,49 +317,49 @@
         "yieldPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 168.639975,
+          "example": 37.87998060825467,
           "description": "Total yield (GT/acre)"
         },
         "costPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 3708.621951,
+          "example": 627.3814992388325,
           "description": "Total harvest cost ($/acre)"
         },
         "costPerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 74.17243903,
+          "example": 63.00680825182345,
           "description": "Total harvest cost ($/CCF)"
         },
         "costPerGT": {
           "type": "number",
           "format": "float",
-          "example": 21.99135734,
+          "example": 16.562350063667026,
           "description": "Total harvest cost ($/GT)"
         },
         "dieselPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 50.99159554,
+          "example": 12.648562901817883,
           "description": "Total diesel consumption (gal/acre)"
         },
         "dieselPerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 1.0198319107071314,
+          "example": 1.2702726783988008,
           "description": "Total diesel consumption (gal/CCF)"
         },
         "gasolinePerAcre": {
           "type": "number",
           "format": "float",
-          "example": 0.388986296,
+          "example": 0.2890999584945396,
           "description": "Total gasoline consumption (gal/acre)"
         },
         "gasolinePerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 0.007779725917184,
+          "example": 0.02903379470477717,
           "description": "Total gasoline consumption (gal/CCF)"
         },
         "jetFuelPerAcre": {
@@ -384,49 +385,49 @@
         "yieldPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 50.518225,
+          "example": 11.556647235892862,
           "description": "Feedstock yield (GT/acre)"
         },
         "costPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 534.2228831,
+          "example": 153.26147167945427,
           "description": "Feedstock harvest cost ($/acre)"
         },
         "costPerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 10.68445766,
+          "example": 15.391777045091967,
           "description": "Feedstock harvest cost ($/CCF)"
         },
         "costPerGT": {
           "type": "number",
           "format": "float",
-          "example": 3.167830659,
+          "example": 4.04597545242819,
           "description": "Feedstock harvest cost ($/GT)"
         },
         "dieselPerAcre": {
           "type": "number",
           "format": "float",
-          "example": 15.64078771,
+          "example": 4.409948082301028,
           "description": "Diesel consumption associated with feedstock harvest (gal/acre)"
         },
         "dieselPerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 15.64078771,
+          "example": 0.44288324338404267,
           "description": "Diesel consumption associated with feedstock harvest (gal/CCF)"
         },
         "gasolinePerAcre": {
           "type": "number",
           "format": "float",
-          "example": 0.066371983,
+          "example": 0,
           "description": "Gasoline consumption associated with feedstock harvest (gal/acre)"
         },
         "gasolinePerBoleCCF": {
           "type": "number",
           "format": "float",
-          "example": 0.066371983,
+          "example": 0,
           "description": "Gasoline consumption associated with feedstock harvest (gal/CCF)"
         },
         "jetFuelPerAcre": {
