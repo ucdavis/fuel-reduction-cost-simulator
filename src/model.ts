@@ -208,7 +208,7 @@ export interface IntermediateVariables {
 }
 
 export interface FrcsOutputs {
-  total: {
+  totalBiomass: {
     yieldPerAcre: number;
     costPerAcre: number;
     costPerBoleCCF: number;
@@ -220,7 +220,7 @@ export interface FrcsOutputs {
     jetFuelPerAcre: number;
     jetFuelPerBoleCCF: number;
   };
-  residual: {
+  feedstock: {
     yieldPerAcre: number;
     costPerAcre: number;
     costPerBoleCCF: number;
