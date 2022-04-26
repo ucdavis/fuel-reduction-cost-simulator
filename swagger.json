@@ -299,18 +299,18 @@
     "FrcsOutputs": {
       "type": "object",
       "properties": {
-        "total": {
-          "$ref": "#/definitions/Total"
+        "totalBiomass": {
+          "$ref": "#/definitions/TotalBiomass"
         },
-        "residual": {
-          "$ref": "#/definitions/Residual"
+        "feedstock": {
+          "$ref": "#/definitions/Feedstock"
         }
       },
       "xml": {
         "name": "FrcsOutputs"
       }
     },
-    "Total": {
+    "TotalBiomass": {
       "type": "object",
       "properties": {
         "yieldPerAcre": {
@@ -375,10 +375,10 @@
         }
       },
       "xml": {
-        "name": "Total"
+        "name": "TotalBiomass"
       }
     },
-    "Residual": {
+    "Feedstock": {
       "type": "object",
       "properties": {
         "yieldPerAcre": {
@@ -443,7 +443,7 @@
         }
       },
       "xml": {
-        "name": "Residual"
+        "name": "Feedstock"
       }
     }
   },

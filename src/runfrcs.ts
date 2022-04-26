@@ -163,7 +163,7 @@ function calculate(input: FrcsInputs) {
     ResidueRecovFracCTL: 0,
   };
   let output: FrcsOutputs = {
-    total: {
+    totalBiomass: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,
@@ -175,7 +175,7 @@ function calculate(input: FrcsInputs) {
       jetFuelPerAcre: 0,
       jetFuelPerBoleCCF: 0,
     },
-    residual: {
+    feedstock: {
       yieldPerAcre: 0,
       costPerAcre: 0,
       costPerBoleCCF: 0,
@@ -206,25 +206,25 @@ function calculate(input: FrcsInputs) {
     const originalTreeVolLLT = input.volumeLLT;
     input.volumeLLT = 250;
     output = calculate(input);
-    const costCCF = output.total.costPerBoleCCF;
-    const dieselCCF = output.total.dieselPerBoleCCF;
-    const gasolineCCF = output.total.gasolinePerBoleCCF;
-    const jetFuelCCF = output.total.jetFuelPerBoleCCF;
+    const costCCF = output.totalBiomass.costPerBoleCCF;
+    const dieselCCF = output.totalBiomass.dieselPerBoleCCF;
+    const gasolineCCF = output.totalBiomass.gasolinePerBoleCCF;
+    const jetFuelCCF = output.totalBiomass.jetFuelPerBoleCCF;
 
     input.volumeLLT = originalTreeVolLLT;
     intermediate = calculateIntermediate(input, intermediate, assumption);
     const AmountRecovered = calculateAmountsRecovered(input, intermediate, assumption);
     const cost = costCCF * AmountRecovered.BoleVolCCF;
-    output.total.yieldPerAcre = AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
-    output.total.costPerAcre = cost / input.area;
-    output.total.costPerGT = cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+    output.totalBiomass.yieldPerAcre = AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
+    output.totalBiomass.costPerAcre = cost / input.area;
+    output.totalBiomass.costPerGT = cost / AmountRecovered.TotalPrimaryProductsAndOptionalResidues;
 
     const diesel = dieselCCF * AmountRecovered.BoleVolCCF;
     const gasoline = gasolineCCF * AmountRecovered.BoleVolCCF;
     const jetFuel = jetFuelCCF * AmountRecovered.BoleVolCCF;
-    output.total.dieselPerAcre = diesel / input.area;
-    output.total.gasolinePerAcre = gasoline / input.area;
-    output.total.jetFuelPerAcre = jetFuel / input.area;
+    output.totalBiomass.dieselPerAcre = diesel / input.area;
+    output.totalBiomass.gasolinePerAcre = gasoline / input.area;
+    output.totalBiomass.jetFuelPerAcre = jetFuel / input.area;
     return output;
   }
 
