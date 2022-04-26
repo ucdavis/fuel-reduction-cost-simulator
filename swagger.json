@@ -50,7 +50,7 @@
         "system": {
           "type": "string",
           "example": "Cable Manual WT",
-          "description": "Select from a list of 10 types of harvesting systems.",
+          "description": "Selected from the ten harvesting systems including four ground-based systems, four cable-yarding systems, and two helicopter systems.",
           "enum": [
             "Ground-Based Mech WT",
             "Ground-Based Manual WT",
@@ -73,198 +73,198 @@
           "type": "number",
           "format": "float",
           "example": 400,
-          "description": "Average distance in feet that logs or trees are delivered to the landing. For ground-based and cable systems this is measured along the slope."
+          "description": "Distance that trees or logs are moved from the stump to be delivered to the landing. Subject to the selected harvesting system, trees or logs can be yarded, skidded, or forwarded to the landing."
         },
         "slope": {
           "type": "number",
           "format": "float",
           "example": 30,
-          "description": "The average fall-line slope for the harvest unit, measured as a percentage."
+          "description": "Average fall-line slope (%) of the harvest unit"
         },
         "elevation": {
           "type": "number",
           "format": "float",
           "example": 5000,
-          "description": "elevation in feet is required for helicopter systems."
+          "description": "Elevation (ft) is required for helicopter systems."
         },
         "includeLoadingCosts": {
           "type": "boolean",
           "example": true,
-          "description": "Indicate whether the costs of fuel loading needs to be included."
+          "description": "Indicate whether to include the costs of fuel loading."
         },
         "includeMoveInCosts": {
           "type": "boolean",
           "example": true,
-          "description": "Indicate whether the costs of moving equipment to the harvesting unit needs to be included."
+          "description": "Indicate whether to include the costs of moving equipment to the harvest unit."
         },
         "area": {
           "type": "number",
           "format": "float",
           "example": 1,
-          "description": "area in acres of one harvest unit if this is the only unit in a treatment contract or timber; area in acres of the combined harvest units if multiple units that would likely be harvested together are close enough to drive equipment between them."
+          "description": "Area (acres) of the harvest unit"
         },
         "moveInDistance": {
           "type": "number",
           "format": "float",
           "example": 2,
-          "description": "One-way move-in distance in miles that equipment is transported to reach the harvest unit."
+          "description": "One-way distance (miles) of moving harvesting equipment to the harvest unit"
         },
         "includeCostsCollectChipResidues": {
           "type": "boolean",
           "example": true,
-          "description": "Indicate whether the costs of collecting and chipping residues needs to be included."
+          "description": "Indicate whether to include the costs of collecting and chipping residues."
         },
         "woodDensityCT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 60,
-          "description": "User specified green wood density of chip trees in pounds per cubic feet."
+          "description": "Ratio (%) of chip tree green weight to green volume (pounds per cubic foot)"
         },
         "woodDensitySLT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 58.6235,
-          "description": "User specified green wood density of small log trees in pounds per cubic feet."
+          "description": "Ratio (%) of small log tree green weight to green volume (pounds per cubic foot)"
         },
         "woodDensityLLT": {
           "type": "number",
           "format": "float",
           "default": 60,
           "example": 62.1225,
-          "description": "User specified green wood density of large log trees in pounds per cubic feet."
+          "description": "Ratio (%) of large log tree green weight to green volume (pounds per cubic foot)"
         },
         "residueFractionCT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0,
-          "description": "User specified residue fraction of chip trees."
+          "description": "Ratio of the green weight of chip tree tops and limbs to the green weight of the tree bole"
         },
         "residueFractionSLT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0.25,
-          "description": "User specified residue fraction of small log trees."
+          "description": "Ratio of the green weight of small log tree tops and limbs to the green weight of the tree bole"
         },
         "residueFractionLLT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0.38,
-          "description": "User specified residue fraction of large log trees."
+          "description": "Ratio of the green weight of large log tree tops and limbs to the green weight of the tree bole"
         },
         "hardwoodFractionCT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0.2,
-          "description": "User specified hardwood fraction of chip trees."
+          "description": "Ratio of the green volume of hardwood to the total green volume of chip trees in the harvest unit"
         },
         "hardwoodFractionSLT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0,
-          "description": "User specified hardwood fraction of small log trees."
+          "description": "Ratio of the green volume of hardwood to the total green volume of small log trees in the harvest unit"
         },
         "hardwoodFractionLLT": {
           "type": "number",
           "format": "float",
           "default": 0,
           "example": 0,
-          "description": "User specified hardwood fraction of large log trees."
+          "description": "Ratio of the green volume of hardwood to the total green volume of large log trees in the harvest unit"
         },
         "treesPerAcreCT": {
           "type": "number",
           "format": "float",
           "example": 20,
-          "description": "Number of harvested chip trees per acre."
+          "description": "Number of chip trees/acre"
         },
         "volumeCT": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Tree volume of harvested chip trees in cubic feet per tree."
+          "description": "Volume of chip trees (cf/tree)"
         },
         "treesPerAcreSLT": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Number of harvested small log trees per acre."
+          "description": "Number of small log trees/acre"
         },
         "volumeSLT": {
           "type": "number",
           "format": "float",
           "example": 70,
-          "description": "Tree volume of harvested small log trees in cubic feet per tree."
+          "description": "Volume of small log trees (cf/tree)"
         },
         "treesPerAcreLLT": {
           "type": "number",
           "format": "float",
           "example": 5,
-          "description": "Number of harvested large log trees per acre."
+          "description": "Number of large log trees/acre"
         },
         "volumeLLT": {
           "type": "number",
           "format": "float",
           "example": 100,
-          "description": "Tree volume of harvested large log trees in cubic feet per tree."
+          "description": "Volume of large log trees (cf/tree)"
         },
         "dieselFuelPrice": {
           "type": "number",
           "format": "float",
           "example": 3.61,
-          "description": "California On-Highway Diesel Fuel Price in dollars per gallon."
+          "description": "Current wholesale price ($/gallon) of low-sulfur diesel fuel in the California"
         },
         "moistureContent": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Moisture Content of Biomass Feedstock on a wet basis, Proportion of residues recovered in the WT systems, measured as a percentage"
+          "description": "Moisture content of biomass on a wet basis (% w.b.)"
         },
         "isBiomassSalvage": {
           "type": "boolean",
           "example": false,
-          "description": "Indicate whether all trees (including log trees) are chipped."
+          "description": "Indicate whether all trees will be utilized as feedstock for the conversion facility."
         },
         "wageFaller": {
           "type": "number",
           "format": "float",
           "example": 35.13,
-          "description": "Hourly wage of faller/bucker"
+          "description": "Hourly wage of faller/bucker ($/h)"
         },
         "wageOther": {
           "type": "number",
           "format": "float",
           "example": 22.07,
-          "description": "Hourly wage of other workers"
+          "description": "Hourly wage of other workers ($/h)"
         },
         "laborBenefits": {
           "type": "number",
           "format": "float",
           "example": 35,
-          "description": "Ratio of benefits and other payroll costs to labor costs, measured as a percentage"
+          "description": "Ratio (%) of benefits and overhead to wages"
         },
         "ppiCurrent": {
           "type": "number",
           "format": "float",
           "example": 284.7,
-          "description": "Current producer price index"
+          "description": "Latest published value of the U.S. producer price index (PPI)"
         },
         "residueRecovFracWT": {
           "type": "number",
           "format": "float",
           "example": 80,
-          "description": "Proportion of residues recovered in the WT systems, measured as a percentage"
+          "description": "Green weight fraction (%) of residues recovered in WT systems"
         },
         "residueRecovFracCTL": {
           "type": "number",
           "format": "float",
           "example": 50,
-          "description": "Proportion of residues recovered in CTL system, measured as a percentage"
+          "description": "Green weight fraction (%) of residues recovered in CTL systems"
         }
       },
       "required": [
@@ -317,61 +317,61 @@
           "type": "number",
           "format": "float",
           "example": 168.639975,
-          "description": "Total Yield in Green Tons per Acre."
+          "description": "Total yield (GT/acre)"
         },
         "costPerAcre": {
           "type": "number",
           "format": "float",
           "example": 3708.621951,
-          "description": "Total Logging Cost in US dollars per Acre."
+          "description": "Total harvest cost ($/acre)"
         },
         "costPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 74.17243903,
-          "description": "Total Logging Cost in US dollars per Hundred Cubic Feet."
+          "description": "Total harvest cost ($/CCF)"
         },
         "costPerGT": {
           "type": "number",
           "format": "float",
           "example": 21.99135734,
-          "description": "Total Logging Cost in US dollars per Green Ton."
+          "description": "Total harvest cost ($/GT)"
         },
         "dieselPerAcre": {
           "type": "number",
           "format": "float",
           "example": 50.99159554,
-          "description": "Total Diesel Consumption in Gallons per Acre."
+          "description": "Total diesel consumption (gal/acre)"
         },
         "dieselPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 1.0198319107071314,
-          "description": "Total Diesel Consumption in Gallons per Hundred Cubic Feet."
+          "description": "Total diesel consumption (gal/CCF)"
         },
         "gasolinePerAcre": {
           "type": "number",
           "format": "float",
           "example": 0.388986296,
-          "description": "Total Gasoline Consumption in Gallons per Acre."
+          "description": "Total gasoline consumption (gal/acre)"
         },
         "gasolinePerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 0.007779725917184,
-          "description": "Total Gasoline Consumption in Gallons per Hundred Cubic Feet."
+          "description": "Total gasoline consumption (gal/CCF)"
         },
         "jetFuelPerAcre": {
           "type": "number",
           "format": "float",
           "example": 0,
-          "description": "Total Jet Fuel Consumption in Gallons per Acre."
+          "description": "Total jet fuel consumption (gal/acre)"
         },
         "jetFuelPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 0,
-          "description": "Total Jet Fuel Consumption in Gallons per Hundred Cubic Feet."
+          "description": "Total jet fuel consumption (gal/CCF)"
         }
       },
       "xml": {
@@ -385,61 +385,61 @@
           "type": "number",
           "format": "float",
           "example": 50.518225,
-          "description": "Yield of Residual Woody Biomass in Green Tons per Acre."
+          "description": "Feedstock yield (GT/acre)"
         },
         "costPerAcre": {
           "type": "number",
           "format": "float",
           "example": 534.2228831,
-          "description": "Cost of Harvesting Residual Woody Biomass in US dollars per Acre."
+          "description": "Feedstock harvest cost ($/acre)"
         },
         "costPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 10.68445766,
-          "description": "Cost of Harvesting Residual Woody Biomass in US dollars per Hundred Cubic Feet."
+          "description": "Feedstock harvest cost ($/CCF)"
         },
         "costPerGT": {
           "type": "number",
           "format": "float",
           "example": 3.167830659,
-          "description": "Cost of Harvesting Residual Woody Biomass in US dollars per Green Ton."
+          "description": "Feedstock harvest cost ($/GT)"
         },
         "dieselPerAcre": {
           "type": "number",
           "format": "float",
           "example": 15.64078771,
-          "description": "Diesel Consumption of Harvesting Residual Woody Biomass in Gallons per Acre."
+          "description": "Diesel consumption associated with feedstock harvest (gal/acre)"
         },
         "dieselPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 15.64078771,
-          "description": "Diesel Consumption of Harvesting Residual Woody Biomass in Gallons per Hundred Cubic Feet."
+          "description": "Diesel consumption associated with feedstock harvest (gal/CCF)"
         },
         "gasolinePerAcre": {
           "type": "number",
           "format": "float",
           "example": 0.066371983,
-          "description": "Gasoline Consumption of Harvesting Residual Woody Biomass in Gallons per Acre."
+          "description": "Gasoline consumption associated with feedstock harvest (gal/acre)"
         },
         "gasolinePerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 0.066371983,
-          "description": "Gasoline Consumption of Harvesting Residual Woody Biomass in Gallons per Hundred Cubic Feet."
+          "description": "Gasoline consumption associated with feedstock harvest (gal/CCF)"
         },
         "jetFuelPerAcre": {
           "type": "number",
           "format": "float",
           "example": 0,
-          "description": "Jet Fuel Consumption of Harvesting Residual Woody Biomass in Gallons per Acre."
+          "description": "Jet fuel consumption associated with feedstock harvest (gal/acre)"
         },
         "jetFuelPerBoleCCF": {
           "type": "number",
           "format": "float",
           "example": 0,
-          "description": "Jet Fuel Consumption of Harvesting Residual Woody Biomass in Gallons per Hundred Cubic Feet."
+          "description": "Jet fuel consumption associated with feedstock harvest (gal/CCF)"
         }
       },
       "xml": {
