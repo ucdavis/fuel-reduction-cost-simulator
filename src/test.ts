@@ -7,7 +7,7 @@ import {
   testCableManualWtLog,
   testExcludeCollectChipResiduesCosts,
   testExcludeLoadingCosts,
-  testGroundBasedCtl,
+  testGroundCtl,
   testGroundManualLog,
   testGroundManualWt,
   testGroundMechWt,
@@ -95,8 +95,8 @@ test('testGroundManualLog', () => {
   expect(parseFloat(res.feedstock.jetFuelPerBoleCCF.toFixed(0))).toBe(0);
 });
 
-test('testGroundBasedCtl', () => {
-  const res = getFrcsOutputs(testGroundBasedCtl);
+test('testGroundCtl', () => {
+  const res = getFrcsOutputs(testGroundCtl);
 
   expect(parseFloat(res.totalBiomass.yieldPerAcre.toFixed(8))).toBe(25.25720838);
   expect(parseFloat(res.totalBiomass.costPerAcre.toFixed(7))).toBe(974.7210172);

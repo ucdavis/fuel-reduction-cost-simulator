@@ -14,7 +14,7 @@ function InLimits(input: FrcsInputs) {
     YardingDistLimit: 0,
   };
   switch (input.system) {
-    case SystemTypes.groundBasedMechWt:
+    case SystemTypes.groundMechWt:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -23,7 +23,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case SystemTypes.groundBasedManualWt:
+    case SystemTypes.groundManualWt:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -32,7 +32,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case SystemTypes.groundBasedManualLog:
+    case SystemTypes.groundManualLog:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;
@@ -41,7 +41,7 @@ function InLimits(input: FrcsInputs) {
       limit.SlopeLimit = 40;
       limit.YardingDistLimit = 0;
       break;
-    case SystemTypes.groundBasedCtl:
+    case SystemTypes.groundCtl:
       limit.MaxLLTperAcre = 0;
       limit.MaxLLTasPercentALT = 0;
       limit.AvgTreeSizeLimit4Chipping = 80;

@@ -1,8 +1,8 @@
 export const SystemTypes = {
-  groundBasedMechWt: 'Ground-Based Mech WT',
-  groundBasedManualWt: 'Ground-Based Manual WT',
-  groundBasedManualLog: 'Ground-Based Manual Log',
-  groundBasedCtl: 'Ground-Based CTL',
+  groundMechWt: 'Ground-Based Mech WT',
+  groundManualWt: 'Ground-Based Manual WT',
+  groundManualLog: 'Ground-Based Manual Log',
+  groundCtl: 'Ground-Based CTL',
   cableManualWtLog: 'Cable Manual WT/Log',
   cableManualWt: 'Cable Manual WT',
   cableManualLog: 'Cable Manual Log',

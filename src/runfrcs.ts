@@ -231,16 +231,16 @@ function calculate(input: FrcsInputs) {
   intermediate = calculateIntermediate(input, intermediate, assumption);
 
   switch (input.system) {
-    case SystemTypes.groundBasedMechWt:
+    case SystemTypes.groundMechWt:
       output = groundMechWT(input, intermediate, assumption);
       break;
-    case SystemTypes.groundBasedManualWt:
+    case SystemTypes.groundManualWt:
       output = groundManualWT(input, intermediate, assumption);
       break;
-    case SystemTypes.groundBasedManualLog:
+    case SystemTypes.groundManualLog:
       output = groundManualLog(input, intermediate, assumption);
       break;
-    case SystemTypes.groundBasedCtl:
+    case SystemTypes.groundCtl:
       output = groundCTL(input, intermediate, assumption);
       break;
     case SystemTypes.cableManualWtLog:
@@ -480,7 +480,7 @@ function calculateAmountsRecovered(
   let ResidueRecoveredOptional = 0;
   let TotalPrimaryProductsAndOptionalResidues = 0;
   switch (input.system) {
-    case SystemTypes.groundBasedMechWt:
+    case SystemTypes.groundMechWt:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
@@ -489,7 +489,7 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case SystemTypes.groundBasedManualWt:
+    case SystemTypes.groundManualWt:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = assumption.ResidueRecovFracWT * intermediate.residueCT;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
@@ -498,14 +498,14 @@ function calculateAmountsRecovered(
         : 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case SystemTypes.groundBasedManualLog:
+    case SystemTypes.groundManualLog:
       BoleVolCCF = intermediate.volPerAcre / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeight + ResidueRecoveredPrimary;
       ResidueRecoveredOptional = 0;
       TotalPrimaryProductsAndOptionalResidues = PrimaryProduct + ResidueRecoveredOptional;
       break;
-    case SystemTypes.groundBasedCtl:
+    case SystemTypes.groundCtl:
       BoleVolCCF = intermediate.volPerAcreST / 100;
       ResidueRecoveredPrimary = 0;
       PrimaryProduct = intermediate.boleWeightST + ResidueRecoveredPrimary;

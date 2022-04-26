@@ -1,7 +1,7 @@
 import { FrcsInputs, SystemTypes } from './model';
 
 const testGroundMechWt: FrcsInputs = {
-  system: SystemTypes.groundBasedMechWt,
+  system: SystemTypes.groundMechWt,
   isPartialCut: false,
   deliverToLandingDistance: 553.9059701791816,
   slope: 12.4204116232628,
@@ -39,15 +39,15 @@ const testGroundMechWt: FrcsInputs = {
 
 const testGroundManualWt: FrcsInputs = {
   ...testGroundMechWt,
-  system: SystemTypes.groundBasedManualWt,
+  system: SystemTypes.groundManualWt,
 };
 const testGroundManualLog: FrcsInputs = {
   ...testGroundMechWt,
-  system: SystemTypes.groundBasedManualLog,
+  system: SystemTypes.groundManualLog,
 };
-const testGroundBasedCtl: FrcsInputs = {
+const testGroundCtl: FrcsInputs = {
   ...testGroundMechWt,
-  system: SystemTypes.groundBasedCtl,
+  system: SystemTypes.groundCtl,
 };
 const testCableManualWtLog: FrcsInputs = {
   ...testGroundMechWt,
@@ -95,7 +95,7 @@ export {
   testGroundMechWt,
   testGroundManualWt,
   testGroundManualLog,
-  testGroundBasedCtl,
+  testGroundCtl,
   testCableManualWtLog,
   testCableManualWt,
   testCableManualLog,
